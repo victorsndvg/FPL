@@ -1,0 +1,3 @@
+[submodule "src/lib/IR_Precision"]
+	path = src/lib/IR_Precision
+	url = https://github.com/szaghi/IR_Precision.git
