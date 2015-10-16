@@ -1,5 +1,6 @@
 module R8PWrapperFactory
 
+USE WrapperFactory
 USE IR_Precision, only: R8P
 USE DimensionsWrapper
 USE DimensionsWrapper0D_R8P
@@ -14,7 +15,7 @@ USE DimensionsWrapper7D_R8P
 implicit none
 private
 
-    type :: R8PWrapperFactory_t
+    type, extends(WrapperFactory_t) :: R8PWrapperFactory_t
     private
 
     contains

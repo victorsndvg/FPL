@@ -1,5 +1,6 @@
 module DLCAWrapperFactory
 
+USE WrapperFactory
 USE DimensionsWrapper
 USE DimensionsWrapper0D_DLCA
 USE DimensionsWrapper1D_DLCA
@@ -13,7 +14,7 @@ USE DimensionsWrapper7D_DLCA
 implicit none
 private
 
-    type :: DLCAWrapperFactory_t
+    type, extends(WrapperFactory_t) :: DLCAWrapperFactory_t
     private
 
     contains

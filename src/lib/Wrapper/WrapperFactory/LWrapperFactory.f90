@@ -1,5 +1,6 @@
 module LWrapperFactory
 
+USE WrapperFactory
 USE DimensionsWrapper
 USE DimensionsWrapper0D_L
 USE DimensionsWrapper1D_L
@@ -13,7 +14,7 @@ USE DimensionsWrapper7D_L
 implicit none
 private
 
-    type :: LWrapperFactory_t
+    type, extends(WrapperFactory_t) :: LWrapperFactory_t
     private
 
     contains

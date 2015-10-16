@@ -1,5 +1,6 @@
 module I2PWrapperFactory
 
+USE WrapperFactory
 USE IR_Precision, only: I2P
 USE DimensionsWrapper
 USE DimensionsWrapper0D_I2P
@@ -14,7 +15,7 @@ USE DimensionsWrapper7D_I2P
 implicit none
 private
 
-    type :: I2PWrapperFactory_t
+    type, extends(WrapperFactory_t) :: I2PWrapperFactory_t
     private
 
     contains
