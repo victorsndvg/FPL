@@ -23,16 +23,21 @@ private
         type(LinkedList_t), pointer  :: Next   => null()
     contains
     private
-        procedure, public :: Free        => LinkedList_Free
-        procedure, public :: GetNode     => LinkedList_GetNode
-        procedure, public :: HasNext     => LinkedList_HasNext
-        procedure, public :: GetNext     => LinkedList_GetNext
-        procedure, public :: HasKey      => LinkedList_HasKey
-        procedure, public :: GetKey      => LinkedList_GetKey
-        procedure, public :: isPresent   => LinkedList_isPresent
-        procedure, public :: RemoveNode  => LinkedList_RemoveNode
-        procedure, public :: GetLength   => LinkedList_GetLength
-        final             ::                LinkedList_Finalize
+        procedure, public :: Free          => LinkedList_Free
+        procedure, public :: HasNext       => LinkedList_HasNext
+        procedure, public :: SetNext       => LinkedList_SetNext
+        procedure, public :: GetNext       => LinkedList_GetNext
+        procedure, public :: NullifyNext   => LinkedList_NullifyNext
+        procedure, public :: HasKey        => LinkedList_HasKey
+        procedure, public :: SetKey        => LinkedList_SetKey
+        procedure, public :: GetKey        => LinkedList_GetKey
+        procedure, public :: AddNode       => LinkedList_AddNode
+        procedure, public :: GetNode       => LinkedList_GetNode
+        procedure, public :: DeallocateKey => LinkedList_DeallocateKey
+        procedure, public :: isPresent     => LinkedList_isPresent
+        procedure, public :: RemoveNode    => LinkedList_RemoveNode
+        procedure, public :: GetLength     => LinkedList_GetLength
+        final             ::                  LinkedList_Finalize
     end type LinkedList_t
 
 contains
@@ -48,9 +53,20 @@ contains
     end function LinkedList_HasNext
 
 
+    subroutine LinkedList_SetNext(this, Next)
+    !-----------------------------------------------------------------
+    !< Set the pointer to the Next node
+    !-----------------------------------------------------------------
+        class(LinkedList_t),         intent(INOUT) :: this               !< Linked List 
+        class(LinkedList_t), target, intent(IN)    :: Next               !< Pointer to Next 
+    !-----------------------------------------------------------------
+        this%Next => Next
+    end subroutine LinkedList_SetNext
+
+
     function LinkedList_GetNext(this) result(Next)
     !-----------------------------------------------------------------
-    !< Check if Next is associated for the current Node
+    !< Return a pointer to the Next node
     !-----------------------------------------------------------------
         class(LinkedList_t), intent(IN) :: this                       !< Linked List 
         class(LinkedList_t), pointer    :: Next                       !< Pointer to Next
@@ -58,6 +74,16 @@ contains
         nullify(Next)
         if(this%HasNext()) Next => this%Next
     end function LinkedList_GetNext
+
+
+    subroutine LinkedList_NullifyNext(this)
+    !-----------------------------------------------------------------
+    !< Nullify Next
+    !-----------------------------------------------------------------
+        class(LinkedList_t), intent(INOUT) :: this                       !< Linked List 
+    !-----------------------------------------------------------------
+        nullify(this%Next)
+    end subroutine LinkedList_NullifyNext
 
 
     function LinkedList_HasKey(this) result(hasKey)
@@ -71,6 +97,18 @@ contains
     end function LinkedList_HasKey
 
 
+    subroutine LinkedList_SetKey(this, Key) 
+    !-----------------------------------------------------------------
+    !< Check if Next is associated for the current Node
+    !-----------------------------------------------------------------
+        class(LinkedList_t),           intent(INOUT) :: this          !< Linked List 
+        character(len=*),              intent(IN)    :: Key           !< Key
+    !-----------------------------------------------------------------
+        if(this%HasKey()) deallocate(this%Key)
+        allocate(this%Key, source=Key)
+    end subroutine LinkedList_SetKey
+
+
     function LinkedList_GetKey(this) result(Key)
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
@@ -82,15 +120,28 @@ contains
     end function LinkedList_GetKey
 
 
+    subroutine LinkedList_DeallocateKey(this)
+    !-----------------------------------------------------------------
+    !< Deallocate Key if allocated
+    !-----------------------------------------------------------------
+        class(LinkedList_t), intent(INOUT) :: this                    !< Linked List 
+    !-----------------------------------------------------------------
+        if(this%HasKey()) deallocate(this%Key)
+    end subroutine LinkedList_DeallocateKey
+
+
     recursive subroutine LinkedList_Free(this)
     !-----------------------------------------------------------------
     !< Free the list
     !-----------------------------------------------------------------
-        class(LinkedList_t), intent(INOUT):: this                     !< Linked List 
+        class(LinkedList_t), intent(INOUT) :: this                    !< Linked List 
+        class(LinkedList_t),  pointer      :: Next                    !< Linked List Node
     !-----------------------------------------------------------------
         if (this%HasNext()) then
-            call this%Next%Free()
-            deallocate(this%Next)
+            Next => this%GetNext()
+            call Next%Free()
+            deallocate(Next)
+            nullify(Next)
         endif
         if (this%HasKey())   deallocate(this%Key)
         nullify(this%Next)
@@ -141,6 +192,25 @@ contains
         isPresent = associated(this%GetNode(Key))
     end function LinkedList_IsPresent
 
+
+    recursive subroutine LinkedList_AddNode(this,Key)
+    !-----------------------------------------------------------------
+    !< Add a new Node if key does not Exist
+    !-----------------------------------------------------------------
+        class(LinkedList_T), intent(INOUT) :: this                    !< Linked List
+        character(len=*),    intent(IN)    :: Key                     !< Key (unique) of the current node.
+        class(LinkedList_t),  pointer      :: Next                    !< Pointer to a next LinkedList
+    !-----------------------------------------------------------------
+        if (this%HasKey()) then
+            if (this%GetKey()/=Key) then
+                if (.not. this%hasNext()) allocate(this%Next)
+                Next => this%GetNext()
+                call Next%AddNode(Key=Key)
+            endif
+        else
+            call this%SetKey(Key=Key)
+        endif
+    end subroutine LinkedList_AddNode
 
     subroutine LinkedList_RemoveNode(this, Key)
     !-----------------------------------------------------------------
