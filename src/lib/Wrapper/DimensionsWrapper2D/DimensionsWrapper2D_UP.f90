@@ -9,8 +9,10 @@ private
         class(*), allocatable :: Value(:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper2D_UP_Set
-        procedure, public :: Get          => DimensionsWrapper2D_UP_Get
+        procedure         ::                 DimensionsWrapper2D_UP_Set
+        procedure         ::                 DimensionsWrapper2D_UP_Get
+        generic,   public :: Set          => DimensionsWrapper2D_UP_Set
+        generic,   public :: Get          => DimensionsWrapper2D_UP_Get
         procedure, public :: isOfDataType => DimensionsWrapper2D_UP_isOfDataType
         procedure, public :: Free         => DimensionsWrapper2D_UP_Free
         final             ::                 DimensionsWrapper2D_UP_Final

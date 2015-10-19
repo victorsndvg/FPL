@@ -10,8 +10,10 @@ private
         real(R8P), allocatable :: Value(:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper1D_R8P_Set
-        procedure, public :: Get          => DimensionsWrapper1D_R8P_Get
+        procedure         ::                 DimensionsWrapper1D_R8P_Set
+        procedure         ::                 DimensionsWrapper1D_R8P_Get
+        generic,   public :: Set          => DimensionsWrapper1D_R8P_Set
+        generic,   public :: Get          => DimensionsWrapper1D_R8P_Get
         procedure, public :: isOfDataType => DimensionsWrapper1D_R8P_isOfDataType
         procedure, public :: Free         => DimensionsWrapper1D_R8P_Free
         final             ::                 DimensionsWrapper1D_R8P_Final

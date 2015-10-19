@@ -10,8 +10,10 @@ private
         integer(I8P), allocatable :: Value(:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper4D_I8P_Set
-        procedure, public :: Get          => DimensionsWrapper4D_I8P_Get
+        procedure         ::                 DimensionsWrapper4D_I8P_Set
+        procedure         ::                 DimensionsWrapper4D_I8P_Get
+        generic,   public :: Set          => DimensionsWrapper4D_I8P_Set
+        generic,   public :: Get          => DimensionsWrapper4D_I8P_Get
         procedure, public :: isOfDataType => DimensionsWrapper4D_I8P_isOfDataType
         procedure, public :: Free         => DimensionsWrapper4D_I8P_Free
         final             ::                 DimensionsWrapper4D_I8P_Final

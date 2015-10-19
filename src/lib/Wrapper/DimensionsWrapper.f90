@@ -9,10 +9,15 @@ private
     private
         integer(I1P) :: Dimensions = -1
     contains
-        procedure :: SetDimensions => DimensionsWrapper_SetDimensions
-        procedure :: GetDimensions => DimensionsWrapper_GetDimensions
-        procedure(DimensionsWrapper_isOfDataType), deferred :: isOfDataType
-        procedure(DimensionsWrapper_Free),         deferred :: Free
+    private
+        procedure         ::                  DimensionsWrapper_Set
+        procedure         ::                  DimensionsWrapper_Get
+        procedure, public :: SetDimensions => DimensionsWrapper_SetDimensions
+        procedure, public :: GetDimensions => DimensionsWrapper_GetDimensions
+        generic,   public :: Set           => DimensionsWrapper_Set
+        generic,   public :: Get           => DimensionsWrapper_Get
+        procedure(DimensionsWrapper_isOfDataType), public, deferred :: isOfDataType
+        procedure(DimensionsWrapper_Free),         public, deferred :: Free
     end type
 
     abstract interface
@@ -53,5 +58,21 @@ contains
         integer(I1P)                              :: Dimensions
         Dimensions = this%Dimensions
     end function
+
+    subroutine DimensionsWrapper_Set(this)
+    !-----------------------------------------------------------------
+    !< Empty Set implementation
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper_t), intent(INOUT) :: this
+    !-----------------------------------------------------------------
+    end subroutine
+
+    subroutine DimensionsWrapper_Get(this)
+    !-----------------------------------------------------------------
+    !< Empty Get implementation
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper_t), intent(IN) :: this
+    !-----------------------------------------------------------------
+    end subroutine
 
 end module DimensionsWrapper

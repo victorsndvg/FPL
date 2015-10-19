@@ -9,8 +9,10 @@ private
         character(len=:), allocatable :: Value(:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper2D_DLCA_Set
-        procedure, public :: Get          => DimensionsWrapper2D_DLCA_Get
+        procedure         ::                 DimensionsWrapper2D_DLCA_Set
+        procedure         ::                 DimensionsWrapper2D_DLCA_Get
+        generic,   public :: Set          => DimensionsWrapper2D_DLCA_Set
+        generic,   public :: Get          => DimensionsWrapper2D_DLCA_Get
         procedure, public :: isOfDataType => DimensionsWrapper2D_DLCA_isOfDataType
         procedure, public :: Free         => DimensionsWrapper2D_DLCA_Free
         final             ::                 DimensionsWrapper2D_DLCA_Final

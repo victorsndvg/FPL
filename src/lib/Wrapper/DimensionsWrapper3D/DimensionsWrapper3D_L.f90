@@ -9,8 +9,10 @@ private
         logical, allocatable :: Value(:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper3D_L_Set
-        procedure, public :: Get          => DimensionsWrapper3D_L_Get
+        procedure         ::                 DimensionsWrapper3D_L_Set
+        procedure         ::                 DimensionsWrapper3D_L_Get
+        generic,   public :: Set          => DimensionsWrapper3D_L_Set
+        generic,   public :: Get          => DimensionsWrapper3D_L_Get
         procedure, public :: isOfDataType => DimensionsWrapper3D_L_isOfDataType
         procedure, public :: Free         => DimensionsWrapper3D_L_Free
         final             ::                 DimensionsWrapper3D_L_Final

@@ -10,8 +10,10 @@ private
         integer(I2P), allocatable :: Value(:,:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper6D_I2P_Set
-        procedure, public :: Get          => DimensionsWrapper6D_I2P_Get
+        procedure         ::                 DimensionsWrapper6D_I2P_Set
+        procedure         ::                 DimensionsWrapper6D_I2P_Get
+        generic,   public :: Set          => DimensionsWrapper6D_I2P_Set
+        generic,   public :: Get          => DimensionsWrapper6D_I2P_Get
         procedure, public :: isOfDataType => DimensionsWrapper6D_I2P_isOfDataType
         procedure, public :: Free         => DimensionsWrapper6D_I2P_Free
         final             ::                 DimensionsWrapper6D_I2P_Final
