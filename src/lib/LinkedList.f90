@@ -20,7 +20,7 @@ private
     type, public :: LinkedList_t
     private
         character(len=:), allocatable :: Key
-        type(LinkedList_t), pointer  :: Next   => null()
+        class(LinkedList_t), public, pointer  :: Next   => null()
     contains
     private
         procedure         ::                  LinkedList_AddNode
@@ -38,7 +38,7 @@ private
         procedure, public :: RemoveNode    => LinkedList_RemoveNode
         procedure, public :: GetLength     => LinkedList_GetLength
         procedure, public :: Print         => LinkedList_Print
-        generic, public   :: AddNode       => LinkedList_AddNode
+        generic,   public :: AddNode       => LinkedList_AddNode
         final             ::                  LinkedList_Finalize
     end type LinkedList_t
 
