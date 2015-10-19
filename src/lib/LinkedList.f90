@@ -19,10 +19,11 @@ private
 
     type, public :: LinkedList_t
     private
-        character(len=:),        allocatable :: Key
+        character(len=:), allocatable :: Key
         type(LinkedList_t), pointer  :: Next   => null()
     contains
     private
+        procedure         ::                  LinkedList_AddNode
         procedure, public :: Free          => LinkedList_Free
         procedure, public :: HasNext       => LinkedList_HasNext
         procedure, public :: SetNext       => LinkedList_SetNext
@@ -31,12 +32,13 @@ private
         procedure, public :: HasKey        => LinkedList_HasKey
         procedure, public :: SetKey        => LinkedList_SetKey
         procedure, public :: GetKey        => LinkedList_GetKey
-        procedure, public :: AddNode       => LinkedList_AddNode
         procedure, public :: GetNode       => LinkedList_GetNode
         procedure, public :: DeallocateKey => LinkedList_DeallocateKey
         procedure, public :: isPresent     => LinkedList_isPresent
         procedure, public :: RemoveNode    => LinkedList_RemoveNode
         procedure, public :: GetLength     => LinkedList_GetLength
+        procedure, public :: Print         => LinkedList_Print
+        generic, public   :: AddNode       => LinkedList_AddNode
         final             ::                  LinkedList_Finalize
     end type LinkedList_t
 
@@ -168,15 +170,17 @@ contains
         type(LinkedList_t),  pointer            :: Node               !< Linked List Node
     !-----------------------------------------------------------------
         Node => this
-        do
+        do while(associated(Node))
             if (Node%HasKey()) then
-                if (Node%Key==Key) exit
+                if (Node%GetKey()==Key) exit
+                Node => Node%GetNext()
             elseif (Node%HasNext()) then
                 Node => Node%GetNext()
             else
                 nullify(Node)
                 exit
             endif
+            
         enddo
     end function LinkedList_GetNode
 
@@ -212,9 +216,11 @@ contains
         endif
     end subroutine LinkedList_AddNode
 
+
     subroutine LinkedList_RemoveNode(this, Key)
     !-----------------------------------------------------------------
     !< Remove an LinkedList given a Key
+
     !-----------------------------------------------------------------
     class(LinkedList_t), target, intent(INOUT) :: this                !< Linked List
     character(len=*),            intent(IN)    :: Key                 !< String Key
@@ -223,19 +229,19 @@ contains
     !-----------------------------------------------------------------
     CurrentNode => this
     do while(associated(CurrentNode))
+        NextNode => CurrentNode%GetNext()
         if (CurrentNode%HasKey()) then
-            if (CurrentNode%Key==Key) then
-                if (CurrentNode%HasNext()) then
-                    NextNode => CurrentNode%GetNext()
+            if (CurrentNode%GetKey()==Key) then
+                if (associated(NextNode)) then
                     if (NextNode%HasKey()) then
-                        CurrentNode%Key = NextNode%Key
+                        call CurrentNode%SetKey(Key=NextNode%GetKey())
                     else
-                        deallocate(CurrentNode%Key)
+                        call CurrentNode%DeallocateKey()
                     endif
                     CurrentNode%Next => NextNode%GetNext()
                     deallocate(NextNode)
                 else
-                    deallocate(CurrentNode%Key)
+                    call CurrentNode%DeallocateKey()
                     nullify(CurrentNode%Next)
                 endif
                 exit
@@ -264,6 +270,36 @@ contains
         enddo
         nullify(NextNode)
     end function LinkedList_GetLength
+
+
+    subroutine LinkedList_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Return the length of the list
+    !-----------------------------------------------------------------
+        class(LinkedList_t), target,      intent(IN)  :: this    !< Linked List
+        integer(I4P),                     intent(IN)  :: unit    !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix  !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat  !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg   !< IO error message.
+        character(len=:), allocatable                 :: prefd   !< Prefixing string.
+        integer(I4P)                                  :: iostatd !< IO error.
+        character(500)                                :: iomsgd  !< Temporary variable for IO error message.
+        class(LinkedList_T), pointer                  :: Node    !< Pointer for scanning the list.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        Node => this
+        write(*,fmt='(A)') prefd//' LINKED LIST KEYS:'
+        do while(Node%HasKey())
+            write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'   Key = '//Node%GetKey()
+            if (Node%HasNExt()) then
+                Node => Node%GetNext()
+            else
+                exit
+            endif
+        enddo
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine LinkedList_Print
 
 
 end module LinkedList

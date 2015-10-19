@@ -167,6 +167,6 @@ ENDIF()
 #################################################################
 
 ADD_SUBDIRECTORY(${LIB_PATH})
-#ADD_SUBDIRECTORY(${TESTS_PATH})
+ADD_SUBDIRECTORY(${TESTS_PATH})
 ADD_SUBDIRECTORY(${EXAMPLES_PATH})
 
