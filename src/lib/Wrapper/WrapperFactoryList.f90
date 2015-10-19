@@ -142,28 +142,25 @@ contains
     !-----------------------------------------------------------------
     class(WrapperFactoryList_t), target, intent(INOUT) :: this        !< Wrapper Factory List
     character(len=*),                    intent(IN)    :: Key         !< String Key
-    type(WrapperFactoryList_t),  pointer               :: CurrentNode !< Pointer to the current Wrapper Factory List
-    type(WrapperFactoryList_t),  pointer               :: NextNode    !< Pointer to a next Wrapper Factory List
+    class(WrapperFactoryList_t),  pointer               :: CurrentNode !< Pointer to the current Wrapper Factory List
+    class(WrapperFactoryList_t),  pointer               :: NextNode    !< Pointer to a next Wrapper Factory List
     !-----------------------------------------------------------------
     CurrentNode => this
     do while(associated(CurrentNode))
         if (CurrentNode%HasKey()) then
             if (CurrentNode%GetKey()==Key) then
                 if (CurrentNode%HasNext()) then
-                    select type (NextNode => CurrentNode%GetNext())
-                        type is (WrapperFactoryList_T)
-                            if (NextNode%HasKey()) then
-                                call CurrentNode%SetKey(Key=NextNode%GetKey())
-                            else
-                                call CurrentNode%DeallocateKey()
-                            endif
-                            if (NextNode%HasValue()) then
-                                allocate(CurrentNode%Value, source=NextNode%Value)
-                            else
-                                deallocate(CurrentNode%Value)
-                            endif
-                            call CurrentNode%SetNext(Next=NextNode%GetNext())
-                    end select
+                    if (NextNode%HasKey()) then
+                        call CurrentNode%SetKey(Key=NextNode%GetKey())
+                    else
+                        call CurrentNode%DeallocateKey()
+                    endif
+                    if (NextNode%HasValue()) then
+                        allocate(CurrentNode%Value, source=NextNode%Value)
+                    else
+                        deallocate(CurrentNode%Value)
+                    endif
+                    call CurrentNode%SetNext(Next=NextNode%GetNext())
                 else
                     call CurrentNode%DeallocateKey()
                     if (CurrentNode%HasValue()) deallocate(CurrentNode%Value)
