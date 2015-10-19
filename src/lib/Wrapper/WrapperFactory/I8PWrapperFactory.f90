@@ -19,23 +19,15 @@ private
     private
 
     contains
-        procedure         :: I8PWrapperFactory_Create0D
-        procedure         :: I8PWrapperFactory_Create1D
-        procedure         :: I8PWrapperFactory_Create2D
-        procedure         :: I8PWrapperFactory_Create3D
-        procedure         :: I8PWrapperFactory_Create4D
-        procedure         :: I8PWrapperFactory_Create5D
-        procedure         :: I8PWrapperFactory_Create6D
-        procedure         :: I8PWrapperFactory_Create7D
+        procedure         :: create0D => I8PWrapperFactory_Create0D
+        procedure         :: create1D => I8PWrapperFactory_Create1D
+        procedure         :: create2D => I8PWrapperFactory_Create2D
+        procedure         :: create3D => I8PWrapperFactory_Create3D
+        procedure         :: create4D => I8PWrapperFactory_Create4D
+        procedure         :: create5D => I8PWrapperFactory_Create5D
+        procedure         :: create6D => I8PWrapperFactory_Create6D
+        procedure         :: create7D => I8PWrapperFactory_Create7D
         procedure, public :: hasSameType => I8PWrapperFactory_hasSameType
-        generic,   public :: Create      => I8PWrapperFactory_Create0D, &
-                                            I8PWrapperFactory_Create1D, &
-                                            I8PWrapperFactory_Create2D, &
-                                            I8PWrapperFactory_Create3D, &
-                                            I8PWrapperFactory_Create4D, &
-                                            I8PWrapperFactory_Create5D, &
-                                            I8PWrapperFactory_Create6D, &
-                                            I8PWrapperFactory_Create7D
     end type
 
 public :: I8PWrapperFactory_t

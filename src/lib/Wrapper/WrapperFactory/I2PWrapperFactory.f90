@@ -19,23 +19,15 @@ private
     private
 
     contains
-        procedure         :: I2PWrapperFactory_Create0D
-        procedure         :: I2PWrapperFactory_Create1D
-        procedure         :: I2PWrapperFactory_Create2D
-        procedure         :: I2PWrapperFactory_Create3D
-        procedure         :: I2PWrapperFactory_Create4D
-        procedure         :: I2PWrapperFactory_Create5D
-        procedure         :: I2PWrapperFactory_Create6D
-        procedure         :: I2PWrapperFactory_Create7D
+        procedure         :: create0D => I2PWrapperFactory_Create0D
+        procedure         :: create1D => I2PWrapperFactory_Create1D
+        procedure         :: create2D => I2PWrapperFactory_Create2D
+        procedure         :: create3D => I2PWrapperFactory_Create3D
+        procedure         :: create4D => I2PWrapperFactory_Create4D
+        procedure         :: create5D => I2PWrapperFactory_Create5D
+        procedure         :: create6D => I2PWrapperFactory_Create6D
+        procedure         :: create7D => I2PWrapperFactory_Create7D
         procedure, public :: hasSameType => I2PWrapperFactory_hasSameType
-        generic,   public :: Create      => I2PWrapperFactory_Create0D, &
-                                            I2PWrapperFactory_Create1D, &
-                                            I2PWrapperFactory_Create2D, &
-                                            I2PWrapperFactory_Create3D, &
-                                            I2PWrapperFactory_Create4D, &
-                                            I2PWrapperFactory_Create5D, &
-                                            I2PWrapperFactory_Create6D, &
-                                            I2PWrapperFactory_Create7D
     end type
 
 public :: I2PWrapperFactory_t
