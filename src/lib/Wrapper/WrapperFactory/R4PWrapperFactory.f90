@@ -74,7 +74,7 @@ contains
     !< Create R4P 1D Wrapper
     !-----------------------------------------------------------------
         class(R4PWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:)
+        class(*),                                intent(IN)    :: Value(1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -97,7 +97,7 @@ contains
     !< Create R4P 2D Wrapper
     !-----------------------------------------------------------------
         class(R4PWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:)
+        class(*),                                intent(IN)    :: Value(1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -120,7 +120,7 @@ contains
     !< Create R4P 3D Wrapper
     !-----------------------------------------------------------------
         class(R4PWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:)
+        class(*),                                intent(IN)    :: Value(1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -143,7 +143,7 @@ contains
     !< Create R4P 4D Wrapper
     !-----------------------------------------------------------------
         class(R4PWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:)
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -166,7 +166,7 @@ contains
     !< Create R4P 5D Wrapper
     !-----------------------------------------------------------------
         class(R4PWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:,:)
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -189,7 +189,7 @@ contains
     !< Create R4P 6D Wrapper
     !-----------------------------------------------------------------
         class(R4PWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:,:,:)
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -212,7 +212,7 @@ contains
     !< Create R4P 7D Wrapper
     !-----------------------------------------------------------------
         class(R4PWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:,:,:,:)
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then

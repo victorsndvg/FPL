@@ -50,7 +50,7 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 0D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
         class(*),                                intent(IN)    :: Value
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
@@ -73,8 +73,8 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 1D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:)
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
+        class(*),                                intent(IN)    :: Value(1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -96,8 +96,8 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 2D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:)
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
+        class(*),                                intent(IN)    :: Value(1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -119,8 +119,8 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 3D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:)
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
+        class(*),                                intent(IN)    :: Value(1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -142,8 +142,8 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 4D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:)
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -165,8 +165,8 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 5D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:,:)
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -188,8 +188,8 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 6D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:,:,:)
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
@@ -211,8 +211,8 @@ contains
     !-----------------------------------------------------------------
     !< Create DLCA 7D Wrapper
     !-----------------------------------------------------------------
-        class(DLCAWrapperFactory_t),              intent(IN)    :: this
-        class(*),                                intent(IN)    :: Value(:,:,:,:,:,:,:)
+        class(DLCAWrapperFactory_t),             intent(IN)    :: this
+        class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:,1:,1:)
         class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
     !-----------------------------------------------------------------
         if(allocated(Wrapper)) then
