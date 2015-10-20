@@ -1,7 +1,7 @@
 module R4PWrapperFactory
 
 USE WrapperFactory
-USE IR_Precision, only: R4P
+USE IR_Precision, only: I1P, R4P
 USE DimensionsWrapper
 USE DimensionsWrapper0D_R4P
 USE DimensionsWrapper1D_R4P
@@ -60,6 +60,7 @@ contains
         endif
         if(this%hasSameType(Value)) then
             allocate(DimensionsWrapper0D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=0_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper0D_R4P_t)
                     call Wrapper%Set(Value=Value)
@@ -82,6 +83,7 @@ contains
         endif
         if(this%hasSameType(Value(1))) then
             allocate(DimensionsWrapper1D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=1_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper1D_R4P_t)
                     call Wrapper%Set(Value=Value)
@@ -104,6 +106,7 @@ contains
         endif
         if(this%hasSameType(Value(1,1))) then
             allocate(DimensionsWrapper2D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=2_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper2D_R4P_t)
                     call Wrapper%Set(Value=Value)
@@ -126,6 +129,7 @@ contains
         endif
         if(this%hasSameType(Value(1,1,1))) then
             allocate(DimensionsWrapper3D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=3_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper3D_R4P_t)
                     call Wrapper%Set(Value=Value)
@@ -148,6 +152,7 @@ contains
         endif
         if(this%hasSameType(Value(1,1,1,1))) then
             allocate(DimensionsWrapper4D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=4_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper4D_R4P_t)
                     call Wrapper%Set(Value=Value)
@@ -170,6 +175,7 @@ contains
         endif
         if(this%hasSameType(Value(1,1,1,1,1))) then
             allocate(DimensionsWrapper5D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=5_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper5D_R4P_t)
                     call Wrapper%Set(Value=Value)
@@ -192,6 +198,7 @@ contains
         endif
         if(this%hasSameType(Value(1,1,1,1,1,1))) then
             allocate(DimensionsWrapper6D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=6_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper6D_R4P_t)
                     call Wrapper%Set(Value=Value)
@@ -214,6 +221,7 @@ contains
         endif
         if(this%hasSameType(Value(1,1,1,1,1,1,1))) then
             allocate(DimensionsWrapper7D_R4P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=7_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper7D_R4P_t)
                     call Wrapper%Set(Value=Value)
