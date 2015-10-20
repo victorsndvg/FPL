@@ -30,7 +30,7 @@ private
         procedure, public :: hasSameType => DLCAWrapperFactory_hasSameType
     end type
 
-    type(DLCAWrapperFactory_t), public :: WrapperFactoryDLCA
+    type(DLCAWrapperFactory_t), public, target :: WrapperFactoryDLCA
 
 contains
 

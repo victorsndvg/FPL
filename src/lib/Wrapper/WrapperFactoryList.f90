@@ -18,7 +18,7 @@ private
 
     type, extends(LinkedList_t), public :: WrapperFactoryList_t
     private
-        class(WrapperFactory_t), allocatable :: Value
+        class(WrapperFactory_t), pointer :: Value
     contains
     private
         procedure         ::                WrapperFactoryList_AddNode
@@ -65,7 +65,6 @@ contains
         call this%AddNode(key='R8P', WrapperFactory=WrapperFactoryR8P)
         call this%AddNode(key='L', WrapperFactory=WrapperFactoryL)
         call this%AddNode(key='DLCA', WrapperFactory=WrapperFactoryDLCA)
-!        call this%AddNode(key='UP', WrapperFactory=WrapperFactoryUP)
     end subroutine WrapperFactoryList_Init
 
 
@@ -76,7 +75,7 @@ contains
         class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
         logical                                 :: hasValue           !< Check if Value is allocated
     !-----------------------------------------------------------------
-        hasValue = allocated(this%Value)
+        hasValue = associated(this%Value)
     end function WrapperFactoryList_HasValue
 
 
@@ -85,10 +84,9 @@ contains
     !< Return a concrete WrapperFactory
     !-----------------------------------------------------------------
         class(WrapperFactoryList_t),          intent(INOUT)  :: this     !< Wrapper Factory List
-        class(WrapperFactory_t),              intent(IN)     :: Value    !< Concrete WrapperFactory
+        class(WrapperFactory_t), target,      intent(IN)     :: Value    !< Concrete WrapperFactory
     !-----------------------------------------------------------------
-        if(this%HasValue()) deallocate(this%Value)
-        allocate(this%Value, source=Value)
+        this%Value => Value
     end subroutine WrapperFactoryList_SetValue
 
 
@@ -97,9 +95,10 @@ contains
     !< Return a concrete WrapperFactory
     !-----------------------------------------------------------------
         class(WrapperFactoryList_t),          intent(IN)  :: this     !< Wrapper Factory List
-        class(WrapperFactory_t), allocatable, intent(OUT) :: Value    !< Concrete WrapperFactory
+        class(WrapperFactory_t), pointer,     intent(OUT) :: Value    !< Concrete WrapperFactory pointer
     !-----------------------------------------------------------------
-        if(this%HasValue()) allocate(Value, source=this%Value)
+        nullify(Value)
+        if(this%HasValue()) Value => this%Value
     end subroutine WrapperFactoryList_GetValue
 
 
@@ -110,7 +109,7 @@ contains
         class(WrapperFactoryList_t), intent(INOUT):: this             !< Wrapper Factory List 
     !-----------------------------------------------------------------
         call this%LinkedList_t%Free()
-        if (this%HasValue())   deallocate(this%Value)
+        nullify(this%Value)
     end subroutine WrapperFactoryList_Free
 
 
@@ -130,7 +129,7 @@ contains
     !-----------------------------------------------------------------
         class(WrapperFactoryList_T),          intent(INOUT) :: this           !< Linked List
         character(len=*),                     intent(IN)    :: Key            !< Key (unique) of the current node.
-        class(WrapperFactory_t),              intent(IN)    :: WrapperFactory !< Wrapper Factory
+        class(WrapperFactory_t), target,      intent(IN)    :: WrapperFactory !< Wrapper Factory
     !-----------------------------------------------------------------
         if (this%HasKey()) then
             if (this%GetKey()/=Key) then
@@ -158,207 +157,230 @@ contains
     !-----------------------------------------------------------------
     !< Remove an LinkedList given a Key
     !-----------------------------------------------------------------
-    class(WrapperFactoryList_t), target,  intent(INOUT) :: this        !< Wrapper Factory List
-    character(len=*),                     intent(IN)    :: Key         !< String Key
-    class(WrapperFactoryList_t),  pointer               :: CurrentNode !< Pointer to the current Wrapper Factory List
-    class(WrapperFactoryList_t),  pointer               :: NextNode    !< Pointer to a next Wrapper Factory List
+        class(WrapperFactoryList_t), target,  intent(INOUT) :: this        !< Wrapper Factory List
+        character(len=*),                     intent(IN)    :: Key         !< String Key
+        class(WrapperFactoryList_t),  pointer               :: CurrentNode !< Pointer to the current Wrapper Factory List
+        class(WrapperFactoryList_t),  pointer               :: NextNode    !< Pointer to a next Wrapper Factory List
     !-----------------------------------------------------------------
-    CurrentNode => this
-    do while(associated(CurrentNode))
-        if (CurrentNode%HasKey()) then
-            if (CurrentNode%GetKey()==Key) then
-                if (CurrentNode%HasNext()) then
-                    if (NextNode%HasKey()) then
-                        call CurrentNode%SetKey(Key=NextNode%GetKey())
+        CurrentNode => this
+        do while(associated(CurrentNode))
+            if (CurrentNode%HasKey()) then
+                if (CurrentNode%GetKey()==Key) then
+                    if (CurrentNode%HasNext()) then
+                        if (NextNode%HasKey()) then
+                            call CurrentNode%SetKey(Key=NextNode%GetKey())
+                        else
+                            call CurrentNode%DeallocateKey()
+                        endif
+                        if (NextNode%HasValue()) then
+                            CurrentNode%Value => NextNode%Value
+                        else
+                            deallocate(CurrentNode%Value)
+                        endif
+                        call CurrentNode%SetNext(Next=NextNode%GetNext())
                     else
                         call CurrentNode%DeallocateKey()
+                        nullify(CurrentNode%Value)
+                        call CurrentNode%NullifyNext()
                     endif
-                    if (NextNode%HasValue()) then
-                        allocate(CurrentNode%Value, source=NextNode%Value)
-                    else
-                        deallocate(CurrentNode%Value)
-                    endif
-                    call CurrentNode%SetNext(Next=NextNode%GetNext())
-                else
-                    call CurrentNode%DeallocateKey()
-                    if (CurrentNode%HasValue()) deallocate(CurrentNode%Value)
-                    call CurrentNode%NullifyNext()
+                    exit
                 endif
-                exit
             endif
-        endif
-        CurrentNode => NextNode
-    enddo
+            CurrentNode => NextNode
+        enddo
     end subroutine WrapperFactoryList_RemoveNode
 
 
-    recursive subroutine WrapperFactoryList_GetFactory0D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory0D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
         class(WrapperFactoryList_t),          intent(IN)  :: this            !< Linked List
         class(*),                             intent(IN)  :: Value           !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory  !< Wrapper Factory
+        class(WrapperFactory_t), pointer                  :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value)) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
             endif
         endif
-    end subroutine WrapperFactoryList_GetFactory0D
+    end function WrapperFactoryList_GetFactory0D
 
 
-    recursive subroutine WrapperFactoryList_GetFactory1D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory1D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this            !< Linked List
-        class(*),                             intent(IN)  :: Value(1:)       !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory  !< Wrapper Factory
+        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Linked List
+        class(*),                         intent(IN)  :: Value(1:)       !< Polymorphic Mold
+        class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1))) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
             endif
         endif
-    end subroutine WrapperFactoryList_GetFactory1D
+    end function WrapperFactoryList_GetFactory1D
 
 
-    recursive subroutine WrapperFactoryList_GetFactory2D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory2D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this            !< Linked List
-        class(*),                             intent(IN)  :: Value(1:,1:)    !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory  !< Wrapper Factory
+        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Linked List
+        class(*),                         intent(IN)  :: Value(1:,1:)    !< Polymorphic Mold
+        class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1))) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
             endif
         endif
-    end subroutine WrapperFactoryList_GetFactory2D
+    end function WrapperFactoryList_GetFactory2D
 
 
-    recursive subroutine WrapperFactoryList_GetFactory3D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory3D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this            !< Linked List
-        class(*),                             intent(IN)  :: Value(1:,1:,1:) !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory  !< Wrapper Factory
+        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Linked List
+        class(*),                         intent(IN)  :: Value(1:,1:,1:) !< Polymorphic Mold
+        class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
-print*, size(value,1), size(value,2), size(value,3)
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1))) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
             endif
         endif
-    end subroutine WrapperFactoryList_GetFactory3D
+    end function WrapperFactoryList_GetFactory3D
 
 
-    recursive subroutine WrapperFactoryList_GetFactory4D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory4D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this               !< Linked List
-        class(*),                             intent(IN)  :: Value(1:,1:,1:,1:) !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory     !< Wrapper Factory
+        class(WrapperFactoryList_t),      intent(IN)  :: this               !< Linked List
+        class(*),                         intent(IN)  :: Value(1:,1:,1:,1:) !< Polymorphic Mold
+        class(WrapperFactory_t), pointer              :: WrapperFactory     !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1))) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             endif
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
         endif
-    end subroutine WrapperFactoryList_GetFactory4D
+    end function WrapperFactoryList_GetFactory4D
 
 
-    recursive subroutine WrapperFactoryList_GetFactory5D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory5D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this                  !< Linked List
-        class(*),                             intent(IN)  :: Value(1:,1:,1:,1:,1:) !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory        !< Wrapper Factory
+        class(WrapperFactoryList_t),      intent(IN)  :: this                  !< Linked List
+        class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:) !< Polymorphic Mold
+        class(WrapperFactory_t), pointer              :: WrapperFactory        !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1))) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
             endif
         endif
-    end subroutine WrapperFactoryList_GetFactory5D
+    end function WrapperFactoryList_GetFactory5D
 
 
-    recursive subroutine WrapperFactoryList_GetFactory6D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory6D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this                     !< Linked List
-        class(*),                             intent(IN)  :: Value(1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory           !< Wrapper Factory
+        class(WrapperFactoryList_t),      intent(IN)  :: this                     !< Linked List
+        class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
+        class(WrapperFactory_t), pointer              :: WrapperFactory           !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1,1))) then
                 allocate(WrapperFactory, source=this%Value)
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
             endif
         endif
-    end subroutine WrapperFactoryList_GetFactory6D
+    end function WrapperFactoryList_GetFactory6D
 
 
-    recursive subroutine WrapperFactoryList_GetFactory7D(this, Value, WrapperFactory)
+    recursive function WrapperFactoryList_GetFactory7D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this                        !< Linked List
-        class(*),                             intent(IN)  :: Value(1:,1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
-        class(WrapperFactory_t), allocatable, intent(OUT) :: WrapperFactory              !< Wrapper Factory
+        class(WrapperFactoryList_t),      intent(IN)  :: this                        !< Linked List
+        class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
+        class(WrapperFactory_t), pointer              :: WrapperFactory              !< Wrapper Factory
     !-----------------------------------------------------------------
-        if (this%HasKey()) then
+        if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1,1,1))) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
-                        call Next%GetFactory(Value=Value, WrapperFactory=WrapperFactory)
+                        WrapperFactory => Next%GetFactory(Value=Value)
                 end select
+            else
+                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
+                WrapperFactory => WrapperFactoryUP
             endif
         endif
-    end subroutine WrapperFactoryList_GetFactory7D
+    end function WrapperFactoryList_GetFactory7D
 
 
 end module WrapperFactoryList

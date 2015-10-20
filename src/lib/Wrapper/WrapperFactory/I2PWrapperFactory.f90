@@ -30,7 +30,7 @@ private
         procedure, public :: hasSameType => I2PWrapperFactory_hasSameType
     end type
 
-    type(I2PWrapperFactory_t), public :: WrapperFactoryI2P
+    type(I2PWrapperFactory_t), public, target :: WrapperFactoryI2P
 
 contains
 
