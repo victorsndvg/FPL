@@ -274,7 +274,7 @@ contains
 
     subroutine LinkedList_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
-    !< Return the length of the list
+    !< Print the keys contained in the list
     !-----------------------------------------------------------------
         class(LinkedList_t), target,      intent(IN)  :: this    !< Linked List
         integer(I4P),                     intent(IN)  :: unit    !< Logic unit.
