@@ -1,6 +1,7 @@
 module DimensionsWrapper6D_UP
 
 USE DimensionsWrapper6D
+USE IR_Precision, only: I4P, str
 
 implicit none
 private
@@ -14,6 +15,7 @@ private
         generic,   public :: Set          => DimensionsWrapper6D_UP_Set
         generic,   public :: Get          => DimensionsWrapper6D_UP_Get
         procedure, public :: isOfDataType => DimensionsWrapper6D_UP_isOfDataType
+        procedure, public :: Print        => DimensionsWrapper6D_UP_Print
         procedure, public :: Free         => DimensionsWrapper6D_UP_Free
         final             ::                 DimensionsWrapper6D_UP_Final
     end type           
@@ -87,5 +89,26 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = same_type_as(this%Value, Mold)
     end function DimensionsWrapper6D_UP_isOfDataType
+
+
+    subroutine DimensionsWrapper6D_UP_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print Wrapper
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_UP_t), intent(IN)  :: this         !< DimensionsWrapper
+        integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
+        character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        integer(I4P)                                  :: iostatd      !< IO error.
+        character(500)                                :: iomsgd       !< Temporary variable for IO error message.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = UP'//&
+                        ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine DimensionsWrapper6D_UP_Print
 
 end module DimensionsWrapper6D_UP

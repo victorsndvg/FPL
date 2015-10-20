@@ -1,7 +1,7 @@
 module DimensionsWrapper0D_R4P
 
 USE DimensionsWrapper0D
-USE IR_Precision, only: R4P
+USE IR_Precision, only: I4P, R4P, str
 
 implicit none
 private
@@ -15,6 +15,7 @@ private
         generic,   public :: Set          => DimensionsWrapper0D_R4P_Set
         generic,   public :: Get          => DimensionsWrapper0D_R4P_Get
         procedure, public :: isOfDataType => DimensionsWrapper0D_R4P_isOfDataType
+        procedure, public :: Print        => DimensionsWrapper0D_R4P_Print
         procedure, public :: Free         => DimensionsWrapper0D_R4P_Free
         final             ::                 DimensionsWrapper0D_R4P_Final
     end type           
@@ -83,5 +84,27 @@ contains
                 isOfDataType = .true.
         end select
     end function DimensionsWrapper0D_R4P_isOfDataType
+
+
+    subroutine DimensionsWrapper0D_R4P_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print Wrapper
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_R4P_t), intent(IN)  :: this         !< DimensionsWrapper
+        integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
+        character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        integer(I4P)                                  :: iostatd      !< IO error.
+        character(500)                                :: iomsgd       !< Temporary variable for IO error message.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
+                            ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Value = '//str(no_sign=.true., n=this%Value)
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine DimensionsWrapper0D_R4P_Print
 
 end module DimensionsWrapper0D_R4P

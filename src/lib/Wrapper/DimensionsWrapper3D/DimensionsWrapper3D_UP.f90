@@ -1,6 +1,7 @@
 module DimensionsWrapper3D_UP
 
 USE DimensionsWrapper3D
+USE IR_Precision, only: I4P, str
 
 implicit none
 private
@@ -15,6 +16,7 @@ private
         generic,   public :: Get          => DimensionsWrapper3D_UP_Get
         procedure, public :: isOfDataType => DimensionsWrapper3D_UP_isOfDataType
         procedure, public :: Free         => DimensionsWrapper3D_UP_Free
+        procedure, public :: Print        => DimensionsWrapper3D_UP_Print
         final             ::                 DimensionsWrapper3D_UP_Final
     end type           
 
@@ -38,7 +40,7 @@ contains
     !< Set Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_UP_t), intent(INOUT) :: this
-        class(*),                         intent(IN)    :: Value(:,:,:)
+        class(*),                         intent(IN)   :: Value(:,:,:)
     !-----------------------------------------------------------------
         allocate(this%Value(size(Value,dim=1),  &
                             size(Value,dim=2),  &
@@ -81,5 +83,26 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = same_type_as(this%Value, Mold)
     end function DimensionsWrapper3D_UP_isOfDataType
+
+
+    subroutine DimensionsWrapper3D_UP_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print Wrapper
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_UP_t),  intent(IN)  :: this         !< DimensionsWrapper
+        integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
+        character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        integer(I4P)                                  :: iostatd      !< IO error.
+        character(500)                                :: iomsgd       !< Temporary variable for IO error message.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = UP'//&
+                            ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine DimensionsWrapper3D_UP_Print
 
 end module DimensionsWrapper3D_UP

@@ -1,6 +1,7 @@
 module DimensionsWrapper7D_DLCA
 
 USE DimensionsWrapper7D
+USE IR_Precision, only: I4P, str
 
 implicit none
 private
@@ -14,6 +15,7 @@ private
         generic,   public :: Set          => DimensionsWrapper7D_DLCA_Set
         generic,   public :: Get          => DimensionsWrapper7D_DLCA_Get
         procedure, public :: isOfDataType => DimensionsWrapper7D_DLCA_isOfDataType
+        procedure, public :: Print        => DimensionsWrapper7D_DLCA_Print
         procedure, public :: Free         => DimensionsWrapper7D_DLCA_Free
         final             ::                 DimensionsWrapper7D_DLCA_Final
     end type           
@@ -96,5 +98,28 @@ contains
                 isOfDataType = .true.
         end select
     end function DimensionsWrapper7D_DLCA_isOfDataType
+
+
+    subroutine DimensionsWrapper7D_DLCA_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print Wrapper
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_DLCA_t),intent(IN)  :: this         !< DimensionsWrapper
+        integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
+        character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        integer(I4P)                                  :: iostatd      !< IO error.
+        character(500)                                :: iomsgd       !< Temporary variable for IO error message.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
+                        ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Value = '
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine DimensionsWrapper7D_DLCA_Print
 
 end module DimensionsWrapper7D_DLCA

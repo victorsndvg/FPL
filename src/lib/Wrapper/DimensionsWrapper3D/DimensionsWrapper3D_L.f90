@@ -1,6 +1,7 @@
 module DimensionsWrapper3D_L
 
 USE DimensionsWrapper3D
+USE IR_Precision, only: I4P, str
 
 implicit none
 private
@@ -15,6 +16,7 @@ private
         generic,   public :: Get          => DimensionsWrapper3D_L_Get
         procedure, public :: isOfDataType => DimensionsWrapper3D_L_isOfDataType
         procedure, public :: Free         => DimensionsWrapper3D_L_Free
+        procedure, public :: Print        => DimensionsWrapper3D_L_Print
         final             ::                 DimensionsWrapper3D_L_Final
     end type           
 
@@ -88,5 +90,28 @@ contains
                 isOfDataType = .true.
         end select
     end function DimensionsWrapper3D_L_isOfDataType
+
+
+    subroutine DimensionsWrapper3D_L_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print Wrapper
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_L_t), intent(IN)  :: this         !< DimensionsWrapper
+        integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
+        character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        integer(I4P)                                  :: iostatd      !< IO error.
+        character(500)                                :: iomsgd       !< Temporary variable for IO error message.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
+                        ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Value = '
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine DimensionsWrapper3D_L_Print
 
 end module DimensionsWrapper3D_L

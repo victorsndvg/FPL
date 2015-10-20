@@ -1,7 +1,7 @@
 module DimensionsWrapper4D_R8P
 
 USE DimensionsWrapper4D
-USE IR_Precision, only: R8P
+USE IR_Precision, only: I4P, R8P, str
 
 implicit none
 private
@@ -16,6 +16,7 @@ private
         generic,   public :: Get          => DimensionsWrapper4D_R8P_Get
         procedure, public :: isOfDataType => DimensionsWrapper4D_R8P_isOfDataType
         procedure, public :: Free         => DimensionsWrapper4D_R8P_Free
+        procedure, public :: Print        => DimensionsWrapper4D_R8P_Print
         final             ::                 DimensionsWrapper4D_R8P_Final
     end type           
 
@@ -91,5 +92,29 @@ contains
                 isOfDataType = .true.
         end select
     end function DimensionsWrapper4D_R8P_isOfDataType
+
+
+    subroutine DimensionsWrapper4D_R8P_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print Wrapper
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_R8P_t), intent(IN)  :: this         !< DimensionsWrapper
+        integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
+        character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        integer(I4P)                                  :: iostatd      !< IO error.
+        character(500)                                :: iomsgd       !< Temporary variable for IO error message.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P, '//&
+                        ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Value = '
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
+
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine DimensionsWrapper4D_R8P_Print
 
 end module DimensionsWrapper4D_R8P

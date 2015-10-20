@@ -1,6 +1,6 @@
 module DimensionsWrapper
 
-USE IR_Precision, only: I1P
+USE IR_Precision, only: I1P, I4P
 
 implicit none
 private
@@ -17,6 +17,7 @@ private
         generic,   public :: Set           => DimensionsWrapper_Set
         generic,   public :: Get           => DimensionsWrapper_Get
         procedure(DimensionsWrapper_isOfDataType), public, deferred :: isOfDataType
+        procedure(DimensionsWrapper_Print),        public, deferred :: Print
         procedure(DimensionsWrapper_Free),         public, deferred :: Free
     end type
 
@@ -24,6 +25,15 @@ private
         subroutine DimensionsWrapper_Free(this)
             import DimensionsWrapper_t
             class(DimensionsWrapper_t), intent(INOUT) :: this
+        end subroutine
+        subroutine DimensionsWrapper_Print(this, unit, prefix, iostat, iomsg)
+            import DimensionsWrapper_t
+            import I4P
+            class(DimensionsWrapper_t), intent(IN)  :: this
+            integer(I4P),               intent(IN)  :: unit
+            character(*), optional,     intent(IN)  :: prefix
+            integer(I4P), optional,     intent(OUT) :: iostat
+            character(*), optional,     intent(OUT) :: iomsg
         end subroutine
         function DimensionsWrapper_isOfDataType(this, Mold) result(isOfDataType)
             import DimensionsWrapper_t
@@ -53,7 +63,7 @@ contains
     !-----------------------------------------------------------------
     !< Get the dimensions of the Value contained in the wrapper
     !-----------------------------------------------------------------
-        class(DimensionsWrapper_t), intent(INOUT) :: this
+        class(DimensionsWrapper_t), intent(IN) :: this
     !-----------------------------------------------------------------
         integer(I1P)                              :: Dimensions
         Dimensions = this%Dimensions
