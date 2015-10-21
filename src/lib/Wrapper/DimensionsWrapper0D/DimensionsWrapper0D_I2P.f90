@@ -54,9 +54,12 @@ contains
     !< Get I2P Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper0D_I2P_t), intent(IN)  :: this
-        integer(I2P), allocatable,        intent(OUT) :: Value
+        class(*),                         intent(OUT) :: Value
     !-----------------------------------------------------------------
-        allocate(Value, source=this%Value)
+        select type (Value)
+            type is (integer(I2P))
+                Value = this%Value
+        end select
     end subroutine
 
 

@@ -54,9 +54,12 @@ contains
     !< Get logical Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper0D_L_t), intent(IN)  :: this
-        logical, allocatable,           intent(OUT) :: Value
+        class(*),                       intent(OUT) :: Value
     !-----------------------------------------------------------------
-        allocate(Value, source=this%Value)
+        select type (Value)
+            type is (logical)
+                Value = this%Value
+        end select
     end subroutine
 
 

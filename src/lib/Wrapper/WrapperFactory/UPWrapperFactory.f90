@@ -240,7 +240,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value
+        class(*),                   allocatable, intent(INOUT) :: Value
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper0D_UP_t)
@@ -255,7 +255,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value(:)
+        class(*),                   allocatable, intent(INOUT) :: Value(:)
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper1D_UP_t)
@@ -270,7 +270,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value(:,:)
+        class(*),                   allocatable, intent(INOUT) :: Value(:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper2D_UP_t)
@@ -285,7 +285,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value(:,:,:)
+        class(*),                   allocatable, intent(INOUT) :: Value(:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper3D_UP_t)
@@ -300,7 +300,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value(:,:,:,:)
+        class(*),                   allocatable, intent(INOUT) :: Value(:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper4D_UP_t)
@@ -315,7 +315,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value(:,:,:,:,:)
+        class(*),                   allocatable, intent(INOUT) :: Value(:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper5D_UP_t)
@@ -330,7 +330,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:)
+        class(*),                   allocatable, intent(INOUT) :: Value(:,:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper6D_UP_t)
@@ -345,7 +345,7 @@ contains
     !-----------------------------------------------------------------
         class(UPWrapperFactory_t),               intent(IN)    :: this
         class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
-        class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:,:)
+        class(*),                   allocatable, intent(INOUT) :: Value(:,:,:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
             type is(DimensionsWrapper7D_UP_t)

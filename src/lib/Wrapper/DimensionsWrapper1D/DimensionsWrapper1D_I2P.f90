@@ -44,8 +44,7 @@ contains
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                allocate(this%Value(size(Value,dim=1)), &
-                                    source=Value)
+                allocate(this%Value(size(Value,dim=1)), source=Value)
         end select
     end subroutine
 
@@ -55,10 +54,12 @@ contains
     !< Get I2P Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I2P_t), intent(IN)  :: this
-        integer(I2P), allocatable,        intent(OUT) :: Value(:)
+        class(*),                         intent(OUT) :: Value(:)
     !-----------------------------------------------------------------
-        allocate(Value(size(this%Value,dim=1)), &
-                       source=this%Value)
+        select type (Value)
+            type is (integer(I4P))
+                Value = this%Value
+        end select
     end subroutine
 
 

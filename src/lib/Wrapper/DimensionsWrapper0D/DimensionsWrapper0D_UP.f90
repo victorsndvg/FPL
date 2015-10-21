@@ -53,7 +53,7 @@ contains
         class(DimensionsWrapper0D_UP_t), intent(IN)  :: this
         class(*), allocatable,           intent(OUT) :: Value
     !-----------------------------------------------------------------
-        allocate(Value, source=this%Value)
+        allocate(Value, source = this%Value)
     end subroutine
 
 

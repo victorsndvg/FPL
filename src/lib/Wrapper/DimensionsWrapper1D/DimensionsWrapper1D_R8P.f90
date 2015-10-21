@@ -54,9 +54,12 @@ contains
     !< Get R8P Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_R8P_t), intent(IN)  :: this
-        real(R8P), allocatable,           intent(OUT) :: Value(:)
+        class(*),                         intent(OUT) :: Value(:)
     !-----------------------------------------------------------------
-        allocate(Value(size(this%Value,dim=1)), source=this%Value)
+        select type (Value)
+            type is (real(R8P))
+                Value = this%Value
+        end select
     end subroutine
 
 

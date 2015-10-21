@@ -54,9 +54,12 @@ contains
     !< Get I8P Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I8P_t), intent(IN)  :: this
-        integer(I8P), allocatable,        intent(OUT) :: Value(:)
+        class(*),                         intent(OUT) :: Value(:)
     !-----------------------------------------------------------------
-        allocate(Value(size(this%Value,dim=1)), source=this%Value)
+        select type (Value)
+            type is (integer(I8P))
+                Value = this%Value
+        end select
     end subroutine
 
 

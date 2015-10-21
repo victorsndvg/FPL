@@ -54,9 +54,12 @@ contains
     !< Get I4P Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper0D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable,        intent(OUT) :: Value
+        class(*),                         intent(OUT) :: Value
     !-----------------------------------------------------------------
-        allocate(Value, source=this%Value)
+        select type (Value)
+            type is (integer(I4P))
+                Value = this%Value
+        end select
     end subroutine
 
 

@@ -56,11 +56,12 @@ contains
     !< Get R4P Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_R4P_t), intent(IN)  :: this
-        real(R4P), allocatable,           intent(OUT) :: Value(:,:)
+        class(*),                         intent(OUT) :: Value(:,:)
     !-----------------------------------------------------------------
-        allocate(Value(size(this%Value,dim=1),  &
-                       size(this%Value,dim=2)), &
-                       source=this%Value)
+        select type (Value)
+            type is (real(R4P))
+                Value = this%Value
+        end select
     end subroutine
 
 

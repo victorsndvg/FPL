@@ -61,16 +61,12 @@ contains
     !< Get deferred length character array Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_DLCA_t), intent(IN)  :: this
-        character(len=:), allocatable,     intent(OUT) :: Value(:,:,:,:,:,:,:)
+        class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
     !-----------------------------------------------------------------
-!        allocate(Value(size(this%Value,dim=1),  &
-!                       size(this%Value,dim=2),  &
-!                       size(this%Value,dim=3),  &
-!                       size(this%Value,dim=4),  &
-!                       size(this%Value,dim=5),  &
-!                       size(this%Value,dim=6),  &
-!                       size(this%Value,dim=7)), &
-!                       source=this%Value)
+        select type (Value)
+            type is (character(len=*))
+                Value = this%Value
+        end select
     end subroutine
 
 
