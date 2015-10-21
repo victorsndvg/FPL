@@ -104,7 +104,7 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P, '//&
+        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)

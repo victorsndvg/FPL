@@ -197,8 +197,8 @@ contains
             deallocate(Wrapper)
         endif
         if(this%hasSameType(Value(1,1,1,1,1,1))) then
-            call Wrapper%SetDimensions(Dimensions=6_I1P)
             allocate(DimensionsWrapper6D_I1P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=6_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper6D_I1P_t)
                     call Wrapper%Set(Value=Value)
@@ -220,8 +220,8 @@ contains
             deallocate(Wrapper)
         endif
         if(this%hasSameType(Value(1,1,1,1,1,1,1))) then
-            call Wrapper%SetDimensions(Dimensions=7_I1P)
             allocate(DimensionsWrapper7D_I1P_t::Wrapper)
+            call Wrapper%SetDimensions(Dimensions=7_I1P)
             select type (Wrapper)
                 type is(DimensionsWrapper7D_I1P_t)
                     call Wrapper%Set(Value=Value)
