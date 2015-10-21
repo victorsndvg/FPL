@@ -167,7 +167,7 @@ contains
     !-----------------------------------------------------------------
         class(LinkedList_t), target, intent(IN) :: this               !< Linked List
         character(len=*),            intent(IN) :: Key                !< String Key
-        type(LinkedList_t),  pointer            :: Node               !< Linked List Node
+        class(LinkedList_t),  pointer           :: Node               !< Linked List Node
     !-----------------------------------------------------------------
         Node => this
         do while(associated(Node))
