@@ -19,14 +19,22 @@ private
     private
 
     contains
-        procedure         :: create0D => LWrapperFactory_Create0D
-        procedure         :: create1D => LWrapperFactory_Create1D
-        procedure         :: create2D => LWrapperFactory_Create2D
-        procedure         :: create3D => LWrapperFactory_Create3D
-        procedure         :: create4D => LWrapperFactory_Create4D
-        procedure         :: create5D => LWrapperFactory_Create5D
-        procedure         :: create6D => LWrapperFactory_Create6D
-        procedure         :: create7D => LWrapperFactory_Create7D
+        procedure         :: Wrap0D      => LWrapperFactory_Wrap0D
+        procedure         :: Wrap1D      => LWrapperFactory_Wrap1D
+        procedure         :: Wrap2D      => LWrapperFactory_Wrap2D
+        procedure         :: Wrap3D      => LWrapperFactory_Wrap3D
+        procedure         :: Wrap4D      => LWrapperFactory_Wrap4D
+        procedure         :: Wrap5D      => LWrapperFactory_Wrap5D
+        procedure         :: Wrap6D      => LWrapperFactory_Wrap6D
+        procedure         :: Wrap7D      => LWrapperFactory_Wrap7D
+        procedure         :: UnWrap0D    => LWrapperFactory_UnWrap0D
+        procedure         :: UnWrap1D    => LWrapperFactory_UnWrap1D
+        procedure         :: UnWrap2D    => LWrapperFactory_UnWrap2D
+        procedure         :: UnWrap3D    => LWrapperFactory_UnWrap3D
+        procedure         :: UnWrap4D    => LWrapperFactory_UnWrap4D
+        procedure         :: UnWrap5D    => LWrapperFactory_UnWrap5D
+        procedure         :: UnWrap6D    => LWrapperFactory_UnWrap6D
+        procedure         :: UnWrap7D    => LWrapperFactory_UnWrap7D
         procedure, public :: hasSameType => LWrapperFactory_hasSameType
     end type
 
@@ -46,7 +54,7 @@ contains
     end function LWrapperFactory_hasSameType
 
 
-    subroutine LWrapperFactory_Create0D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap0D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 0D Wrapper
     !-----------------------------------------------------------------
@@ -66,10 +74,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create0D
+    end subroutine LWrapperFactory_Wrap0D
 
 
-    subroutine LWrapperFactory_Create1D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap1D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 1D Wrapper
     !-----------------------------------------------------------------
@@ -89,10 +97,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create1D
+    end subroutine LWrapperFactory_Wrap1D
 
 
-    subroutine LWrapperFactory_Create2D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap2D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 2D Wrapper
     !-----------------------------------------------------------------
@@ -112,10 +120,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create2D
+    end subroutine LWrapperFactory_Wrap2D
 
 
-    subroutine LWrapperFactory_Create3D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap3D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 3D Wrapper
     !-----------------------------------------------------------------
@@ -135,10 +143,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create3D
+    end subroutine LWrapperFactory_Wrap3D
 
 
-    subroutine LWrapperFactory_Create4D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap4D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 4D Wrapper
     !-----------------------------------------------------------------
@@ -158,10 +166,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create4D
+    end subroutine LWrapperFactory_Wrap4D
 
 
-    subroutine LWrapperFactory_Create5D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap5D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 5D Wrapper
     !-----------------------------------------------------------------
@@ -181,10 +189,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create5D
+    end subroutine LWrapperFactory_Wrap5D
 
 
-    subroutine LWrapperFactory_Create6D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap6D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 6D Wrapper
     !-----------------------------------------------------------------
@@ -204,10 +212,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create6D
+    end subroutine LWrapperFactory_Wrap6D
 
 
-    subroutine LWrapperFactory_Create7D(this, Value, Wrapper)
+    subroutine LWrapperFactory_Wrap7D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create L 7D Wrapper
     !-----------------------------------------------------------------
@@ -227,7 +235,126 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Create7D
+    end subroutine LWrapperFactory_Wrap7D
 
+
+    subroutine LWrapperFactory_UnWrap0D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 0D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper0D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine LWrapperFactory_UnWrap1D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 1D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper1D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine LWrapperFactory_UnWrap2D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 2D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper2D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine LWrapperFactory_UnWrap3D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 3D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper3D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine LWrapperFactory_UnWrap4D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 4D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper4D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine LWrapperFactory_UnWrap5D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 5D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper5D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine LWrapperFactory_UnWrap6D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 6D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper6D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine LWrapperFactory_UnWrap7D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the L 7D Wrapped Value
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),                intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper7D_L_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
 
 end module LWrapperFactory

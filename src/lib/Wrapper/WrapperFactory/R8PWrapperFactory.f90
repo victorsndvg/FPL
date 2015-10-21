@@ -19,20 +19,29 @@ private
     private
 
     contains
-        procedure         :: create0D => R8PWrapperFactory_Create0D
-        procedure         :: create1D => R8PWrapperFactory_Create1D
-        procedure         :: create2D => R8PWrapperFactory_Create2D
-        procedure         :: create3D => R8PWrapperFactory_Create3D
-        procedure         :: create4D => R8PWrapperFactory_Create4D
-        procedure         :: create5D => R8PWrapperFactory_Create5D
-        procedure         :: create6D => R8PWrapperFactory_Create6D
-        procedure         :: create7D => R8PWrapperFactory_Create7D
+        procedure         :: Wrap0D      => R8PWrapperFactory_Wrap0D
+        procedure         :: Wrap1D      => R8PWrapperFactory_Wrap1D
+        procedure         :: Wrap2D      => R8PWrapperFactory_Wrap2D
+        procedure         :: Wrap3D      => R8PWrapperFactory_Wrap3D
+        procedure         :: Wrap4D      => R8PWrapperFactory_Wrap4D
+        procedure         :: Wrap5D      => R8PWrapperFactory_Wrap5D
+        procedure         :: Wrap6D      => R8PWrapperFactory_Wrap6D
+        procedure         :: Wrap7D      => R8PWrapperFactory_Wrap7D
+        procedure         :: UnWrap0D    => R8PWrapperFactory_UnWrap0D
+        procedure         :: UnWrap1D    => R8PWrapperFactory_UnWrap1D
+        procedure         :: UnWrap2D    => R8PWrapperFactory_UnWrap2D
+        procedure         :: UnWrap3D    => R8PWrapperFactory_UnWrap3D
+        procedure         :: UnWrap4D    => R8PWrapperFactory_UnWrap4D
+        procedure         :: UnWrap5D    => R8PWrapperFactory_UnWrap5D
+        procedure         :: UnWrap6D    => R8PWrapperFactory_UnWrap6D
+        procedure         :: UnWrap7D    => R8PWrapperFactory_UnWrap7D
         procedure, public :: hasSameType => R8PWrapperFactory_hasSameType
     end type
 
     type(R8PWrapperFactory_t), public, target :: WrapperFactoryR8P
 
 contains
+
 
     function R8PWrapperFactory_hasSameType(this, Value) result(hasSameType)
         class(R8PWrapperFactory_t), intent(IN) :: this
@@ -46,7 +55,7 @@ contains
     end function R8PWrapperFactory_hasSameType
 
 
-    subroutine R8PWrapperFactory_Create0D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap0D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 0D Wrapper
     !-----------------------------------------------------------------
@@ -66,10 +75,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create0D
+    end subroutine R8PWrapperFactory_Wrap0D
 
 
-    subroutine R8PWrapperFactory_Create1D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap1D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 1D Wrapper
     !-----------------------------------------------------------------
@@ -89,10 +98,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create1D
+    end subroutine R8PWrapperFactory_Wrap1D
 
 
-    subroutine R8PWrapperFactory_Create2D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap2D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 2D Wrapper
     !-----------------------------------------------------------------
@@ -112,10 +121,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create2D
+    end subroutine R8PWrapperFactory_Wrap2D
 
 
-    subroutine R8PWrapperFactory_Create3D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap3D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 3D Wrapper
     !-----------------------------------------------------------------
@@ -135,10 +144,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create3D
+    end subroutine R8PWrapperFactory_Wrap3D
 
 
-    subroutine R8PWrapperFactory_Create4D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap4D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 4D Wrapper
     !-----------------------------------------------------------------
@@ -158,10 +167,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create4D
+    end subroutine R8PWrapperFactory_Wrap4D
 
 
-    subroutine R8PWrapperFactory_Create5D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap5D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 5D Wrapper
     !-----------------------------------------------------------------
@@ -181,10 +190,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create5D
+    end subroutine R8PWrapperFactory_Wrap5D
 
 
-    subroutine R8PWrapperFactory_Create6D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap6D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 6D Wrapper
     !-----------------------------------------------------------------
@@ -204,10 +213,10 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create6D
+    end subroutine R8PWrapperFactory_Wrap6D
 
 
-    subroutine R8PWrapperFactory_Create7D(this, Value, Wrapper)
+    subroutine R8PWrapperFactory_Wrap7D(this, Value, Wrapper)
     !-----------------------------------------------------------------
     !< Create R8P 7D Wrapper
     !-----------------------------------------------------------------
@@ -227,7 +236,128 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine R8PWrapperFactory_Create7D
+    end subroutine R8PWrapperFactory_Wrap7D
+
+
+
+    subroutine R8PWrapperFactory_UnWrap0D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 0D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper0D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine R8PWrapperFactory_UnWrap1D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 1D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper1D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine R8PWrapperFactory_UnWrap2D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 2D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper2D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine R8PWrapperFactory_UnWrap3D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 3D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper3D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine R8PWrapperFactory_UnWrap4D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 4D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper4D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine R8PWrapperFactory_UnWrap5D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 5D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper5D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine R8PWrapperFactory_UnWrap6D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 6D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper6D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
+
+
+    subroutine R8PWrapperFactory_UnWrap7D(this, Wrapper, Value)
+    !-----------------------------------------------------------------
+    !< Return the R8P 7D Wrapped Value
+    !-----------------------------------------------------------------
+        class(R8PWrapperFactory_t),              intent(IN)    :: this
+        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        select type (Wrapper)
+            type is(DimensionsWrapper7D_R8P_t)
+                call Wrapper%Get(Value = Value)
+        end select
+    end subroutine
 
 
 end module R8PWrapperFactory
