@@ -103,9 +103,10 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
-                            ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
-                            ', Value = '//str(n=this%Value)
+        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
+                        ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Value = '
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper1D_L_Print

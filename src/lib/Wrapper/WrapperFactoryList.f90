@@ -145,6 +145,8 @@ contains
                         call Next%AddNode(Key=Key, WrapperFactory=WrapperFactory)
                     end select
                 endif
+            else
+                call this%SetValue(Value=WrapperFactory)
             endif
         else
             call this%SetKey(Key=Key)

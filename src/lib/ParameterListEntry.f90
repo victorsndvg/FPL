@@ -105,6 +105,8 @@ contains
                         call Next%AddNode(Key=Key, Value=Value)
                     end select
                 endif
+            else
+                call this%SetValue(Value=Value)
             endif
         else
             call this%SetKey(Key=Key)
