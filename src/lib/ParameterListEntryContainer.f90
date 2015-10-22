@@ -41,10 +41,10 @@ save
         procedure         ::                   ParameterListEntryContainer_Set7D
         procedure         ::                   ParameterListEntryContainer_Get0D
         procedure         ::                   ParameterListEntryContainer_Get1D
-        procedure         ::                   ParameterListEntryContainer_Clone1D
         procedure         :: Hash           => ParameterListEntryContainer_Hash
         procedure, public :: Init           => ParameterListEntryContainer_Init
         procedure, public :: Free           => ParameterListEntryContainer_Free
+        procedure, public :: Print          => ParameterListEntryContainer_Print
         generic,   public :: Set            => ParameterListEntryContainer_Set0D, &
                                                ParameterListEntryContainer_Set1D, &
                                                ParameterListEntryContainer_Set2D, &
@@ -55,7 +55,6 @@ save
                                                ParameterListEntryContainer_Set7D
         generic,   public :: Get            => ParameterListEntryContainer_Get0D, &
                                                ParameterListEntryContainer_Get1D
-        generic,   public :: Clone          => ParameterListEntryContainer_Clone1D
 !        procedure, public :: isPresent      => ParameterListEntryContainer_isPresent
 !        procedure, public :: isOfDataType   => ParameterListEntryContainer_isOfDataType
 !        procedure, public :: isSubList      => ParameterListEntryContainer_isSubList
@@ -344,32 +343,6 @@ contains
     end subroutine ParameterListEntryContainer_Get1D
 
 
-    subroutine ParameterListEntryContainer_Clone1D(this,Key,Value)
-    !-----------------------------------------------------------------
-    !< Return an I1P scalar Value given the Key
-    !-----------------------------------------------------------------
-        class(ParameterListEntryContainer_t), intent(IN)    :: this      !< Parameter List Entry Containter type
-        character(len=*),                     intent(IN)    :: Key       !< String Key
-        class(*), allocatable,                intent(INOUT) :: Value(:)     
-        class(*), pointer                                   :: Node
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper
-    !-----------------------------------------------------------------
-        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
-        if(associated(Node)) then
-            select type(Node)
-                type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
-                        call Wrapper%Print(unit=6)
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
-!                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
-            end select
-        end if
-    end subroutine ParameterListEntryContainer_Clone1D
-
-
     function ParameterListEntryContainer_isPresent(this,Key) result(isPresent)
     !-----------------------------------------------------------------
     !< Check if a Key is present in the DataBase
@@ -409,6 +382,34 @@ contains
             enddo
         endif
     end function ParameterListEntryContainer_GetLength
+
+
+    subroutine ParameterListEntryContainer_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print the content of the DataBase
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)  :: this    !< Linked List
+        integer(I4P),                         intent(IN)  :: unit    !< Logic unit.
+        character(*), optional,               intent(IN)  :: prefix  !< Prefixing string.
+        integer(I4P), optional,               intent(OUT) :: iostat  !< IO error.
+        character(*), optional,               intent(OUT) :: iomsg   !< IO error message.
+        character(len=:), allocatable                     :: prefd   !< Prefixing string.
+        integer(I4P)                                      :: iostatd !< IO error.
+        character(500)                                    :: iomsgd  !< Temporary variable for IO error message.
+        integer(I4P)                                      :: DBIter  !< Database iterator
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(*,fmt='(A)') prefd//' LINKED LIST KEYS:'
+        if (allocated(this%DataBase)) then
+            write(*,fmt='(A)') prefd//' PARAMETER LIST CONTENT:'
+            write(*,fmt='(A)') prefd//' -----------------------'
+            do DBIter=lbound(this%DataBase,dim=1), ubound(this%DataBase,dim=1)
+                call this%DataBase(DBIter)%print(unit=unit, prefix=prefd//"  ",iostat=iostatd,iomsg=iomsgd)
+            enddo
+        endif
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine ParameterListEntryContainer_Print
 
 
 end module ParameterListEntryContainer
