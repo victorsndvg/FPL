@@ -163,7 +163,6 @@ contains
         WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
-            call Wrapper%Print(unit=6)
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
             call Wrapper%Free()
             deallocate(Wrapper)
@@ -308,7 +307,6 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        call Wrapper%Print(unit=6)
                         WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -334,7 +332,6 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        call Wrapper%Print(unit=6)
                         WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -399,12 +396,13 @@ contains
         integer(I4P)                                      :: DBIter  !< Database iterator
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(*,fmt='(A)') prefd//' LINKED LIST KEYS:'
+        write(*,fmt='(A)') prefd//' PARAMETER LIST CONTENT:'
+        write(*,fmt='(A)') prefd//' -----------------------'
         if (allocated(this%DataBase)) then
-            write(*,fmt='(A)') prefd//' PARAMETER LIST CONTENT:'
-            write(*,fmt='(A)') prefd//' -----------------------'
             do DBIter=lbound(this%DataBase,dim=1), ubound(this%DataBase,dim=1)
-                call this%DataBase(DBIter)%print(unit=unit, prefix=prefd//"  ",iostat=iostatd,iomsg=iomsgd)
+                call this%DataBase(DBIter)%Print(unit=unit,                             &
+                        prefix=prefd//'  ['//trim(str(no_sign=.true., n=DBIter))//'] ', &
+                        iostat=iostatd,iomsg=iomsgd)
             enddo
         endif
         if (present(iostat)) iostat = iostatd

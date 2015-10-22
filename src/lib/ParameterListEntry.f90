@@ -174,7 +174,7 @@ contains
         select type (Node)
             class is (ParameterListEntry_t)
                 do while(Node%HasKey())
-                    write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//'   Key = '//Node%GetKey()//', '
+                    write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Node%GetKey()//'", '
                     call Node%Value%Print(unit=unit)
                     if (Node%HasNext()) then
                         Next => Node%GetNext()
