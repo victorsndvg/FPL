@@ -124,26 +124,25 @@ contains
     character(len=*),                    intent(IN)    :: Key         !< String Key
     class(ParameterListEntry_t),  pointer              :: CurrentNode !< Pointer to the current Wrapper Factory List
     class(ParameterListEntry_t),  pointer              :: NextNode    !< Pointer to a next Wrapper Factory List
+    class(*),                     pointer              :: AuxPointer  !< Aux pointer
     !-----------------------------------------------------------------
+    nullify(NextNode)
     CurrentNode => this
     do while(associated(CurrentNode))
+        select type (AuxPointer => CurrentNode%GetNext())
+            type is (ParameterListEntry_t)
+                NextNode => AuxPointer
+            class Default
+                Nullify(NextNode)
+        end select
         if (CurrentNode%HasKey()) then
             if (CurrentNode%GetKey()==Key) then
-                if (CurrentNode%HasNext()) then
-                    if (NextNode%HasKey()) then
-                        call CurrentNode%SetKey(Key=NextNode%GetKey())
-                    else
-                        call CurrentNode%DeallocateKey()
-                    endif
-                    if (NextNode%HasValue()) then
-                        allocate(CurrentNode%Value, source=NextNode%Value)
-                    else
-                        deallocate(CurrentNode%Value)
-                    endif
-                    call CurrentNode%SetNext(Next=NextNode%GetNext())
+                call CurrentNode%DeallocateKey()
+                if (CurrentNode%HasValue()) deallocate(CurrentNode%Value)
+                if (associated(NextNode)) then
+                    if (NextNode%HasKey()) call CurrentNode%SetKey(Key=NextNode%GetKey())
+                    if (NextNode%HasValue()) call CurrentNode%SetValue(Value=NextNode%Value)
                 else
-                    call CurrentNode%DeallocateKey()
-                    if (CurrentNode%HasValue()) deallocate(CurrentNode%Value)
                     call CurrentNode%NullifyNext()
                 endif
                 exit

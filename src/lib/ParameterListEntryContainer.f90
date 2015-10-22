@@ -41,6 +41,12 @@ save
         procedure         ::                   ParameterListEntryContainer_Set7D
         procedure         ::                   ParameterListEntryContainer_Get0D
         procedure         ::                   ParameterListEntryContainer_Get1D
+        procedure         ::                   ParameterListEntryContainer_Get2D
+        procedure         ::                   ParameterListEntryContainer_Get3D
+        procedure         ::                   ParameterListEntryContainer_Get4D
+        procedure         ::                   ParameterListEntryContainer_Get5D
+        procedure         ::                   ParameterListEntryContainer_Get6D
+        procedure         ::                   ParameterListEntryContainer_Get7D
         procedure         :: Hash           => ParameterListEntryContainer_Hash
         procedure, public :: Init           => ParameterListEntryContainer_Init
         procedure, public :: Free           => ParameterListEntryContainer_Free
@@ -54,7 +60,13 @@ save
                                                ParameterListEntryContainer_Set6D, &
                                                ParameterListEntryContainer_Set7D
         generic,   public :: Get            => ParameterListEntryContainer_Get0D, &
-                                               ParameterListEntryContainer_Get1D
+                                               ParameterListEntryContainer_Get1D, &
+                                               ParameterListEntryContainer_Get2D, &
+                                               ParameterListEntryContainer_Get3D, &
+                                               ParameterListEntryContainer_Get4D, &
+                                               ParameterListEntryContainer_Get5D, &
+                                               ParameterListEntryContainer_Get6D, &
+                                               ParameterListEntryContainer_Get7D
 !        procedure, public :: isPresent      => ParameterListEntryContainer_isPresent
 !        procedure, public :: isOfDataType   => ParameterListEntryContainer_isOfDataType
 !        procedure, public :: isSubList      => ParameterListEntryContainer_isSubList
@@ -292,14 +304,14 @@ contains
 
     subroutine ParameterListEntryContainer_Get0D(this,Key,Value)
     !-----------------------------------------------------------------
-    !< Return an I1P scalar Value given the Key
+    !< Return a scalar Value given the Key
     !-----------------------------------------------------------------
-        class(ParameterListEntryContainer_t), intent(IN)    :: this      !< Parameter List Entry Containter type
-        character(len=*),                     intent(IN)    :: Key       !< String Key
-        class(*),                             intent(INOUT) :: Value     
-        class(*), pointer                                   :: Node
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*),                             intent(INOUT) :: Value          !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -317,14 +329,14 @@ contains
 
     subroutine ParameterListEntryContainer_Get1D(this,Key,Value)
     !-----------------------------------------------------------------
-    !< Return an I1P scalar Value given the Key
+    !< Return a vector Value given the Key
     !-----------------------------------------------------------------
-        class(ParameterListEntryContainer_t), intent(IN)    :: this      !< Parameter List Entry Containter type
-        character(len=*),                     intent(IN)    :: Key       !< String Key
-        class(*),                             intent(INOUT) :: Value(:)     
-        class(*), pointer                                   :: Node
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*),                             intent(INOUT) :: Value(:)       !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -338,6 +350,156 @@ contains
             end select
         end if
     end subroutine ParameterListEntryContainer_Get1D
+
+
+    subroutine ParameterListEntryContainer_Get2D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 2D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter 
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    call Node%GetValue(Value=Wrapper)
+                    if(allocated(Wrapper)) then
+                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
+                    endif
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_Get2D
+
+
+    subroutine ParameterListEntryContainer_Get3D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 3D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    call Node%GetValue(Value=Wrapper)
+                    if(allocated(Wrapper)) then
+                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
+                    endif
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_Get3D
+
+
+    subroutine ParameterListEntryContainer_Get4D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 4D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    call Node%GetValue(Value=Wrapper)
+                    if(allocated(Wrapper)) then
+                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
+                    endif
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_Get4D
+
+
+    subroutine ParameterListEntryContainer_Get5D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 5D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this             !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key              !< String Key
+        class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node             !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper          !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    call Node%GetValue(Value=Wrapper)
+                    if(allocated(Wrapper)) then
+                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
+                    endif
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_Get5D
+
+
+    subroutine ParameterListEntryContainer_Get6D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 6D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key                !< String Key
+        class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node               !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory     !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper            !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    call Node%GetValue(Value=Wrapper)
+                    if(allocated(Wrapper)) then
+                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
+                    endif
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_Get6D
+
+
+    subroutine ParameterListEntryContainer_Get7D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 7D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key                  !< String Key
+        class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory       !< Wrapper factory
+        class(DimensionsWrapper_t), allocatable             :: Wrapper              !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    call Node%GetValue(Value=Wrapper)
+                    if(allocated(Wrapper)) then
+                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
+                    endif
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_Get7D
 
 
     function ParameterListEntryContainer_isPresent(this,Key) result(isPresent)
