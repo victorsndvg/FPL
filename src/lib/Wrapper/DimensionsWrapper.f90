@@ -1,6 +1,6 @@
 module DimensionsWrapper
 
-USE IR_Precision, only: I1P, I4P
+USE IR_Precision, only: I1P, I4P, str
 
 implicit none
 private
@@ -10,14 +10,10 @@ private
         integer(I1P) :: Dimensions = -1
     contains
     private
-        procedure         ::                  DimensionsWrapper_Set
-        procedure         ::                  DimensionsWrapper_Get
         procedure, public :: SetDimensions => DimensionsWrapper_SetDimensions
         procedure, public :: GetDimensions => DimensionsWrapper_GetDimensions
-        generic,   public :: Set           => DimensionsWrapper_Set
-        generic,   public :: Get           => DimensionsWrapper_Get
+        procedure, public :: Print         => DimensionsWrapper_Print
         procedure(DimensionsWrapper_isOfDataType), public, deferred :: isOfDataType
-        procedure(DimensionsWrapper_Print),        public, deferred :: Print
         procedure(DimensionsWrapper_Free),         public, deferred :: Free
     end type
 
@@ -26,15 +22,7 @@ private
             import DimensionsWrapper_t
             class(DimensionsWrapper_t), intent(INOUT) :: this
         end subroutine
-        subroutine DimensionsWrapper_Print(this, unit, prefix, iostat, iomsg)
-            import DimensionsWrapper_t
-            import I4P
-            class(DimensionsWrapper_t), intent(IN)  :: this
-            integer(I4P),               intent(IN)  :: unit
-            character(*), optional,     intent(IN)  :: prefix
-            integer(I4P), optional,     intent(OUT) :: iostat
-            character(*), optional,     intent(OUT) :: iomsg
-        end subroutine
+
         function DimensionsWrapper_isOfDataType(this, Mold) result(isOfDataType)
             import DimensionsWrapper_t
             class(DimensionsWrapper_t), intent(IN) :: this
@@ -69,20 +57,25 @@ contains
         Dimensions = this%Dimensions
     end function
 
-    subroutine DimensionsWrapper_Set(this)
-    !-----------------------------------------------------------------
-    !< Empty Set implementation
-    !-----------------------------------------------------------------
-        class(DimensionsWrapper_t), intent(INOUT) :: this
-    !-----------------------------------------------------------------
-    end subroutine
 
-    subroutine DimensionsWrapper_Get(this)
+    subroutine DimensionsWrapper_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
-    !< Empty Get implementation
+    !< Generic Wrapper Print
     !-----------------------------------------------------------------
-        class(DimensionsWrapper_t), intent(IN) :: this
+        class(DimensionsWrapper_t),       intent(IN)  :: this         !< DimensionsWrapper
+        integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
+        character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
+        integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
+        character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
+        character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        integer(I4P)                                  :: iostatd      !< IO error.
+        character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
-    end subroutine
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = -, '//&
+                            ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine DimensionsWrapper_Print
 
 end module DimensionsWrapper

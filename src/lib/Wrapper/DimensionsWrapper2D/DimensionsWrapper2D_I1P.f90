@@ -10,10 +10,8 @@ private
         integer(I1P), allocatable :: Value(:,:)
     contains
     private
-        procedure         ::                 DimensionsWrapper2D_I1P_Set
-        procedure         ::                 DimensionsWrapper2D_I1P_Get
-        generic,   public :: Set          => DimensionsWrapper2D_I1P_Set
-        generic,   public :: Get          => DimensionsWrapper2D_I1P_Get
+        procedure, public :: Set          => DimensionsWrapper2D_I1P_Set
+        procedure, public :: Get          => DimensionsWrapper2D_I1P_Get
         procedure, public :: isOfDataType => DimensionsWrapper2D_I1P_isOfDataType
         procedure, public :: Free         => DimensionsWrapper2D_I1P_Free
         procedure, public :: Print        => DimensionsWrapper2D_I1P_Print

@@ -10,10 +10,8 @@ private
         character(len=:), allocatable :: Value
     contains
     private
-        procedure         ::                 DimensionsWrapper0D_DLCA_Set
-        procedure         ::                 DimensionsWrapper0D_DLCA_Get
-        generic,   public :: Set          => DimensionsWrapper0D_DLCA_Set
-        generic,   public :: Get          => DimensionsWrapper0D_DLCA_Get
+        procedure, public :: Set          => DimensionsWrapper0D_DLCA_Set
+        procedure, public :: Get          => DimensionsWrapper0D_DLCA_Get
         procedure, public :: isOfDataType => DimensionsWrapper0D_DLCA_isOfDataType
         procedure, public :: Free         => DimensionsWrapper0D_DLCA_Free
         procedure, public :: Print        => DimensionsWrapper0D_DLCA_Print

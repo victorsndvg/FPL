@@ -10,10 +10,8 @@ private
         real(R4P), allocatable :: Value
     contains
     private
-        procedure         ::                 DimensionsWrapper0D_R4P_Set
-        procedure         ::                 DimensionsWrapper0D_R4P_Get
-        generic,   public :: Set          => DimensionsWrapper0D_R4P_Set
-        generic,   public :: Get          => DimensionsWrapper0D_R4P_Get
+        procedure, public :: Set          => DimensionsWrapper0D_R4P_Set
+        procedure, public :: Get          => DimensionsWrapper0D_R4P_Get
         procedure, public :: isOfDataType => DimensionsWrapper0D_R4P_isOfDataType
         procedure, public :: Print        => DimensionsWrapper0D_R4P_Print
         procedure, public :: Free         => DimensionsWrapper0D_R4P_Free

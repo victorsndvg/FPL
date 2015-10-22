@@ -10,10 +10,8 @@ private
         character(len=:), allocatable :: Value(:,:,:,:,:)
     contains
     private
-        procedure         ::                 DimensionsWrapper5D_DLCA_Set
-        procedure         ::                 DimensionsWrapper5D_DLCA_Get
-        generic,   public :: Set          => DimensionsWrapper5D_DLCA_Set
-        generic,   public :: Get          => DimensionsWrapper5D_DLCA_Get
+        procedure, public :: Set          => DimensionsWrapper5D_DLCA_Set
+        procedure, public :: Get          => DimensionsWrapper5D_DLCA_Get
         procedure, public :: isOfDataType => DimensionsWrapper5D_DLCA_isOfDataType
         procedure, public :: Print        => DimensionsWrapper5D_DLCA_Print
         procedure, public :: Free         => DimensionsWrapper5D_DLCA_Free
@@ -40,7 +38,7 @@ contains
     !< Set DLCA Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_DLCA_t), intent(INOUT) :: this
-        class(*),                         intent(IN)    :: Value(:,:,:,:,:)
+        class(*),                          intent(IN)    :: Value(:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))

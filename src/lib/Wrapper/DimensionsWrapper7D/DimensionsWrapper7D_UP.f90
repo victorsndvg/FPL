@@ -10,10 +10,8 @@ private
         class(*), allocatable :: Value(:,:,:,:,:,:,:)
     contains
     private
-        procedure         ::                 DimensionsWrapper7D_UP_Set
-        procedure         ::                 DimensionsWrapper7D_UP_Get
-        generic,   public :: Set          => DimensionsWrapper7D_UP_Set
-        generic,   public :: Get          => DimensionsWrapper7D_UP_Get
+        procedure, public :: Set          => DimensionsWrapper7D_UP_Set
+        procedure, public :: Get          => DimensionsWrapper7D_UP_Get
         procedure, public :: isOfDataType => DimensionsWrapper7D_UP_isOfDataType
         procedure, public :: Print        => DimensionsWrapper7D_UP_Print
         procedure, public :: Free         => DimensionsWrapper7D_UP_Free

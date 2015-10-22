@@ -10,10 +10,8 @@ private
         logical, allocatable :: Value(:,:,:,:,:)
     contains
     private
-        procedure         ::                 DimensionsWrapper5D_L_Set
-        procedure         ::                 DimensionsWrapper5D_L_Get
-        generic,   public :: Set          => DimensionsWrapper5D_L_Set
-        generic,   public :: Get          => DimensionsWrapper5D_L_Get
+        procedure, public :: Set          => DimensionsWrapper5D_L_Set
+        procedure, public :: Get          => DimensionsWrapper5D_L_Get
         procedure, public :: isOfDataType => DimensionsWrapper5D_L_isOfDataType
         procedure, public :: Print        => DimensionsWrapper5D_L_Print
         procedure, public :: Free         => DimensionsWrapper5D_L_Free

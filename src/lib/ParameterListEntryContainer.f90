@@ -17,6 +17,14 @@ USE ParameterListEntry
 USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper
+USE DimensionsWrapper0D
+USE DimensionsWrapper1D
+USE DimensionsWrapper2D
+USE DimensionsWrapper3D
+USE DimensionsWrapper4D
+USE DimensionsWrapper5D
+USE DimensionsWrapper6D
+USE DimensionsWrapper7D
 
 implicit none
 private
@@ -307,7 +315,6 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value          !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
         class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
@@ -315,10 +322,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper0D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get0D
@@ -332,7 +339,6 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
         class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
@@ -340,10 +346,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper1D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get1D
@@ -365,10 +371,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper2D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get2D
@@ -382,7 +388,6 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
         class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
@@ -390,10 +395,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper3D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get3D
@@ -407,7 +412,6 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
         class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
@@ -415,10 +419,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper4D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get4D
@@ -440,10 +444,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper5D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get5D
@@ -457,7 +461,6 @@ contains
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node               !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory     !< Wrapper factory
         class(DimensionsWrapper_t), pointer                 :: Wrapper            !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
@@ -465,10 +468,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper6D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get6D
@@ -482,7 +485,6 @@ contains
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory       !< Wrapper factory
         class(DimensionsWrapper_t), pointer                 :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
@@ -490,10 +492,10 @@ contains
             select type(Node)
                 type is (ParameterListEntry_t)
                     Wrapper => Node%PointToValue()
-                    if(associated(Wrapper)) then
-                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
-                        if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
-                    endif
+                    select type(Wrapper)
+                        class is (DimensionsWrapper7D_t)
+                            call Wrapper%Get(Value=Value)
+                    end select
             end select
         end if
     end subroutine ParameterListEntryContainer_Get7D
@@ -566,7 +568,6 @@ contains
         endif
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
-        call TheWrapperFactoryList%Print(unit=unit)
     end subroutine ParameterListEntryContainer_Print
 
 
