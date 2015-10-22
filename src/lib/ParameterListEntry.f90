@@ -165,7 +165,7 @@ contains
     end subroutine ParameterListEntry_RemoveNode
 
 
-    subroutine ParameterListEntry_Print(this, unit, prefix, iostat, iomsg)
+    recursive subroutine ParameterListEntry_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print the keys/value pair contained in the parameter list
     !-----------------------------------------------------------------
@@ -177,29 +177,22 @@ contains
         character(len=:), allocatable                 :: prefd        !< Prefixing string.
         integer(I4P)                                  :: iostatd      !< IO error.
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
-        class(*), pointer                             :: Node         !< Pointer for scanning the list.
+        class(ParameterListEntry_t), pointer          :: Node         !< Pointer for scanning the list.
         class(*), pointer                             :: Next         !< Pointer for scanning the list.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
         Node => this
-        select type (Node)
-            class is (ParameterListEntry_t)
-                do while(Node%HasKey())
-                    write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Node%GetKey()//'", '
-                    call Node%Value%Print(unit=unit)
-                    if (Node%HasNext()) then
-                        Next => Node%GetNext()
-                        select type (Next)
-                            class is (ParameterListEntry_t)
-                                Node => Next
-                            class Default
-                                exit
-                        end select
-                    else
-                        exit
-                    endif
-                enddo
-        end select
+        if(Node%HasKey()) then
+            write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Node%GetKey()//'", '
+            call Node%Value%Print(unit=unit)
+            if (Node%HasNext()) then
+                Next => Node%GetNext()
+                select type (Next)
+                    class is (ParameterListEntry_t)
+                        call Next%Print(unit=unit,prefix=prefd,iostat=iostatd,iomsg=iomsgd)
+                end select
+            endif
+        endif
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine ParameterListEntry_Print
