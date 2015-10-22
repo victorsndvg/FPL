@@ -308,14 +308,14 @@ contains
         class(*),                             intent(INOUT) :: Value          !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -333,14 +333,14 @@ contains
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -358,14 +358,14 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -383,14 +383,14 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -408,14 +408,14 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -433,14 +433,14 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper          !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper          !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -458,14 +458,14 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node               !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory     !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper            !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper            !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
@@ -483,14 +483,14 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory       !< Wrapper factory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper              !< Wrapper
+        class(DimensionsWrapper_t), pointer                 :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
             select type(Node)
                 type is (ParameterListEntry_t)
-                    call Node%GetValue(Value=Wrapper)
-                    if(allocated(Wrapper)) then
+                    Wrapper => Node%PointToValue()
+                    if(associated(Wrapper)) then
                         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif

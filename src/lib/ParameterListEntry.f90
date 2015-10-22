@@ -13,15 +13,16 @@ private
         class(DimensionsWrapper_t), allocatable :: Value
     contains
     private
-        procedure         ::                ParameterListEntry_AddNode
-        procedure, public :: Free        => ParameterListEntry_Free
-        procedure, public :: Print       => ParameterListEntry_Print
-        procedure, public :: HasValue    => ParameterListEntry_HasValue
-        procedure, public :: SetValue    => ParameterListEntry_SetValue
-        procedure, public :: GetValue    => ParameterListEntry_GetValue
-        procedure, public :: RemoveNode  => ParameterListEntry_RemoveNode
-        generic,   public :: AddNode     => ParameterListEntry_AddNode     
-        final             ::                ParameterListEntry_Finalize 
+        procedure         ::                  ParameterListEntry_AddNode
+        procedure, public :: Free          => ParameterListEntry_Free
+        procedure, public :: Print         => ParameterListEntry_Print
+        procedure, public :: HasValue      => ParameterListEntry_HasValue
+        procedure, public :: SetValue      => ParameterListEntry_SetValue
+        procedure, public :: GetValue      => ParameterListEntry_GetValue
+        procedure, public :: PointToValue  => ParameterListEntry_PointToValue
+        procedure, public :: RemoveNode    => ParameterListEntry_RemoveNode
+        generic,   public :: AddNode       => ParameterListEntry_AddNode     
+        final             ::                  ParameterListEntry_Finalize 
     end type ParameterListEntry_t
 
 public :: ParameterListEntry_t
@@ -33,7 +34,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Value is allocated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterListEntry_t), intent(IN) :: this               !< Wrapper Factory List 
+        class(ParameterListEntry_t), intent(IN) :: this               !< Parameter List 
         logical                                 :: hasValue           !< Check if Value is allocated
     !-----------------------------------------------------------------
         hasValue = allocated(this%Value)
@@ -42,10 +43,10 @@ contains
 
     subroutine ParameterListEntry_SetValue(this, Value)
     !-----------------------------------------------------------------
-    !< Return a concrete WrapperFactory
+    !< Set a concrete Wrapper
     !-----------------------------------------------------------------
-        class(ParameterListEntry_t),          intent(INOUT)  :: this     !< Wrapper Factory List
-        class(DimensionsWrapper_t),           intent(IN)     :: Value    !< Concrete WrapperFactory
+        class(ParameterListEntry_t),          intent(INOUT)  :: this  !< Parameter List
+        class(DimensionsWrapper_t),           intent(IN)     :: Value !< Concrete Wrapper
     !-----------------------------------------------------------------
         if(this%HasValue()) deallocate(this%Value)
         allocate(this%Value, source=Value)
@@ -56,18 +57,29 @@ contains
     !-----------------------------------------------------------------
     !< Return a concrete WrapperFactory
     !-----------------------------------------------------------------
-        class(ParameterListEntry_t),             intent(IN)  :: this  !< Wrapper Factory List
-        class(DimensionsWrapper_t), allocatable, intent(OUT) :: Value !< Concrete WrapperFactory
+        class(ParameterListEntry_t),             intent(IN)  :: this  !< Parameter List
+        class(DimensionsWrapper_t), allocatable, intent(OUT) :: Value !< Concrete Wrapper
     !-----------------------------------------------------------------
         if(this%HasValue()) allocate(Value, source=this%Value)
     end subroutine ParameterListEntry_GetValue
+
+
+    function ParameterListEntry_PointToValue(this) result(Value)
+    !-----------------------------------------------------------------
+    !< Return a pointer to a concrete WrapperFactory
+    !-----------------------------------------------------------------
+        class(ParameterListEntry_t), target, intent(IN)  :: this      !< Parameter List
+        class(DimensionsWrapper_t), pointer              :: Value     !< Concrete Wrapper
+    !-----------------------------------------------------------------
+        Value => this%Value
+    end function ParameterListEntry_PointToValue
 
 
     recursive subroutine ParameterListEntry_Free(this)
     !-----------------------------------------------------------------
     !< Free the list
     !-----------------------------------------------------------------
-        class(ParameterListEntry_t), intent(INOUT):: this             !< Wrapper Factory List 
+        class(ParameterListEntry_t), intent(INOUT):: this             !< Parameter List 
     !-----------------------------------------------------------------
         call this%LinkedList_t%Free()
         if (this%HasValue())   deallocate(this%Value)
@@ -78,7 +90,7 @@ contains
     !-----------------------------------------------------------------
     !< Finalize procedure
     !-----------------------------------------------------------------
-        type(ParameterListEntry_t), intent(INOUT):: this              !< Wrapper Factory List 
+        type(ParameterListEntry_t), intent(INOUT):: this              !< Parameter List 
     !-----------------------------------------------------------------
         call this%Free()
     end subroutine ParameterListEntry_Finalize
@@ -120,10 +132,10 @@ contains
     !-----------------------------------------------------------------
     !< Remove an LinkedList given a Key
     !-----------------------------------------------------------------
-    class(ParameterListEntry_t), target, intent(INOUT) :: this        !< Wrapper Factory List
+    class(ParameterListEntry_t), target, intent(INOUT) :: this        !< Parameter List
     character(len=*),                    intent(IN)    :: Key         !< String Key
-    class(ParameterListEntry_t),  pointer              :: CurrentNode !< Pointer to the current Wrapper Factory List
-    class(ParameterListEntry_t),  pointer              :: NextNode    !< Pointer to a next Wrapper Factory List
+    class(ParameterListEntry_t),  pointer              :: CurrentNode !< Pointer to the current Parameter List
+    class(ParameterListEntry_t),  pointer              :: NextNode    !< Pointer to a next Parameter List
     class(*),                     pointer              :: AuxPointer  !< Aux pointer
     !-----------------------------------------------------------------
     nullify(NextNode)
