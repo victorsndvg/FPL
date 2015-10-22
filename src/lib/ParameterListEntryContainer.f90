@@ -14,7 +14,7 @@ module ParameterListEntryContainer
 
 USE IR_Precision
 USE ParameterListEntry
-USE WrapperFactoryList
+USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper
 
@@ -26,7 +26,6 @@ save
 
     type, public:: ParameterListEntryContainer_t
     private
-        type(WrapperFactoryList_t)              :: WrapperFactoryList
         type(ParameterListEntry_t), allocatable :: DataBase(:)
         integer(I4P)                            :: Size = 0_I4P
     contains
@@ -67,7 +66,7 @@ save
                                                ParameterListEntryContainer_Get5D, &
                                                ParameterListEntryContainer_Get6D, &
                                                ParameterListEntryContainer_Get7D
-!        procedure, public :: isPresent      => ParameterListEntryContainer_isPresent
+        procedure, public :: isPresent      => ParameterListEntryContainer_isPresent
 !        procedure, public :: isOfDataType   => ParameterListEntryContainer_isOfDataType
 !        procedure, public :: isSubList      => ParameterListEntryContainer_isSubList
         procedure, public :: Del            => ParameterListEntryContainer_RemoveEntry
@@ -110,7 +109,6 @@ contains
             this%Size = DefaultDataBaseSize
         endif
         allocate(this%DataBase(0:this%Size-1))
-        call this%WrapperFactoryList%Init()
     end subroutine ParameterListEntryContainer_Init
 
 
@@ -121,7 +119,6 @@ contains
         class(ParameterListEntryContainer_t), intent(INOUT) :: this       !< Parameter List Entry Containter type
         integer(I4P)                                        :: DBIterator !< Database Iterator index 
     !-----------------------------------------------------------------
-        call this%WrapperFactoryList%Free()
         if (allocated(this%DataBase)) THEN
             do DBIterator=lbound(this%DataBase,dim=1),ubound(this%DataBase,dim=1)
                 call this%DataBase(DBIterator)%Free()
@@ -152,7 +149,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -172,7 +169,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -192,7 +189,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -212,7 +209,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -232,7 +229,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -252,7 +249,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -272,7 +269,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -292,7 +289,7 @@ contains
         class(WrapperFactory_t),    pointer                 :: WrapperFactory
         class(DimensionsWrapper_t), allocatable             :: Wrapper
     !-----------------------------------------------------------------
-        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
         if(allocated(Wrapper)) then
             call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Wrapper)
@@ -319,7 +316,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -344,7 +341,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -369,7 +366,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -394,7 +391,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -419,7 +416,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -444,7 +441,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -469,7 +466,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -494,7 +491,7 @@ contains
                 type is (ParameterListEntry_t)
                     call Node%GetValue(Value=Wrapper)
                     if(allocated(Wrapper)) then
-                        WrapperFactory => this%WrapperFactoryList%GetFactory(Value=Value)
+                        WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
                         if(associated(WrapperFactory)) call WrapperFactory%UnWrap(Wrapper=Wrapper, Value=Value)
                     endif
             end select
@@ -569,6 +566,7 @@ contains
         endif
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
+        call TheWrapperFactoryList%Print(unit=unit)
     end subroutine ParameterListEntryContainer_Print
 
 

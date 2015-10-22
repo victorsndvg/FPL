@@ -2,70 +2,54 @@ module WrapperFactoryList
 
 USE LinkedList
 USE WrapperFactory
-USE DLCAWrapperFactory
-USE I1PWrapperFactory
-USE I2PWrapperFactory
-USE I4PWrapperFactory
-USE I8PWrapperFactory
-USE LWrapperFactory
-USE R4PWrapperFactory
-USE R8PWrapperFactory
-USE UPWrapperFactory
-
 
 implicit none
 private
 
     type, extends(LinkedList_t), public :: WrapperFactoryList_t
     private
-        class(WrapperFactory_t), pointer :: Value
+        class(WrapperFactory_t), pointer :: Value          => null()
+        class(WrapperFactory_t), pointer :: DefaultFactory => null()
     contains
     private
-        procedure         ::                WrapperFactoryList_AddNode
-        procedure         ::                WrapperFactoryList_GetFactory0D
-        procedure         ::                WrapperFactoryList_GetFactory1D
-        procedure         ::                WrapperFactoryList_GetFactory2D
-        procedure         ::                WrapperFactoryList_GetFactory3D
-        procedure         ::                WrapperFactoryList_GetFactory4D
-        procedure         ::                WrapperFactoryList_GetFactory5D
-        procedure         ::                WrapperFactoryList_GetFactory6D
-        procedure         ::                WrapperFactoryList_GetFactory7D
-        procedure, public :: Init        => WrapperFactoryList_Init
-        procedure, public :: Free        => WrapperFactoryList_Free
-        procedure, public :: HasValue    => WrapperFactoryList_HasValue
-        procedure, public :: SetValue    => WrapperFactoryList_SetValue
-        procedure, public :: GetValue    => WrapperFactoryList_GetValue
-        procedure, public :: RemoveNode  => WrapperFactoryList_RemoveNode
-        generic,   public :: GetFactory  => WrapperFactoryList_GetFactory0D, &
-                                            WrapperFactoryList_GetFactory1D, &
-                                            WrapperFactoryList_GetFactory2D, &
-                                            WrapperFactoryList_GetFactory3D, &
-                                            WrapperFactoryList_GetFactory4D, &
-                                            WrapperFactoryList_GetFactory5D, &
-                                            WrapperFactoryList_GetFactory6D, &
-                                            WrapperFactoryList_GetFactory7D
-        generic,   public :: AddNode     => WrapperFactoryList_AddNode
-        final             ::                WrapperFactoryList_Finalize
+        procedure         ::                      WrapperFactoryList_AddNode
+        procedure         ::                      WrapperFactoryList_GetFactory0D
+        procedure         ::                      WrapperFactoryList_GetFactory1D
+        procedure         ::                      WrapperFactoryList_GetFactory2D
+        procedure         ::                      WrapperFactoryList_GetFactory3D
+        procedure         ::                      WrapperFactoryList_GetFactory4D
+        procedure         ::                      WrapperFactoryList_GetFactory5D
+        procedure         ::                      WrapperFactoryList_GetFactory6D
+        procedure         ::                      WrapperFactoryList_GetFactory7D
+        procedure, public :: SetDefaultFactory => WrapperFactoryList_SetDefaultFactory
+        procedure, public :: Free              => WrapperFactoryList_Free
+        procedure, public :: HasValue          => WrapperFactoryList_HasValue
+        procedure, public :: SetValue          => WrapperFactoryList_SetValue
+        procedure, public :: GetValue          => WrapperFactoryList_GetValue
+        procedure, public :: RemoveNode        => WrapperFactoryList_RemoveNode
+        generic,   public :: GetFactory        => WrapperFactoryList_GetFactory0D, &
+                                                  WrapperFactoryList_GetFactory1D, &
+                                                  WrapperFactoryList_GetFactory2D, &
+                                                  WrapperFactoryList_GetFactory3D, &
+                                                  WrapperFactoryList_GetFactory4D, &
+                                                  WrapperFactoryList_GetFactory5D, &
+                                                  WrapperFactoryList_GetFactory6D, &
+                                                  WrapperFactoryList_GetFactory7D
+        generic,   public :: AddNode           => WrapperFactoryList_AddNode
+        final             ::                      WrapperFactoryList_Finalize
     end type WrapperFactoryList_t
 
 contains
 
-    subroutine WrapperFactoryList_Init(this)
+    subroutine WrapperFactoryList_SetDefaultFactory(this, DefaultFactory)
     !-----------------------------------------------------------------
-    !< WrapperFactory default initialization
+    !< Set Default Factory
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(INOUT)  :: this     !< Wrapper Factory List
-
+        class(WrapperFactoryList_t),     intent(INOUT)  :: this           !< Wrapper Factory List
+        class(WrapperFactory_T), target, intent(IN)     :: DefaultFactory !< Default factory
     !-----------------------------------------------------------------
-        call this%AddNode(key='I1P', WrapperFactory=WrapperFactoryI1P)
-        call this%AddNode(key='I2P', WrapperFactory=WrapperFactoryI2P)
-        call this%AddNode(key='I4P', WrapperFactory=WrapperFactoryI4P)
-        call this%AddNode(key='I8P', WrapperFactory=WrapperFactoryI8P)
-        call this%AddNode(key='R4P', WrapperFactory=WrapperFactoryR4P)
-        call this%AddNode(key='R8P', WrapperFactory=WrapperFactoryR8P)
-        call this%AddNode(key='L', WrapperFactory=WrapperFactoryL)
-        call this%AddNode(key='DLCA', WrapperFactory=WrapperFactoryDLCA)
-    end subroutine WrapperFactoryList_Init
+        this%DefaultFactory => DefaultFactory
+    end subroutine WrapperFactoryList_SetDefaultFactory
 
 
     function WrapperFactoryList_HasValue(this) result(hasValue)
@@ -110,6 +94,7 @@ contains
     !-----------------------------------------------------------------
         call this%LinkedList_t%Free()
         nullify(this%Value)
+        nullify(this%DefaultFactory)
     end subroutine WrapperFactoryList_Free
 
 
@@ -210,8 +195,8 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory0D
@@ -234,8 +219,8 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory1D
@@ -258,8 +243,8 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory2D
@@ -282,8 +267,8 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory3D
@@ -307,8 +292,8 @@ contains
                 end select
             endif
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
         endif
     end function WrapperFactoryList_GetFactory4D
 
@@ -330,8 +315,8 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory5D
@@ -354,8 +339,8 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory6D
@@ -378,8 +363,8 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             else
-                ! Default case: Return an Unlimited Polymorphic Wrapper Factory
-                WrapperFactory => WrapperFactoryUP
+                ! Default case: Return the DefaultFactory
+                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory7D
