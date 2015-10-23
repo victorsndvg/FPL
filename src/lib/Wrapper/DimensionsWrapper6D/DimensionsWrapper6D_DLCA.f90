@@ -10,12 +10,13 @@ private
         character(len=:), allocatable :: Value(:,:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper6D_DLCA_Set
-        procedure, public :: Get          => DimensionsWrapper6D_DLCA_Get
-        procedure, public :: isOfDataType => DimensionsWrapper6D_DLCA_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper6D_DLCA_Print
-        procedure, public :: Free         => DimensionsWrapper6D_DLCA_Free
-        final             ::                 DimensionsWrapper6D_DLCA_Final
+        procedure, public :: Set            => DimensionsWrapper6D_DLCA_Set
+        procedure, public :: Get            => DimensionsWrapper6D_DLCA_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper6D_DLCA_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper6D_DLCA_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper6D_DLCA_Print
+        procedure, public :: Free           => DimensionsWrapper6D_DLCA_Free
+        final             ::                   DimensionsWrapper6D_DLCA_Final
     end type           
 
 public :: DimensionsWrapper6D_DLCA_t
@@ -38,7 +39,7 @@ contains
     !< Set DLCA Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_DLCA_t), intent(INOUT) :: this
-        class(*),                         intent(IN)    :: Value(:,:,:,:,:,:)
+        class(*),                          intent(IN)    :: Value(:,:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
@@ -57,13 +58,30 @@ contains
     !-----------------------------------------------------------------
     !< Get deferred length character array Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_DLCA_t), intent(IN)  :: this
-        class(*),                         intent(OUT) :: Value(:,:,:,:,:,:)
+        class(DimensionsWrapper6D_DLCA_t), intent(IN)    :: this
+        class(*),                          intent(INOUT) :: Value(:,:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    subroutine DimensionsWrapper6D_DLCA_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_DLCA_t), intent(IN)  :: this
+        class(*), allocatable,             intent(OUT) :: Value(:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+!        allocate(Value(size(this%Value,dim=1),  &
+!                       size(this%Value,dim=2),  &
+!                       size(this%Value,dim=3),  &
+!                       size(this%Value,dim=4),  &
+!                       size(this%Value,dim=5),  &
+!                       size(this%Value,dim=6)), &
+!                       source=this%Value)
     end subroutine
 
 

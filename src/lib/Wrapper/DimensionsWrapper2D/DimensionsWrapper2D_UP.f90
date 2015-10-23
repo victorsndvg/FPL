@@ -1,5 +1,6 @@
 module DimensionsWrapper2D_UP
 
+USE Message_handler
 USE DimensionsWrapper2D
 USE IR_Precision, only: I4P, str
 
@@ -10,12 +11,13 @@ private
         class(*), allocatable :: Value(:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper2D_UP_Set
-        procedure, public :: Get          => DimensionsWrapper2D_UP_Get
-        procedure, public :: isOfDataType => DimensionsWrapper2D_UP_isOfDataType
-        procedure, public :: Free         => DimensionsWrapper2D_UP_Free
-        procedure, public :: Print        => DimensionsWrapper2D_UP_Print
-        final             ::                 DimensionsWrapper2D_UP_Final
+        procedure, public :: Set            => DimensionsWrapper2D_UP_Set
+        procedure, public :: Get            => DimensionsWrapper2D_UP_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper2D_UP_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper2D_UP_isOfDataType
+        procedure, public :: Free           => DimensionsWrapper2D_UP_Free
+        procedure, public :: Print          => DimensionsWrapper2D_UP_Print
+        final             ::                   DimensionsWrapper2D_UP_Final
     end type           
 
 public :: DimensionsWrapper2D_UP_t
@@ -47,6 +49,17 @@ contains
 
 
     subroutine DimensionsWrapper2D_UP_Get(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_UP_t), intent(IN)    :: this
+        class(*),                        intent(INOUT) :: Value(:,:)
+    !-----------------------------------------------------------------
+        call msg%Error('Unregistered data type cannot be Getted. Try GetPolymorphic()')
+    end subroutine
+
+
+    subroutine DimensionsWrapper2D_UP_GetPolymorphic(this, Value) 
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------

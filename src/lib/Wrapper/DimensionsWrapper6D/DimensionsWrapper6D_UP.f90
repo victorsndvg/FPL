@@ -1,5 +1,6 @@
 module DimensionsWrapper6D_UP
 
+USE Message_handler
 USE DimensionsWrapper6D
 USE IR_Precision, only: I4P, str
 
@@ -10,12 +11,13 @@ private
         class(*), allocatable :: Value(:,:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper6D_UP_Set
-        procedure, public :: Get          => DimensionsWrapper6D_UP_Get
-        procedure, public :: isOfDataType => DimensionsWrapper6D_UP_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper6D_UP_Print
-        procedure, public :: Free         => DimensionsWrapper6D_UP_Free
-        final             ::                 DimensionsWrapper6D_UP_Final
+        procedure, public :: Set            => DimensionsWrapper6D_UP_Set
+        procedure, public :: Get            => DimensionsWrapper6D_UP_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper6D_UP_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper6D_UP_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper6D_UP_Print
+        procedure, public :: Free           => DimensionsWrapper6D_UP_Free
+        final             ::                   DimensionsWrapper6D_UP_Final
     end type           
 
 public :: DimensionsWrapper6D_UP_t
@@ -54,7 +56,18 @@ contains
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_UP_t), intent(IN)  :: this
+        class(DimensionsWrapper6D_UP_t), intent(IN)    :: this
+        class(*),                        intent(INOUT) :: Value(:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        call msg%Error('Unregistered data type cannot be Getted. Try GetPolymorphic()')
+    end subroutine
+
+
+    subroutine DimensionsWrapper6D_UP_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_UP_t), intent(IN)    :: this
         class(*), allocatable,           intent(OUT) :: Value(:,:,:,:,:,:)
     !-----------------------------------------------------------------
         allocate(Value(size(this%Value,dim=1),  &

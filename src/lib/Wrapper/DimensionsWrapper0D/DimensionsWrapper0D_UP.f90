@@ -10,12 +10,13 @@ private
         class(*), allocatable :: Value
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper0D_UP_Set
-        procedure, public :: Get          => DimensionsWrapper0D_UP_Get
-        procedure, public :: isOfDataType => DimensionsWrapper0D_UP_isOfDataType
-        procedure, public :: Free         => DimensionsWrapper0D_UP_Free
-        procedure, public :: Print        => DimensionsWrapper0D_UP_Print
-        final             ::                 DimensionsWrapper0D_UP_Final
+        procedure, public :: Set            => DimensionsWrapper0D_UP_Set
+        procedure, public :: Get            => DimensionsWrapper0D_UP_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper0D_UP_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper0D_UP_isOfDataType
+        procedure, public :: Free           => DimensionsWrapper0D_UP_Free
+        procedure, public :: Print          => DimensionsWrapper0D_UP_Print
+        final             ::                   DimensionsWrapper0D_UP_Final
     end type           
 
 public :: DimensionsWrapper0D_UP_t
@@ -45,6 +46,17 @@ contains
 
 
     subroutine DimensionsWrapper0D_UP_Get(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_UP_t), intent(IN)    :: this
+        class(*), allocatable,           intent(INOUT) :: Value
+    !-----------------------------------------------------------------
+        allocate(Value, source = this%Value)
+    end subroutine
+
+
+    subroutine DimensionsWrapper0D_UP_GetPolymorphic(this, Value) 
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------

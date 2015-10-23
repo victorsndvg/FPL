@@ -8,8 +8,9 @@ private
     type, extends(DimensionsWrapper_t), abstract :: DimensionsWrapper7D_t
     private
     contains
-        procedure(DimensionsWrapper7D_Set), deferred :: Set
-        procedure(DimensionsWrapper7D_Get), deferred :: Get
+        procedure(DimensionsWrapper7D_Set),            deferred :: Set
+        procedure(DimensionsWrapper7D_Get),            deferred :: Get
+        procedure(DimensionsWrapper7D_GetPolymorphic), deferred :: GetPolymorphic
     end type
 
     abstract interface
@@ -20,6 +21,12 @@ private
         end subroutine
 
         subroutine DimensionsWrapper7D_Get(this, Value)
+            import DimensionsWrapper7D_t
+            class(DimensionsWrapper7D_t), intent(IN)    :: this
+            class(*),                     intent(INOUT) :: Value(:,:,:,:,:,:,:)
+        end subroutine
+
+        subroutine DimensionsWrapper7D_GetPolymorphic(this, Value)
             import DimensionsWrapper7D_t
             class(DimensionsWrapper7D_t), intent(IN)  :: this
             class(*),                     intent(OUT) :: Value(:,:,:,:,:,:,:)

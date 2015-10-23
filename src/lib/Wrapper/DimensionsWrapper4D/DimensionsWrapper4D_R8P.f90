@@ -10,12 +10,13 @@ private
         real(R8P), allocatable :: Value(:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper4D_R8P_Set
-        procedure, public :: Get          => DimensionsWrapper4D_R8P_Get
-        procedure, public :: isOfDataType => DimensionsWrapper4D_R8P_isOfDataType
-        procedure, public :: Free         => DimensionsWrapper4D_R8P_Free
-        procedure, public :: Print        => DimensionsWrapper4D_R8P_Print
-        final             ::                 DimensionsWrapper4D_R8P_Final
+        procedure, public :: Set            => DimensionsWrapper4D_R8P_Set
+        procedure, public :: Get            => DimensionsWrapper4D_R8P_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper4D_R8P_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper4D_R8P_isOfDataType
+        procedure, public :: Free           => DimensionsWrapper4D_R8P_Free
+        procedure, public :: Print          => DimensionsWrapper4D_R8P_Print
+        final             ::                   DimensionsWrapper4D_R8P_Final
     end type           
 
 public :: DimensionsWrapper4D_R8P_t
@@ -55,13 +56,28 @@ contains
     !-----------------------------------------------------------------
     !< Get R8P Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_R8P_t), intent(IN)  :: this
-        class(*),                         intent(OUT) :: Value(:,:,:,:)
+        class(DimensionsWrapper4D_R8P_t), intent(IN)    :: this
+        class(*),                         intent(INOUT) :: Value(:,:,:,:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    subroutine DimensionsWrapper4D_R8P_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_R8P_t), intent(IN)  :: this
+        class(*), allocatable,            intent(OUT) :: Value(:,:,:,:)
+    !-----------------------------------------------------------------
+        allocate(Value(size(this%Value,dim=1),  &
+                       size(this%Value,dim=2),  &
+                       size(this%Value,dim=3),  &
+                       size(this%Value,dim=4)), &
+                       source=this%Value)
     end subroutine
 
 

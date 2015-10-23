@@ -10,6 +10,7 @@ private
     contains
         procedure(DimensionsWrapper5D_Set), deferred :: Set
         procedure(DimensionsWrapper5D_Get), deferred :: Get
+        procedure(DimensionsWrapper5D_GetPolymorphic), deferred :: GetPolymorphic
     end type
 
     abstract interface
@@ -20,6 +21,12 @@ private
         end subroutine
 
         subroutine DimensionsWrapper5D_Get(this, Value)
+            import DimensionsWrapper5D_t
+            class(DimensionsWrapper5D_t), intent(IN)    :: this
+            class(*),                     intent(INOUT) :: Value(:,:,:,:,:)
+        end subroutine
+
+        subroutine DimensionsWrapper5D_GetPolymorphic(this, Value)
             import DimensionsWrapper5D_t
             class(DimensionsWrapper5D_t), intent(IN)  :: this
             class(*),                     intent(OUT) :: Value(:,:,:,:,:)

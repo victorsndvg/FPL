@@ -8,8 +8,9 @@ private
     type, extends(DimensionsWrapper_t), abstract :: DimensionsWrapper2D_t
     private
     contains
-        procedure(DimensionsWrapper2D_Set), deferred :: Set
-        procedure(DimensionsWrapper2D_Get), deferred :: Get
+        procedure(DimensionsWrapper2D_Set),            deferred :: Set
+        procedure(DimensionsWrapper2D_Get),            deferred :: Get
+        procedure(DimensionsWrapper2D_GetPolymorphic), deferred :: GetPolymorphic
     end type
 
     abstract interface
@@ -20,6 +21,12 @@ private
         end subroutine
 
         subroutine DimensionsWrapper2D_Get(this, Value)
+            import DimensionsWrapper2D_t
+            class(DimensionsWrapper2D_t), intent(IN)    :: this
+            class(*),                     intent(INOUT) :: Value(:,:)
+        end subroutine
+
+        subroutine DimensionsWrapper2D_GetPolymorphic(this, Value)
             import DimensionsWrapper2D_t
             class(DimensionsWrapper2D_t), intent(IN)  :: this
             class(*),                     intent(OUT) :: Value(:,:)

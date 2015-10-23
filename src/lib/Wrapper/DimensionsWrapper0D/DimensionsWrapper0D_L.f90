@@ -10,12 +10,13 @@ private
         logical, allocatable :: Value
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper0D_L_Set
-        procedure, public :: Get          => DimensionsWrapper0D_L_Get
-        procedure, public :: isOfDataType => DimensionsWrapper0D_L_isOfDataType
-        procedure, public :: Free         => DimensionsWrapper0D_L_Free
-        procedure, public :: Print        => DimensionsWrapper0D_L_Print
-        final             ::                 DimensionsWrapper0D_L_Final
+        procedure, public :: Set            => DimensionsWrapper0D_L_Set
+        procedure, public :: Get            => DimensionsWrapper0D_L_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper0D_L_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper0D_L_isOfDataType
+        procedure, public :: Free           => DimensionsWrapper0D_L_Free
+        procedure, public :: Print          => DimensionsWrapper0D_L_Print
+        final             ::                   DimensionsWrapper0D_L_Final
     end type           
 
 public :: DimensionsWrapper0D_L_t
@@ -51,13 +52,24 @@ contains
     !-----------------------------------------------------------------
     !< Get logical Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_L_t), intent(IN)  :: this
-        class(*),                       intent(OUT) :: Value
+        class(DimensionsWrapper0D_L_t), intent(IN)    :: this
+        class(*),                       intent(INOUT) :: Value
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
                 Value = this%Value
         end select
+    end subroutine
+
+
+    subroutine DimensionsWrapper0D_L_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_L_t), intent(IN)  :: this
+        class(*), allocatable,          intent(OUT) :: Value
+    !-----------------------------------------------------------------
+        allocate(Value, source = this%Value)
     end subroutine
 
 

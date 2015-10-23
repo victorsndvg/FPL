@@ -10,12 +10,13 @@ private
         integer(I2P), allocatable :: Value(:,:,:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper7D_I2P_Set
-        procedure, public :: Get          => DimensionsWrapper7D_I2P_Get
-        procedure, public :: isOfDataType => DimensionsWrapper7D_I2P_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper7D_I2P_Print
-        procedure, public :: Free         => DimensionsWrapper7D_I2P_Free
-        final             ::                 DimensionsWrapper7D_I2P_Final
+        procedure, public :: Set            => DimensionsWrapper7D_I2P_Set
+        procedure, public :: Get            => DimensionsWrapper7D_I2P_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper7D_I2P_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper7D_I2P_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper7D_I2P_Print
+        procedure, public :: Free           => DimensionsWrapper7D_I2P_Free
+        final             ::                   DimensionsWrapper7D_I2P_Final
     end type           
 
 public :: DimensionsWrapper7D_I2P_t
@@ -58,13 +59,31 @@ contains
     !-----------------------------------------------------------------
     !< Get I2P Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_I2P_t), intent(IN)  :: this
-        class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
+        class(DimensionsWrapper7D_I2P_t), intent(IN)    :: this
+        class(*),                         intent(INOUT) :: Value(:,:,:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    subroutine DimensionsWrapper7D_I2P_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I2P_t), intent(IN)  :: this
+        class(*), allocatable,            intent(OUT) :: Value(:,:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        allocate(Value(size(this%Value,dim=1),  &
+                       size(this%Value,dim=2),  &
+                       size(this%Value,dim=3),  &
+                       size(this%Value,dim=4),  &
+                       size(this%Value,dim=5),  &
+                       size(this%Value,dim=6),  &
+                       size(this%Value,dim=7)), &
+                       source=this%Value)
     end subroutine
 
 

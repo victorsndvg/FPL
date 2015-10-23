@@ -1,5 +1,6 @@
 module DimensionsWrapper7D_UP
 
+USE Message_handler
 USE DimensionsWrapper7D
 USE IR_Precision, only: I4P, str
 
@@ -10,12 +11,13 @@ private
         class(*), allocatable :: Value(:,:,:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper7D_UP_Set
-        procedure, public :: Get          => DimensionsWrapper7D_UP_Get
-        procedure, public :: isOfDataType => DimensionsWrapper7D_UP_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper7D_UP_Print
-        procedure, public :: Free         => DimensionsWrapper7D_UP_Free
-        final             ::                 DimensionsWrapper7D_UP_Final
+        procedure, public :: Set            => DimensionsWrapper7D_UP_Set
+        procedure, public :: Get            => DimensionsWrapper7D_UP_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper7D_UP_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper7D_UP_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper7D_UP_Print
+        procedure, public :: Free           => DimensionsWrapper7D_UP_Free
+        final             ::                   DimensionsWrapper7D_UP_Final
     end type           
 
 public :: DimensionsWrapper7D_UP_t
@@ -38,7 +40,7 @@ contains
     !< Set Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_UP_t), intent(INOUT) :: this
-        class(*),                         intent(IN)    :: Value(:,:,:,:,:,:,:)
+        class(*),                        intent(IN)   :: Value(:,:,:,:,:,:,:)
     !-----------------------------------------------------------------
         allocate(this%Value(size(Value,dim=1),  &
                             size(Value,dim=2),  &
@@ -52,6 +54,17 @@ contains
 
 
     subroutine DimensionsWrapper7D_UP_Get(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_UP_t), intent(IN)    :: this
+        class(*),                        intent(INOUT) :: Value(:,:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        call msg%Error('Unregistered data type cannot be Getted. Try GetPolymorphic()')
+    end subroutine
+
+
+    subroutine DimensionsWrapper7D_UP_GetPolymorphic(this, Value) 
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------

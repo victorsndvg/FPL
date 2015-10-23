@@ -10,12 +10,13 @@ private
         real(R4P), allocatable :: Value(:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper5D_R4P_Set
-        procedure, public :: Get          => DimensionsWrapper5D_R4P_Get
-        procedure, public :: isOfDataType => DimensionsWrapper5D_R4P_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper5D_R4P_Print
-        procedure, public :: Free         => DimensionsWrapper5D_R4P_Free
-        final             ::                 DimensionsWrapper5D_R4P_Final
+        procedure, public :: Set            => DimensionsWrapper5D_R4P_Set
+        procedure, public :: Get            => DimensionsWrapper5D_R4P_Get
+        procedure, public :: GetPolymorphic => DimensionsWrapper5D_R4P_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper5D_R4P_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper5D_R4P_Print
+        procedure, public :: Free           => DimensionsWrapper5D_R4P_Free
+        final             ::                   DimensionsWrapper5D_R4P_Final
     end type           
 
 public :: DimensionsWrapper5D_R4P_t
@@ -33,7 +34,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper5D_r4P_Set(this, Value) 
+    subroutine DimensionsWrapper5D_R4P_Set(this, Value) 
     !-----------------------------------------------------------------
     !< Set R4P Wrapper Value
     !-----------------------------------------------------------------
@@ -56,13 +57,29 @@ contains
     !-----------------------------------------------------------------
     !< Get R4P Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_R4P_t), intent(IN)  :: this
-        class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        class(DimensionsWrapper5D_R4P_t), intent(IN)    :: this
+        class(*),                         intent(INOUT) :: Value(:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    subroutine DimensionsWrapper5D_R4P_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_R4P_t), intent(IN)  :: this
+        class(*), allocatable,            intent(OUT) :: Value(:,:,:,:,:)
+    !-----------------------------------------------------------------
+        allocate(Value(size(this%Value,dim=1),  &
+                       size(this%Value,dim=2),  &
+                       size(this%Value,dim=3),  &
+                       size(this%Value,dim=4),  &
+                       size(this%Value,dim=5)), &
+                       source=this%Value)
     end subroutine
 
 
