@@ -6,6 +6,7 @@ USE FPL
 
 type(ParameterListEntryContainer_t) :: Parameters
 integer(I4P),allocatable :: array(:)
+class(*), allocatable :: UParray(:)
 integer :: iter, numiters
 
 numiters = 7
@@ -29,7 +30,22 @@ do iter = 1, numiters
     write(unit=OUTPUT_UNIT, fmt='(A,$)') 'Getting: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
     call Parameters%Get(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)), Value=array)
     if(all(array == iter)) then
-        write(unit=OUTPUT_UNIT, fmt='(A)') ' Ok!'
+        write(unit=OUTPUT_UNIT, fmt='(A,$)') ' Ok!'
+    else
+        write(unit=OUTPUT_UNIT, fmt= '(A,$)') ' FAIL!!!!'
+        stop -1
+    endif
+
+    write(unit=OUTPUT_UNIT, fmt='(A,$)') ' - Alloc Unlimited Polymorphic: '
+    call Parameters%GetPolymorphic(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)), Value=UParray)
+    if(size(UParray, dim=1) == iter) then
+        Select type (UParray)
+            type is (Integer(I4P))
+                write(unit=OUTPUT_UNIT, fmt='(A)') ' Ok!'
+            class Default
+                write(unit=OUTPUT_UNIT, fmt= '(A)') ' FAIL!!!!'
+                stop -1
+        end select
     else
         write(unit=OUTPUT_UNIT, fmt= '(A)') ' FAIL!!!!'
         stop -1

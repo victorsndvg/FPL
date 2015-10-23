@@ -29,7 +29,7 @@ private
         subroutine DimensionsWrapper7D_GetPolymorphic(this, Value)
             import DimensionsWrapper7D_t
             class(DimensionsWrapper7D_t), intent(IN)  :: this
-            class(*),                     intent(OUT) :: Value(:,:,:,:,:,:,:)
+            class(*), allocatable,        intent(OUT) :: Value(:,:,:,:,:,:,:)
         end subroutine
     end interface
 

@@ -29,7 +29,7 @@ private
         subroutine DimensionsWrapper6D_GetPolymorphic(this, Value)
             import DimensionsWrapper6D_t
             class(DimensionsWrapper6D_t), intent(IN)  :: this
-            class(*),                     intent(OUT) :: Value(:,:,:,:,:,:)
+            class(*), allocatable,        intent(OUT) :: Value(:,:,:,:,:,:)
         end subroutine
     end interface
 

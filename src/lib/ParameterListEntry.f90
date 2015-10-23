@@ -138,30 +138,36 @@ contains
     class(ParameterListEntry_t),  pointer              :: NextNode    !< Pointer to a next Parameter List
     class(*),                     pointer              :: AuxPointer  !< Aux pointer
     !-----------------------------------------------------------------
+  CurrentNode => this
+  do while(associated(CurrentNode))
     nullify(NextNode)
-    CurrentNode => this
-    do while(associated(CurrentNode))
-        select type (AuxPointer => CurrentNode%GetNext())
-            type is (ParameterListEntry_t)
-                NextNode => AuxPointer
-            class Default
-                Nullify(NextNode)
+    if(CurrentNode%HasNext()) then
+        select type(Next => CurrentNode%Next)
+            type is(ParameterListEntry_t)
+                NextNode => NExt
         end select
-        if (CurrentNode%HasKey()) then
-            if (CurrentNode%GetKey()==Key) then
-                call CurrentNode%DeallocateKey()
-                if (CurrentNode%HasValue()) deallocate(CurrentNode%Value)
-                if (associated(NextNode)) then
-                    if (NextNode%HasKey()) call CurrentNode%SetKey(Key=NextNode%GetKey())
-                    if (NextNode%HasValue()) call CurrentNode%SetValue(Value=NextNode%Value)
-                else
-                    call CurrentNode%NullifyNext()
-                endif
-                exit
-            endif
+    endif
+    if (CurrentNode%HasKey()) then
+      if (CurrentNode%GetKey()==Key) then
+        if (associated(NextNode)) then
+          if (NextNode%HasKey()) then
+            call CurrentNode%SetKey(Key=NextNode%GetKey())
+            call CurrentNode%SetValue(Value=NextNode%Value)
+          else
+            call CurrentNode%DeallocateKey()
+            if(allocated(CurrentNode%Value)) deallocate(CurrentNode%Value)
+          endif
+          CurrentNode%Next => NextNode%Next
+          deallocate(NextNode)
+        else
+          call CurrentNode%DeallocateKey()
+          nullify(CurrentNode%Next)
         endif
-        CurrentNode => NextNode
-    enddo
+        exit 
+      endif
+    endif
+    CurrentNode => NextNode
+  enddo 
     end subroutine ParameterListEntry_RemoveNode
 
 

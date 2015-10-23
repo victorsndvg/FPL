@@ -29,7 +29,7 @@ private
         subroutine DimensionsWrapper5D_GetPolymorphic(this, Value)
             import DimensionsWrapper5D_t
             class(DimensionsWrapper5D_t), intent(IN)  :: this
-            class(*),                     intent(OUT) :: Value(:,:,:,:,:)
+            class(*), allocatable,        intent(OUT) :: Value(:,:,:,:,:)
         end subroutine
     end interface
 

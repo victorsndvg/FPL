@@ -54,6 +54,14 @@ save
         procedure         ::                   ParameterListEntryContainer_Get5D
         procedure         ::                   ParameterListEntryContainer_Get6D
         procedure         ::                   ParameterListEntryContainer_Get7D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic0D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic1D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic2D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic3D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic4D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic5D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic6D
+        procedure         ::                   ParameterListEntryContainer_GetPolymorphic7D
         procedure         :: Hash           => ParameterListEntryContainer_Hash
         procedure, public :: Init           => ParameterListEntryContainer_Init
         procedure, public :: Free           => ParameterListEntryContainer_Free
@@ -74,6 +82,14 @@ save
                                                ParameterListEntryContainer_Get5D, &
                                                ParameterListEntryContainer_Get6D, &
                                                ParameterListEntryContainer_Get7D
+        generic,   public :: GetPolymorphic => ParameterListEntryContainer_GetPolymorphic0D, &
+                                               ParameterListEntryContainer_GetPolymorphic1D, &
+                                               ParameterListEntryContainer_GetPolymorphic2D, &
+                                               ParameterListEntryContainer_GetPolymorphic3D, &
+                                               ParameterListEntryContainer_GetPolymorphic4D, &
+                                               ParameterListEntryContainer_GetPolymorphic5D, &
+                                               ParameterListEntryContainer_GetPolymorphic6D, &
+                                               ParameterListEntryContainer_GetPolymorphic7D
         procedure, public :: isPresent      => ParameterListEntryContainer_isPresent
 !        procedure, public :: isOfDataType   => ParameterListEntryContainer_isOfDataType
 !        procedure, public :: isSubList      => ParameterListEntryContainer_isSubList
@@ -499,6 +515,201 @@ contains
             end select
         end if
     end subroutine ParameterListEntryContainer_Get7D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic0D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a scalar Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*), allocatable,                intent(INOUT) :: Value          !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper0D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic0D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic1D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a vector Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*), allocatable,                intent(OUT)   :: Value(:)       !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper1D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic1D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic2D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 2D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter 
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*), allocatable,                intent(OUT)   :: Value(:,:)     !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper2D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic2D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic3D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 3D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*), allocatable,                intent(OUT)   :: Value(:,:,:)   !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper3D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic3D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic4D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 4D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
+        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper4D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic4D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic5D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 5D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this             !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key              !< String Key
+        class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node             !< Pointer to a Parameter List
+        class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< Wrapper factory
+        class(DimensionsWrapper_t), pointer                 :: Wrapper          !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper5D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic5D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic6D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 6D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key                !< String Key
+        class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node               !< Pointer to a Parameter List
+        class(DimensionsWrapper_t), pointer                 :: Wrapper            !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper6D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic6D
+
+
+    subroutine ParameterListEntryContainer_GetPolymorphic7D(this,Key,Value)
+    !-----------------------------------------------------------------
+    !< Return a 7D array Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key                  !< String Key
+        class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:,:) !< Returned value
+        class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
+        class(DimensionsWrapper_t), pointer                 :: Wrapper              !< Wrapper
+    !-----------------------------------------------------------------
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    Wrapper => Node%PointToValue()
+                    select type(Wrapper)
+                        class is (DimensionsWrapper7D_t)
+                            call Wrapper%GetPolymorphic(Value=Value)
+                    end select
+            end select
+        end if
+    end subroutine ParameterListEntryContainer_GetPolymorphic7D
+
 
 
     function ParameterListEntryContainer_isPresent(this,Key) result(isPresent)

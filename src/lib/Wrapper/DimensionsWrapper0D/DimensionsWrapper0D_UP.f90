@@ -1,5 +1,6 @@
 module DimensionsWrapper0D_UP
 
+USE message_handler
 USE DimensionsWrapper0D
 USE IR_Precision, only: I4P, str
 
@@ -50,9 +51,9 @@ contains
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper0D_UP_t), intent(IN)    :: this
-        class(*), allocatable,           intent(INOUT) :: Value
+        class(*),                        intent(INOUT) :: Value
     !-----------------------------------------------------------------
-        allocate(Value, source = this%Value)
+        call msg%Error('Unregistered data type cannot be Getted. Try GetPolymorphic()')
     end subroutine
 
 
