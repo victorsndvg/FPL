@@ -10,7 +10,7 @@ private
 
     type, extends(LinkedList_t) :: ParameterListEntry_t
     private
-        class(DimensionsWrapper_t), allocatable :: Value
+        class(*), allocatable :: Value
     contains
     private
         procedure         ::                  ParameterListEntry_AddNode
@@ -45,8 +45,8 @@ contains
     !-----------------------------------------------------------------
     !< Set a concrete Wrapper
     !-----------------------------------------------------------------
-        class(ParameterListEntry_t),          intent(INOUT)  :: this  !< Parameter List
-        class(DimensionsWrapper_t),           intent(IN)     :: Value !< Concrete Wrapper
+        class(ParameterListEntry_t), intent(INOUT)  :: this           !< Parameter List
+        class(*),                    intent(IN)     :: Value          !< Concrete Wrapper
     !-----------------------------------------------------------------
         if(this%HasValue()) deallocate(this%Value)
         allocate(this%Value, source=Value)
@@ -58,7 +58,7 @@ contains
     !< Return a concrete WrapperFactory
     !-----------------------------------------------------------------
         class(ParameterListEntry_t),             intent(IN)  :: this  !< Parameter List
-        class(DimensionsWrapper_t), allocatable, intent(OUT) :: Value !< Concrete Wrapper
+        class(*), allocatable,                   intent(OUT) :: Value !< Concrete Wrapper
     !-----------------------------------------------------------------
         if(this%HasValue()) allocate(Value, source=this%Value)
     end subroutine ParameterListEntry_GetValue
@@ -69,7 +69,7 @@ contains
     !< Return a pointer to a concrete WrapperFactory
     !-----------------------------------------------------------------
         class(ParameterListEntry_t), target, intent(IN)  :: this      !< Parameter List
-        class(DimensionsWrapper_t), pointer              :: Value     !< Concrete Wrapper
+        class(*), pointer                                :: Value     !< Concrete Wrapper
     !-----------------------------------------------------------------
         Value => this%Value
     end function ParameterListEntry_PointToValue
@@ -102,7 +102,7 @@ contains
     !-----------------------------------------------------------------
         class(ParameterListEntry_T),          intent(INOUT) :: this   !< Linked List
         character(len=*),                     intent(IN)    :: Key    !< Key (unique) of the current node.
-        class(DimensionsWrapper_t),           intent(IN)    :: Value  !< Wrapper Factory
+        class(*),                             intent(IN)    :: Value  !< Wrapper Factory
     !-----------------------------------------------------------------
         if (this%HasKey()) then
             if (this%GetKey()/=Key) then
@@ -138,30 +138,36 @@ contains
     class(ParameterListEntry_t),  pointer              :: NextNode    !< Pointer to a next Parameter List
     class(*),                     pointer              :: AuxPointer  !< Aux pointer
     !-----------------------------------------------------------------
-    nullify(NextNode)
     CurrentNode => this
-    do while(associated(CurrentNode))
-        select type (AuxPointer => CurrentNode%GetNext())
-            type is (ParameterListEntry_t)
-                NextNode => AuxPointer
-            class Default
-                Nullify(NextNode)
-        end select
-        if (CurrentNode%HasKey()) then
-            if (CurrentNode%GetKey()==Key) then
-                call CurrentNode%DeallocateKey()
-                if (CurrentNode%HasValue()) deallocate(CurrentNode%Value)
-                if (associated(NextNode)) then
-                    if (NextNode%HasKey()) call CurrentNode%SetKey(Key=NextNode%GetKey())
-                    if (NextNode%HasValue()) call CurrentNode%SetValue(Value=NextNode%Value)
-                else
-                    call CurrentNode%NullifyNext()
-                endif
-                exit
+        do while(associated(CurrentNode))
+            nullify(NextNode)
+            if(CurrentNode%HasNext()) then
+                select type(Next => CurrentNode%Next)
+                    type is(ParameterListEntry_t)
+                        NextNode => NExt
+                end select
             endif
-        endif
-        CurrentNode => NextNode
-    enddo
+            if (CurrentNode%HasKey()) then
+                if (CurrentNode%GetKey()==Key) then
+                    if (associated(NextNode)) then
+                        if (NextNode%HasKey()) then
+                            call CurrentNode%SetKey(Key=NextNode%GetKey())
+                            call CurrentNode%SetValue(Value=NextNode%Value)
+                        else
+                            call CurrentNode%DeallocateKey()
+                            if(allocated(CurrentNode%Value)) deallocate(CurrentNode%Value)
+                        endif
+                        CurrentNode%Next => NextNode%Next
+                        deallocate(NextNode)
+                    else
+                        call CurrentNode%DeallocateKey()
+                        nullify(CurrentNode%Next)
+                    endif
+                    exit 
+                endif
+            endif
+            CurrentNode => NextNode
+        enddo 
     end subroutine ParameterListEntry_RemoveNode
 
 
@@ -184,7 +190,10 @@ contains
         Node => this
         if(Node%HasKey()) then
             write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Node%GetKey()//'", '
-            call Node%Value%Print(unit=unit)
+            select type (Wrapper =>Node%Value)
+                class is (DimensionsWrapper_t)
+                    call Wrapper%Print(unit=unit)
+            end select
             if (Node%HasNext()) then
                 Next => Node%GetNext()
                 select type (Next)

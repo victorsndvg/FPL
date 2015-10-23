@@ -315,7 +315,7 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value          !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+        class(*), pointer                                   :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -339,7 +339,7 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+        class(*), pointer                                   :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -364,7 +364,7 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+        class(*), pointer                                   :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -388,7 +388,7 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+        class(*), pointer                                   :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -412,7 +412,7 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(DimensionsWrapper_t), pointer                 :: Wrapper        !< Wrapper
+        class(*), pointer                                   :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -437,7 +437,7 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
         class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< Wrapper factory
-        class(DimensionsWrapper_t), pointer                 :: Wrapper          !< Wrapper
+        class(*), pointer                                   :: Wrapper          !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -461,7 +461,7 @@ contains
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node               !< Pointer to a Parameter List
-        class(DimensionsWrapper_t), pointer                 :: Wrapper            !< Wrapper
+        class(*), pointer                                   :: Wrapper            !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
@@ -485,7 +485,7 @@ contains
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
-        class(DimensionsWrapper_t), pointer                 :: Wrapper              !< Wrapper
+        class(*), pointer                                   :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
         Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
         if(associated(Node)) then
