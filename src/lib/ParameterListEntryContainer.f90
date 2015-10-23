@@ -56,6 +56,7 @@ save
         procedure         ::                   ParameterListEntryContainer_Get7D
         procedure         :: Hash           => ParameterListEntryContainer_Hash
         procedure, public :: Init           => ParameterListEntryContainer_Init
+        procedure, public :: NewSubList     => ParameterListEntryContainer_NewSubList
         procedure, public :: Free           => ParameterListEntryContainer_Free
         procedure, public :: Print          => ParameterListEntryContainer_Print
         generic,   public :: Set            => ParameterListEntryContainer_Set0D, &
@@ -145,6 +146,37 @@ contains
     !-----------------------------------------------------------------
         call this%Free()
     end subroutine ParameterListEntryContainer_Finalize
+
+
+    subroutine ParameterListEntryContainer_NewSubList(this,Key, Size)
+    !-----------------------------------------------------------------
+    !< Set a Key/Value pair into the DataBase
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(INOUT) :: this           !< Parameter List Entry Containter type
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        integer(I4P), optional,               intent(IN)    :: Size           !< Sublist Size
+        class(*), pointer                                   :: Node           !< Pointer to a Parameter List Entry
+        type(ParameterListEntryContainer_t)                 :: Sublist        !< New Sublist
+        integer(I4P)                                        :: SublistSize    !< Sublist real Size
+        class(*), pointer                                   :: SublistPointer !< Pointer to the New SubList
+    !-----------------------------------------------------------------
+        SublistSize = DefaultDataBaseSize
+        if(present(Size)) SublistSize = Size
+        call this%DataBase(this%Hash(Key=Key))%AddNode(Key=Key,Value=Sublist)
+        Node => this%DataBase(this%Hash(Key=Key))%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type(Node)
+                type is (ParameterListEntry_t)
+                    SublistPointer => Node%PointToValue()
+                    select type(SublistPointer)
+                        class is (ParameterListEntryContainer_t)
+                            print*, 'pasa por aqui'
+                            call SublistPointer%Init(Size=SublistSize)
+                    end select
+            end select
+        end if
+
+    end subroutine ParameterListEntryContainer_NewSubList
 
 
     subroutine ParameterListEntryContainer_Set0D(this,Key,Value)

@@ -193,6 +193,8 @@ contains
             select type (Wrapper =>Node%Value)
                 class is (DimensionsWrapper_t)
                     call Wrapper%Print(unit=unit)
+                class Default
+                    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) ' is a SubList'
             end select
             if (Node%HasNext()) then
                 Next => Node%GetNext()
