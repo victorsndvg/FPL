@@ -9,7 +9,6 @@ USE I8PWrapperFactory
 USE LWrapperFactory
 USE R4PWrapperFactory
 USE R8PWrapperFactory
-!USE UPWrapperFactory
 
 implicit none
 private
@@ -34,8 +33,6 @@ contains
         call TheWrapperFactoryList%AddNode(key='R8P',  WrapperFactory=WrapperFactoryR8P)
         call TheWrapperFactoryList%AddNode(key='L',    WrapperFactory=WrapperFactoryL)
         call TheWrapperFactoryList%AddNode(key='DLCA', WrapperFactory=WrapperFactoryDLCA)
-        ! Add Unlimited Polymorphic WrapperFactory as default
-!        call TheWrapperFactoryList%SetDefaultFactory(DefaultFactory=WrapperFactoryUP)
     end subroutine TheWrapperFactoryList_Init
 
 end module WrapperFactoryListSingleton

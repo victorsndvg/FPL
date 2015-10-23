@@ -9,7 +9,6 @@ private
     type, extends(LinkedList_t), public :: WrapperFactoryList_t
     private
         class(WrapperFactory_t), pointer :: Value          => null()
-        class(WrapperFactory_t), pointer :: DefaultFactory => null()
     contains
     private
         procedure         ::                      WrapperFactoryList_AddNode
@@ -21,7 +20,6 @@ private
         procedure         ::                      WrapperFactoryList_GetFactory5D
         procedure         ::                      WrapperFactoryList_GetFactory6D
         procedure         ::                      WrapperFactoryList_GetFactory7D
-        procedure, public :: SetDefaultFactory => WrapperFactoryList_SetDefaultFactory
         procedure, public :: Free              => WrapperFactoryList_Free
         procedure, public :: HasValue          => WrapperFactoryList_HasValue
         procedure, public :: SetValue          => WrapperFactoryList_SetValue
@@ -40,17 +38,6 @@ private
     end type WrapperFactoryList_t
 
 contains
-
-    subroutine WrapperFactoryList_SetDefaultFactory(this, DefaultFactory)
-    !-----------------------------------------------------------------
-    !< Set Default Factory
-    !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),     intent(INOUT)  :: this           !< Wrapper Factory List
-        class(WrapperFactory_T), target, intent(IN)     :: DefaultFactory !< Default factory
-    !-----------------------------------------------------------------
-        this%DefaultFactory => DefaultFactory
-    end subroutine WrapperFactoryList_SetDefaultFactory
-
 
     function WrapperFactoryList_HasValue(this) result(hasValue)
     !-----------------------------------------------------------------
@@ -94,7 +81,6 @@ contains
     !-----------------------------------------------------------------
         call this%LinkedList_t%Free()
         nullify(this%Value)
-        nullify(this%DefaultFactory)
     end subroutine WrapperFactoryList_Free
 
 
@@ -194,9 +180,6 @@ contains
                     type is (WrapperFactoryList_T)
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory0D
@@ -218,9 +201,6 @@ contains
                     type is (WrapperFactoryList_T)
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory1D
@@ -242,9 +222,6 @@ contains
                     type is (WrapperFactoryList_T)
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory2D
@@ -266,9 +243,6 @@ contains
                     type is (WrapperFactoryList_T)
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory3D
@@ -291,9 +265,6 @@ contains
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
             endif
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
         endif
     end function WrapperFactoryList_GetFactory4D
 
@@ -314,9 +285,6 @@ contains
                     type is (WrapperFactoryList_T)
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory5D
@@ -338,9 +306,6 @@ contains
                     type is (WrapperFactoryList_T)
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory6D
@@ -362,9 +327,6 @@ contains
                     type is (WrapperFactoryList_T)
                         WrapperFactory => Next%GetFactory(Value=Value)
                 end select
-            else
-                ! Default case: Return the DefaultFactory
-                WrapperFactory => this%DefaultFactory
             endif
         endif
     end function WrapperFactoryList_GetFactory7D
