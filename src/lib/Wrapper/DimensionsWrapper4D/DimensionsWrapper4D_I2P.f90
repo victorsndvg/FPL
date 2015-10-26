@@ -10,12 +10,15 @@ private
         integer(I2P), allocatable :: Value(:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper4D_I2P_Set
-        procedure, public :: Get          => DimensionsWrapper4D_I2P_Get
-        procedure, public :: isOfDataType => DimensionsWrapper4D_I2P_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper4D_I2P_Print
-        procedure, public :: Free         => DimensionsWrapper4D_I2P_Free
-        final             ::                 DimensionsWrapper4D_I2P_Final
+        procedure, public :: Set            => DimensionsWrapper4D_I2P_Set
+        procedure, public :: Get            => DimensionsWrapper4D_I2P_Get
+        procedure, public :: GetShape       => DimensionsWrapper4D_I2P_GetShape
+        procedure, public :: GetPointer     => DimensionsWrapper4D_I2P_GetPointer
+        procedure, public :: GetPolymorphic => DimensionsWrapper4D_I2P_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper4D_I2P_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper4D_I2P_Print
+        procedure, public :: Free           => DimensionsWrapper4D_I2P_Free
+        final             ::                   DimensionsWrapper4D_I2P_Final
     end type           
 
 public :: DimensionsWrapper4D_I2P_t
@@ -62,6 +65,43 @@ contains
             type is (integer(I2P))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    function DimensionsWrapper4D_I2P_GetShape(this) result(ValueShape) 
+    !-----------------------------------------------------------------
+    !< Get Wrapper Value Shape
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_I2P_t), intent(IN)  :: this
+        integer(I4P), allocatable                     :: ValueShape(:)
+    !-----------------------------------------------------------------
+        ValueShape = shape(this%Value)
+    end function
+
+
+    function DimensionsWrapper4D_I2P_GetPointer(this) result(Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic pointer to Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_I2P_t), target, intent(IN)  :: this
+        class(*), pointer                                     :: Value(:,:,:,:)
+    !-----------------------------------------------------------------
+        Value => this%Value
+    end function
+
+
+    subroutine DimensionsWrapper4D_I2P_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_I2P_t), intent(IN)  :: this
+        class(*), allocatable,            intent(OUT) :: Value(:,:,:,:)
+    !-----------------------------------------------------------------
+        allocate(Value(size(this%Value,dim=1),  &
+                       size(this%Value,dim=2),  &
+                       size(this%Value,dim=3),  &
+                       size(this%Value,dim=4)), &
+                       source=this%Value)
     end subroutine
 
 

@@ -10,12 +10,15 @@ private
         integer(I1P), allocatable :: Value(:,:,:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper7D_I1P_Set
-        procedure, public :: Get          => DimensionsWrapper7D_I1P_Get
-        procedure, public :: isOfDataType => DimensionsWrapper7D_I1P_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper7D_I1P_Print
-        procedure, public :: Free         => DimensionsWrapper7D_I1P_Free
-        final             ::                 DimensionsWrapper7D_I1P_Final
+        procedure, public :: Set            => DimensionsWrapper7D_I1P_Set
+        procedure, public :: Get            => DimensionsWrapper7D_I1P_Get
+        procedure, public :: GetShape       => DimensionsWrapper7D_I1P_GetShape
+        procedure, public :: GetPointer     => DimensionsWrapper7D_I1P_GetPointer
+        procedure, public :: GetPolymorphic => DimensionsWrapper7D_I1P_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper7D_I1P_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper7D_I1P_Print
+        procedure, public :: Free           => DimensionsWrapper7D_I1P_Free
+        final             ::                   DimensionsWrapper7D_I1P_Final
     end type           
 
 public :: DimensionsWrapper7D_I1P_t
@@ -65,6 +68,46 @@ contains
             type is (integer(I1P))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    function DimensionsWrapper7D_I1P_GetShape(this) result(ValueShape) 
+    !-----------------------------------------------------------------
+    !< Get Wrapper Value Shape
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I1P_t), intent(IN)  :: this
+        integer(I4P), allocatable                     :: ValueShape(:)
+    !-----------------------------------------------------------------
+        ValueShape = shape(this%Value)
+    end function
+
+
+    function DimensionsWrapper7D_I1P_GetPointer(this) result(Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic pointer to Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I1P_t), target, intent(IN)  :: this
+        class(*), pointer                                     :: Value(:,:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        Value => this%Value
+    end function
+
+
+    subroutine DimensionsWrapper7D_I1P_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I1P_t), intent(IN)  :: this
+        class(*), allocatable,            intent(OUT) :: Value(:,:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        allocate(Value(size(this%Value,dim=1),  &
+                       size(this%Value,dim=2),  &
+                       size(this%Value,dim=3),  &
+                       size(this%Value,dim=4),  &
+                       size(this%Value,dim=5),  &
+                       size(this%Value,dim=6),  &
+                       size(this%Value,dim=7)), &
+                       source=this%Value)
     end subroutine
 
 

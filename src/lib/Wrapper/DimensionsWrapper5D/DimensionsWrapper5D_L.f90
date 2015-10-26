@@ -10,12 +10,15 @@ private
         logical, allocatable :: Value(:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper5D_L_Set
-        procedure, public :: Get          => DimensionsWrapper5D_L_Get
-        procedure, public :: isOfDataType => DimensionsWrapper5D_L_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper5D_L_Print
-        procedure, public :: Free         => DimensionsWrapper5D_L_Free
-        final             ::                 DimensionsWrapper5D_L_Final
+        procedure, public :: Set            => DimensionsWrapper5D_L_Set
+        procedure, public :: Get            => DimensionsWrapper5D_L_Get
+        procedure, public :: GetShape       => DimensionsWrapper5D_L_GetShape
+        procedure, public :: GetPointer     => DimensionsWrapper5D_L_GetPointer
+        procedure, public :: GetPolymorphic => DimensionsWrapper5D_L_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper5D_L_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper5D_L_Print
+        procedure, public :: Free           => DimensionsWrapper5D_L_Free
+        final             ::                   DimensionsWrapper5D_L_Final
     end type           
 
 public :: DimensionsWrapper5D_L_t
@@ -57,12 +60,50 @@ contains
     !< Get logical Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_L_t), intent(IN)  :: this
-        class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        class(*),                       intent(OUT) :: Value(:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
                 Value = this%Value
         end select
+    end subroutine
+
+
+    function DimensionsWrapper5D_L_GetShape(this) result(ValueShape) 
+    !-----------------------------------------------------------------
+    !< Get Wrapper Value Shape
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_L_t), intent(IN)  :: this
+        integer(I4P), allocatable                   :: ValueShape(:)
+    !-----------------------------------------------------------------
+        ValueShape = shape(this%Value)
+    end function
+
+
+    function DimensionsWrapper5D_L_GetPointer(this) result(Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic pointer to Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_L_t), target, intent(IN) :: this
+        class(*), pointer                                  :: Value(:,:,:,:,:)
+    !-----------------------------------------------------------------
+        Value => this%Value
+    end function
+
+
+    subroutine DimensionsWrapper5D_L_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_L_t), intent(IN)  :: this
+        class(*), allocatable,          intent(OUT) :: Value(:,:,:,:,:)
+    !-----------------------------------------------------------------
+        allocate(Value(size(this%Value,dim=1),  &
+                       size(this%Value,dim=2),  &
+                       size(this%Value,dim=3),  &
+                       size(this%Value,dim=4),  &
+                       size(this%Value,dim=5)), &
+                       source=this%Value)
     end subroutine
 
 
