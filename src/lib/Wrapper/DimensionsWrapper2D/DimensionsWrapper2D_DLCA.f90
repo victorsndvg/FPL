@@ -10,12 +10,15 @@ private
         character(len=:), allocatable :: Value(:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper2D_DLCA_Set
-        procedure, public :: Get          => DimensionsWrapper2D_DLCA_Get
-        procedure, public :: isOfDataType => DimensionsWrapper2D_DLCA_isOfDataType
-        procedure, public :: Free         => DimensionsWrapper2D_DLCA_Free
-        procedure, public :: Print        => DimensionsWrapper2D_DLCA_Print
-        final             ::                 DimensionsWrapper2D_DLCA_Final
+        procedure, public :: Set            => DimensionsWrapper2D_DLCA_Set
+        procedure, public :: Get            => DimensionsWrapper2D_DLCA_Get
+        procedure, public :: GetShape       => DimensionsWrapper2D_DLCA_GetShape
+        procedure, public :: GetPointer     => DimensionsWrapper2D_DLCA_GetPointer
+        procedure, public :: GetPolymorphic => DimensionsWrapper2D_DLCA_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper2D_DLCA_isOfDataType
+        procedure, public :: Free           => DimensionsWrapper2D_DLCA_Free
+        procedure, public :: Print          => DimensionsWrapper2D_DLCA_Print
+        final             ::                   DimensionsWrapper2D_DLCA_Final
     end type           
 
 public :: DimensionsWrapper2D_DLCA_t
@@ -60,6 +63,41 @@ contains
             type is (character(len=*))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    function DimensionsWrapper2D_DLCA_GetShape(this) result(ValueShape) 
+    !-----------------------------------------------------------------
+    !< Get Wrapper Value Shape
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_DLCA_t), intent(IN)  :: this
+        integer(I4P), allocatable                      :: ValueShape(:)
+    !-----------------------------------------------------------------
+        ValueShape = shape(this%Value)
+    end function
+
+
+    function DimensionsWrapper2D_DLCA_GetPointer(this) result(Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_DLCA_t), target, intent(IN) :: this
+        class(*), pointer                                     :: Value(:,:)
+    !-----------------------------------------------------------------
+        Value => this%value
+    end function
+
+
+    subroutine DimensionsWrapper2D_DLCA_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_DLCA_t), intent(IN)  :: this
+        class(*), allocatable,             intent(OUT) :: Value(:,:)
+    !-----------------------------------------------------------------
+!        allocate(Value(size(this%Value,dim=1),  &
+!                       size(this%Value,dim=2)), &
+!                       source=this%Value)
     end subroutine
 
 

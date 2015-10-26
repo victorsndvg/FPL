@@ -15,6 +15,7 @@ private
         procedure, public :: Print         => DimensionsWrapper_Print
         procedure(DimensionsWrapper_isOfDataType), public, deferred :: isOfDataType
         procedure(DimensionsWrapper_Free),         public, deferred :: Free
+        procedure(DimensionsWrapper_GetShape),     public, deferred :: GetShape
     end type
 
     abstract interface
@@ -28,6 +29,13 @@ private
             class(DimensionsWrapper_t), intent(IN) :: this
             class(*),                   intent(IN) :: Mold
             logical                                :: isOfDataType
+        end function
+
+        function DimensionsWrapper_GetShape(this) result(ValueShape)
+            import DimensionsWrapper_t
+            import I4P
+            class(DimensionsWrapper_t), intent(IN) :: this
+            integer(I4P), allocatable              :: ValueShape(:)
         end function
     end interface
 

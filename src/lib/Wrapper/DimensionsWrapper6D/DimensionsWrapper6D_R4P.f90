@@ -10,12 +10,15 @@ private
         real(R4P), allocatable :: Value(:,:,:,:,:,:)
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper6D_R4P_Set
-        procedure, public :: Get          => DimensionsWrapper6D_R4P_Get
-        procedure, public :: isOfDataType => DimensionsWrapper6D_R4P_isOfDataType
-        procedure, public :: Print        => DimensionsWrapper6D_R4P_Print
-        procedure, public :: Free         => DimensionsWrapper6D_R4P_Free
-        final             ::                 DimensionsWrapper6D_R4P_Final
+        procedure, public :: Set            => DimensionsWrapper6D_R4P_Set
+        procedure, public :: Get            => DimensionsWrapper6D_R4P_Get
+        procedure, public :: GetShape       => DimensionsWrapper6D_R4P_GetShape
+        procedure, public :: GetPointer     => DimensionsWrapper6D_R4P_GetPointer
+        procedure, public :: GetPolymorphic => DimensionsWrapper6D_R4P_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper6D_R4P_isOfDataType
+        procedure, public :: Print          => DimensionsWrapper6D_R4P_Print
+        procedure, public :: Free           => DimensionsWrapper6D_R4P_Free
+        final             ::                   DimensionsWrapper6D_R4P_Final
     end type           
 
 public :: DimensionsWrapper6D_R4P_t
@@ -33,7 +36,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper6D_r4P_Set(this, Value) 
+    subroutine DimensionsWrapper6D_R4P_Set(this, Value) 
     !-----------------------------------------------------------------
     !< Set R4P Wrapper Value
     !-----------------------------------------------------------------
@@ -64,6 +67,45 @@ contains
             type is (real(R4P))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    function DimensionsWrapper6D_R4P_GetShape(this) result(ValueShape) 
+    !-----------------------------------------------------------------
+    !< Get Wrapper Value Shape
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_R4P_t), intent(IN)  :: this
+        integer(I4P), allocatable                     :: ValueShape(:)
+    !-----------------------------------------------------------------
+        ValueShape = shape(this%Value)
+    end function
+
+
+    function DimensionsWrapper6D_R4P_GetPointer(this) result(Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic pointer to Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_R4P_t), target, intent(IN)  :: this
+        class(*), pointer                                     :: Value(:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        Value => this%Value
+    end function
+
+
+    subroutine DimensionsWrapper6D_R4P_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_R4P_t), intent(IN)  :: this
+        class(*), allocatable,            intent(OUT) :: Value(:,:,:,:,:,:)
+    !-----------------------------------------------------------------
+        allocate(Value(size(this%Value,dim=1),  &
+                       size(this%Value,dim=2),  &
+                       size(this%Value,dim=3),  &
+                       size(this%Value,dim=4),  &
+                       size(this%Value,dim=5),  &
+                       size(this%Value,dim=6)), &
+                       source=this%Value)
     end subroutine
 
 

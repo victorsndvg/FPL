@@ -10,12 +10,15 @@ private
         integer(I8P), allocatable :: Value
     contains
     private
-        procedure, public :: Set          => DimensionsWrapper0D_I8P_Set
-        procedure, public :: Get          => DimensionsWrapper0D_I8P_Get
-        procedure, public :: isOfDataType => DimensionsWrapper0D_I8P_isOfDataType
-        procedure, public :: Free         => DimensionsWrapper0D_I8P_Free
-        procedure, public :: Print        => DimensionsWrapper0D_I8P_Print
-        final             ::                 DimensionsWrapper0D_I8P_Final
+        procedure, public :: Set            => DimensionsWrapper0D_I8P_Set
+        procedure, public :: Get            => DimensionsWrapper0D_I8P_Get
+        procedure, public :: GetShape       => DimensionsWrapper0D_I8P_GetShape
+        procedure, public :: GetPointer     => DimensionsWrapper0D_I8P_GetPointer
+        procedure, public :: GetPolymorphic => DimensionsWrapper0D_I8P_GetPolymorphic
+        procedure, public :: isOfDataType   => DimensionsWrapper0D_I8P_isOfDataType
+        procedure, public :: Free           => DimensionsWrapper0D_I8P_Free
+        procedure, public :: Print          => DimensionsWrapper0D_I8P_Print
+        final             ::                   DimensionsWrapper0D_I8P_Final
     end type           
 
 public :: DimensionsWrapper0D_I8P_t
@@ -58,6 +61,39 @@ contains
             type is (integer(I8P))
                 Value = this%Value
         end select
+    end subroutine
+
+
+    function DimensionsWrapper0D_I8P_GetShape(this)  result(ValueShape)
+    !-----------------------------------------------------------------
+    !< Return the shape of the Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_I8P_t), intent(IN)  :: this
+        integer(I4P), allocatable                     :: ValueShape(:)
+    !-----------------------------------------------------------------
+        ValueShape = shape(this%Value)
+    end function
+
+
+    function DimensionsWrapper0D_I8P_GetPointer(this) result(Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic pointer to Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_I8P_t), target, intent(IN)  :: this
+        class(*), pointer                                     :: Value
+    !-----------------------------------------------------------------
+        Value => this%Value
+    end function
+
+
+    subroutine DimensionsWrapper0D_I8P_GetPolymorphic(this, Value) 
+    !-----------------------------------------------------------------
+    !< Get Unlimited Polymorphic Wrapper Value
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_I8P_t), intent(IN)  :: this
+        class(*), allocatable,            intent(OUT) :: Value
+    !-----------------------------------------------------------------
+        allocate(Value, source = this%Value)
     end subroutine
 
 
