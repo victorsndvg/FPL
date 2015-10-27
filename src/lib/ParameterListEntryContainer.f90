@@ -32,8 +32,8 @@ save
 
     integer(I4P), parameter:: DefaultDataBaseSize = 999_I4P
 
-    type :: ParameterListRoot_T
-        type(ParameterListEntry_t), pointer :: Root => null()
+    type :: ParameterListRoot_t
+        class(ParameterListEntry_t), pointer :: Root => null()
     end type
 
     type, public:: ParameterListEntryContainer_t
@@ -166,19 +166,16 @@ contains
     !-----------------------------------------------------------------
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P), allocatable                           :: ValueShape(:)
     !-----------------------------------------------------------------
-        Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-        if(associated(Node)) then
-            select type(Node)
-                type is (ParameterListEntry_t)
-                    Wrapper => Node%PointToValue()
-                    select type(Wrapper)
-                        class is (DimensionsWrapper_t)
-                            ValueShape = Wrapper%GetShape()
-                    end select
+        Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        if(associated(Entry)) then
+            Wrapper => Entry%PointToValue()
+            select type(Wrapper)
+                class is (DimensionsWrapper_t)
+                    ValueShape = Wrapper%GetShape()
             end select
         end if
     end function ParameterListEntryContainer_GetShape
@@ -246,26 +243,22 @@ contains
         class(ParameterListEntryContainer_t), intent(INOUT) :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         integer(I4P), optional,               intent(IN)    :: Size           !< Sublist Size
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List Entry
+        class(ParameterListEntry_T), pointer                :: Entry          !< Pointer to a Parameter List Entry
         type(ParameterListEntryContainer_t)                 :: Sublist        !< New Sublist
         integer(I4P)                                        :: SublistSize    !< Sublist real Size
-        class(*), pointer                                   :: SublistPointer !< Pointer to the New SubList
+        class(*),                    pointer                :: SublistPointer !< Pointer to the New SubList
     !-----------------------------------------------------------------
         SublistSize = DefaultDataBaseSize
         if(present(Size)) SublistSize = Size
         call this%DataBase(this%Hash(Key=Key))%Root%AddNode(Key=Key,Value=Sublist)
-        Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-        if(associated(Node)) then
-            select type(Node)
-                type is (ParameterListEntry_t)
-                    SublistPointer => Node%PointToValue()
-                    select type(SublistPointer)
-                        class is (ParameterListEntryContainer_t)
-                            call SublistPointer%Init(Size=SublistSize)
-                    end select
+        Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        if(associated(Entry)) then
+            SublistPointer => Entry%PointToValue()
+            select type(SublistPointer)
+                class is (ParameterListEntryContainer_t)
+                    call SublistPointer%Init(Size=SublistSize)
             end select
         end if
-
     end subroutine ParameterListEntryContainer_NewSubList
 
 
@@ -436,19 +429,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value          !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper0D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper0D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -462,19 +452,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper1D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper1D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -488,20 +475,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter 
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper2D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper2D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -515,19 +498,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper3D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper3D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -541,19 +521,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper4D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper4D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -568,19 +545,16 @@ contains
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< Wrapper factory
-        class(*), pointer                                   :: Wrapper          !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper5D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper5D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -594,19 +568,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
-        class(*), pointer                                   :: Node               !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper            !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper6D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper6D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -620,19 +591,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
-        class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper              !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper7D_t)
-                                call Wrapper%Get(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper7D_t)
+                        call Wrapper%Get(Value=Value)
                 end select
             end if
         endif
@@ -646,19 +614,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this    !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key     !< String Key
         class(*), pointer,                    intent(INOUT) :: Value   !< Returned pointer to value
-        class(*), pointer                                   :: Node    !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry   !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper0D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper0D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -672,19 +637,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this     !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key      !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:) !< Returned pointer to value
-        class(*), pointer                                   :: Node     !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper  !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry    !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper  !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper1D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper1D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -698,19 +660,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this       !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key        !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:) !< Returned pointer to value
-        class(*), pointer                                   :: Node       !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper    !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry      !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper    !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper2D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper2D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -724,19 +683,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:)   !< Returned pointer to value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper3D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper3D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -750,19 +706,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:) !< Returned pointer to value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper4D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper4D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -776,19 +729,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this             !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:) !< Returned pointer to value
-        class(*), pointer                                   :: Node             !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper          !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper          !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper5D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper5D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -802,19 +752,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned pointer to value
-        class(*), pointer                                   :: Node               !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper            !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper            !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper6D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper6D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -828,19 +775,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned pointer to value
-        class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper              !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper7D_t)
-                                Value => Wrapper%GetPointer()
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper7D_t)
+                        Value => Wrapper%GetPointer()
                 end select
             end if
         endif
@@ -854,19 +798,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(INOUT) :: Value          !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper0D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper0D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -880,19 +821,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:)       !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper1D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper1D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -907,19 +845,16 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:)     !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory !< Wrapper factory
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper2D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper2D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -933,19 +868,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:)   !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper3D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper3D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -959,19 +891,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:) !< Returned value
-        class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper4D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper4D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -986,19 +915,16 @@ contains
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
-        class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< Wrapper factory
-        class(*), pointer                                   :: Wrapper          !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper          !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper5D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper5D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -1012,19 +938,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:) !< Returned value
-        class(*), pointer                                   :: Node               !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper            !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper            !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper6D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper6D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -1038,19 +961,16 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:,:) !< Returned value
-        class(*), pointer                                   :: Node                 !< Pointer to a Parameter List
-        class(*), pointer                                   :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            Node => this%DataBase(this%Hash(Key=Key))%Root%GetNode(Key=Key)
-            if(associated(Node)) then
-                select type(Node)
-                    type is (ParameterListEntry_t)
-                        Wrapper => Node%PointToValue()
-                        select type(Wrapper)
-                            class is (DimensionsWrapper7D_t)
-                                call Wrapper%GetPolymorphic(Value=Value)
-                        end select
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Wrapper => Entry%PointToValue()
+                select type(Wrapper)
+                    class is (DimensionsWrapper7D_t)
+                        call Wrapper%GetPolymorphic(Value=Value)
                 end select
             end if
         endif
@@ -1073,30 +993,18 @@ contains
     end function ParameterListEntryContainer_isPresent
 
 
-    subroutine ParameterListEntryContainer_RemoveEntry(this,Key)
+    subroutine ParameterListEntryContainer_RemoveEntry(this, Key)
     !-----------------------------------------------------------------
-    !< Remove a ParameterListEntry given a Key
+    !< Remove an Entry given a Key
     !-----------------------------------------------------------------
         class(ParameterListEntryContainer_t), intent(INOUT) :: this          !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key           !< String Key
-        class(ParameterListEntry_t), pointer                :: PreviousEntry !< The Previous Node of a given key
-        class(ParameterListEntry_t), pointer                :: CurrentEntry  !< Node of a given key
+        class(ParameterListEntry_t), pointer                :: PreviousEntry !< The Previous Entry of a given key
+        class(ParameterListEntry_t), pointer                :: CurrentEntry  !< Entry of a given key
         class(ParameterListEntry_t), pointer                :: NextEntry     !< The Next Node of a given key
     !-----------------------------------------------------------------
-       if(this%isPresent(Key=Key)) then
-            PreviousEntry => this%DataBase(this%Hash(Key=Key))%Root%GetPreviousEntry(Key=Key)
-            if(associated(PreviousEntry)) then
-                CurrentEntry  => PreviousEntry%GetNextEntry()
-                NextEntry     => CurrentEntry%GetNextEntry()
-                PreviousEntry%Next => NextEntry
-            else
-                CurrentEntry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key) ! SHOULD BE EQ TO CurrentEntry => this%DataBase(this%Hash(Key=Key))%Root
-                NextEntry    => CurrentEntry%GetNextEntry()
-                this%DataBase(this%Hash(Key=Key))%Root => NextEntry
-            endif
-            call CurrentEntry%NullifyNext() 
-            call CurrentEntry%Free()
-            deallocate(CurrentEntry)
+        if(this%HasRoot(Key=Key)) then
+            call this%DataBase(this%Hash(Key=Key))%Root%RemoveNode(Key=Key,Root=this%DataBase(this%Hash(Key=Key))%Root)
         endif
     end subroutine ParameterListEntryContainer_RemoveEntry
 
