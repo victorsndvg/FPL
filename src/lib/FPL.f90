@@ -1,10 +1,10 @@
 module FPL
 
 USE IR_Precision, only: I4P
-USE ParameterListEntryContainer
+USE ParameterList
 USE WrapperFactoryListSingleton
 
-public :: ParameterListEntryContainer_t
+public :: ParameterList_t
 
 contains
 

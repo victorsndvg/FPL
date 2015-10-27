@@ -14,9 +14,6 @@ private
         class(ParameterEntry_t), public, pointer  :: Next   => null()
     contains
     private
-        procedure         ::                     ParameterEntry_AddNode
-        procedure, public :: GetEntry         => ParameterEntry_GetEntry
-        procedure, public :: GetPreviousEntry => ParameterEntry_GetPreviousEntry
         procedure, public :: Free             => ParameterEntry_Free
         procedure, public :: Print            => ParameterEntry_Print
         procedure, public :: HasNext          => ParameterEntry_HasNext
@@ -32,10 +29,6 @@ private
         procedure, public :: GetValue         => ParameterEntry_GetValue
         procedure, public :: DeallocateValue  => ParameterEntry_DeallocateValue
         procedure, public :: PointToValue     => ParameterEntry_PointToValue
-        procedure, public :: isPresent        => ParameterEntry_isPresent
-        procedure, public :: GetLength        => ParameterEntry_GetLength
-        procedure, public :: RemoveEntry      => ParameterEntry_RemoveEntry
-        generic,   public :: AddNode          => ParameterEntry_AddNode     
         final             ::                     ParameterEntry_Finalize 
     end type ParameterEntry_t
 
@@ -132,18 +125,6 @@ contains
     end subroutine ParameterEntry_DeallocateKey
 
 
-    function ParameterEntry_IsPresent(this, Key) result(isPresent)
-    !-----------------------------------------------------------------
-    !< Check if a Key is present in the DataBase
-    !-----------------------------------------------------------------
-        class(ParameterEntry_t),       intent(IN)  :: this            !< Parameter List
-        character(len=*),              intent(IN)  :: Key             !< String Key
-        logical                                    :: isPresent       !< Boolean flag to check if a Key is present
-    !-----------------------------------------------------------------
-        isPresent = associated(this%GetEntry(Key))
-    end function ParameterEntry_IsPresent
-
-
     recursive subroutine ParameterEntry_Free(this)
     !-----------------------------------------------------------------
     !< Free the list
@@ -161,58 +142,6 @@ contains
         call this%DeallocateValue()
         call this%NullifyNext()
     end subroutine ParameterEntry_Free
-
-
-
-    function ParameterEntry_GetEntry(this,Key) result(Entry)
-    !-----------------------------------------------------------------
-    !< Return a pointer to a ParameterList given a Key
-    !-----------------------------------------------------------------
-        class(ParameterEntry_t), target,     intent(IN) :: this       !< Parameter List
-        character(len=*),                    intent(IN) :: Key        !< String Key
-        class(ParameterEntry_t), pointer                :: Entry      !< Parameter List Node
-    !-----------------------------------------------------------------
-        Entry => this
-        do while(associated(Entry))
-            if (Entry%HasKey()) then
-                if (Entry%GetKey()==Key) exit
-                Entry => Entry%GetNext()
-            elseif (Entry%HasNext()) then
-                Entry => Entry%GetNext()
-            else
-                nullify(Entry)
-                exit
-            endif
-        enddo
-    end function ParameterEntry_GetEntry
-
-
-    function ParameterEntry_GetPreviousEntry(this,Key) result(PreviousEntry)
-    !-----------------------------------------------------------------
-    !< Return a pointer to the provious node of a Parameter List given a Key
-    !-----------------------------------------------------------------
-        class(ParameterEntry_t), target, intent(IN) :: this          !< Parameter List
-        character(len=*),                intent(IN) :: Key           !< String Key
-        class(ParameterEntry_t), pointer            :: PreviousEntry !< Parameter List Node
-        class(ParameterEntry_t), pointer            :: Next          !< Parameter List Next Node
-    !-----------------------------------------------------------------
-        PreviousEntry => this
-        do while(associated(PreviousEntry))
-            if (PreviousEntry%HasNext()) then
-                Next => PreviousEntry%GetNext()
-                if(Next%HasKey()) then
-                    if (Next%GetKey()==Key) then
-                        exit
-                    else
-                        PreviousEntry => Next
-                    endif
-                endif
-            else
-                nullify(PreviousEntry)
-                exit
-            endif
-        enddo    
-    end function ParameterEntry_GetPreviousEntry
 
 
     function ParameterEntry_HasValue(this) result(hasValue)
@@ -270,7 +199,6 @@ contains
     end subroutine ParameterEntry_DeallocateValue
 
 
-
     recursive subroutine ParameterEntry_Finalize(this)
     !-----------------------------------------------------------------
     !< Finalize procedure
@@ -279,105 +207,6 @@ contains
     !-----------------------------------------------------------------
         call this%Free()
     end subroutine ParameterEntry_Finalize
-
-
-    recursive subroutine ParameterEntry_AddNode(this,Key, Value)
-    !-----------------------------------------------------------------
-    !< Add a new Node if key does not Exist
-    !-----------------------------------------------------------------
-        class(ParameterEntry_t),  intent(INOUT) :: this               !< Linked List
-        character(len=*),         intent(IN)    :: Key                !< Key (unique) of the current node.
-        class(*),                 intent(IN)    :: Value              !< Wrapper Factory
-    !-----------------------------------------------------------------
-        if (this%HasKey()) then
-            if (this%GetKey()/=Key) then
-                if (.not. this%hasNext()) then 
-                    ! I reached the end of the list
-                    allocate(ParameterEntry_t::this%Next)
-                    select type (Next => this%Next)
-                    type is (ParameterEntry_t)
-                        call Next%AddNode(Key=Key, Value=Value)
-                    end select
-                else
-                    select type (Next => this%Next)
-                    type is (ParameterEntry_t)
-                        call Next%AddNode(Key=Key, Value=Value)
-                    end select
-                endif
-            else
-                call this%SetValue(Value=Value)
-            endif
-        else
-            call this%SetKey(Key=Key)
-            call this%SetValue(Value=Value)
-        endif
-    end subroutine ParameterEntry_AddNode
-
-
-    subroutine ParameterEntry_RemoveEntry(this, Key, Root)
-    !-----------------------------------------------------------------
-    !< Remove an Entry given a Key
-    !-----------------------------------------------------------------
-        class(ParameterEntry_t), target,  intent(INOUT) :: this          !< Parameter List Entry type
-        character(len=*),                 intent(IN)    :: Key           !< String Key
-        class(ParameterEntry_t), pointer, intent(INOUT) :: Root          !< The Previous Entry of a given key
-        class(ParameterEntry_t), pointer                :: PreviousEntry !< The Previous Entry of a given key
-        class(ParameterEntry_t), pointer                :: CurrentEntry  !< Entry of a given key
-        class(ParameterEntry_t), pointer                :: NextEntry     !< The Next Node of a given key
-    !-----------------------------------------------------------------
-        if(associated(Root,this)) then
-            if(Root%HasKey()) then
-                if(Root%GetKey() == Key) then
-                    CurrentEntry => Root
-                    NextEntry    => CurrentEntry%GetNext()
-                    call CurrentEntry%DeallocateKey()    
-                    call CurrentEntry%DeallocateValue()
-                    if(CurrentEntry%HasNext()) then
-                        if(NextEntry%HasKey()) then
-                            call CurrentEntry%NullifyNext()
-                            Root => NextEntry
-                            deallocate(CurrentEntry)
-                        endif
-                    endif
-                else
-                    PreviousEntry => Root%GetPreviousEntry(Key=Key)
-                    if(associated(PreviousEntry)) then
-                        CurrentEntry  => PreviousEntry%GetNext()
-                        NextEntry     => CurrentEntry%GetNext()
-                        call CurrentEntry%DeallocateKey()    
-                        call CurrentEntry%DeallocateValue()
-                        if(CurrentEntry%HasNext()) then
-                            if(NextEntry%HasKey()) then
-                                call CurrentEntry%NullifyNext()
-                                call PreviousEntry%SetNext(Next=NextEntry)
-                                deallocate(CurrentEntry)
-                            endif
-                        endif
-                    endif   
-                endif
-            endif
-        endif
-    end subroutine ParameterEntry_RemoveEntry
-
-
-    function ParameterEntry_GetLength(this) result(Length)
-    !-----------------------------------------------------------------
-    !< Return the length of the list
-    !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter List
-        integer(I4P)                        :: Length                 !< Length of the list
-        type(ParameterEntry_t),  pointer    :: NextEntry               !< Next Parameter List Entry
-    !-----------------------------------------------------------------
-        Length = 0 ; if (this%HasKey()) Length = 1
-        NextEntry => this%GetNext()
-        do while (associated(NextEntry))
-            if (NextEntry%HasKey()) then
-                Length = Length + 1
-            endif
-            NextEntry => NextEntry%GetNext()
-        enddo
-        nullify(NextEntry)
-    end function ParameterEntry_GetLength
 
 
     recursive subroutine ParameterEntry_Print(this, unit, prefix, iostat, iomsg)
@@ -392,26 +221,16 @@ contains
         character(len=:),       allocatable           :: prefd        !< Prefixing string.
         integer(I4P)                                  :: iostatd      !< IO error.
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
-        class(ParameterEntry_t), pointer              :: Node         !< Pointer for scanning the list.
-        class(*), pointer                             :: Next         !< Pointer for scanning the list.
     !-----------------------------------------------------------------
         iostatd = 0 ; iomsgd = ''; prefd = '';if (present(prefix)) prefd = prefix
-        Node => this
-        if(Node%HasKey()) then
-            write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Node%GetKey()//'", '
-            select type (Wrapper =>Node%Value)
+        if(this%HasKey()) then
+            write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//this%GetKey()//'", '
+            select type (Wrapper =>this%Value)
                 class is (DimensionsWrapper_t)
                     call Wrapper%Print(unit=unit)
                 class Default
-                    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) ' is a SubList'
+                    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) ' is not a Wrapper'
             end select
-            if (Node%HasNext()) then
-                Next => Node%GetNext()
-                select type (Next)
-                    class is (ParameterEntry_t)
-                        call Next%Print(unit=unit,prefix=prefd,iostat=iostatd,iomsg=iomsgd)
-                end select
-            endif
         endif
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
