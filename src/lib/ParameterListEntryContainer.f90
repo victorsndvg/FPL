@@ -13,7 +13,7 @@
 module ParameterListEntryContainer
 
 USE IR_Precision
-USE ParameterListEntry
+USE ParameterEntry
 USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper
@@ -33,7 +33,7 @@ save
     integer(I4P), parameter:: DefaultDataBaseSize = 100_I4P
 
     type :: ParameterListRoot_t
-        class(ParameterListEntry_t), pointer :: Root => null()
+        class(ParameterEntry_t), pointer :: Root => null()
     end type
 
     type, public:: ParameterListEntryContainer_t
@@ -170,7 +170,7 @@ contains
     !-----------------------------------------------------------------
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P), allocatable                           :: ValueShape(:)
     !-----------------------------------------------------------------
@@ -265,7 +265,7 @@ contains
         integer(I4P), optional,               intent(IN)    :: Size           !< Sublist Size
         class(ParameterListEntryContainer_T), pointer       :: SublistPointer !< Pointer to the New SubList
         class(*),                             pointer       :: Value          !< Pointer to the New SubList
-        class(ParameterListEntry_T),          pointer       :: Entry          !< Pointer to a Parameter List Entry
+        class(ParameterEntry_t),              pointer       :: Entry          !< Pointer to a Parameter List Entry
         type(ParameterListEntryContainer_t)                 :: Sublist        !< New Sublist
         integer(I4P)                                        :: SublistSize    !< Sublist real Size
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
@@ -297,7 +297,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this    !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key     !< String Key
         class(*),                              pointer      :: Value   !< Returned pointer to value
-        class(ParameterListEntry_t),           pointer      :: Entry   !< Pointer to a Parameter List
+        class(ParameterEntry_t),               pointer      :: Entry   !< Pointer to a Parameter List
         class(ParameterListEntryContainer_T),  pointer      :: Sublist !< Wrapper
         integer(I4P)                                        :: Hash    !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -482,7 +482,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value          !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -507,7 +507,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -532,7 +532,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter 
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -557,7 +557,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -582,7 +582,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -608,7 +608,7 @@ contains
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
-        class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry            !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper          !< Wrapper
         integer(I4P)                                        :: Hash             !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -633,7 +633,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry              !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper            !< Wrapper
         integer(I4P)                                        :: Hash               !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -658,7 +658,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry                !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper              !< Wrapper
         integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -683,7 +683,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this    !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key     !< String Key
         class(*), pointer,                    intent(INOUT) :: Value   !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry   !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry   !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper !< Wrapper
         integer(I4P)                                        :: Hash    !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -708,7 +708,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this     !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key      !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:) !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry    !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry    !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper  !< Wrapper
         integer(I4P)                                        :: Hash     !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -733,7 +733,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this       !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key        !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:) !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry      !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry      !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper    !< Wrapper
         integer(I4P)                                        :: Hash       !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -758,7 +758,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:)   !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -783,7 +783,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:) !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -808,7 +808,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this             !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:) !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry            !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper          !< Wrapper
         integer(I4P)                                        :: Hash             !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -833,7 +833,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry              !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper            !< Wrapper
         integer(I4P)                                        :: Hash               !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -858,7 +858,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned pointer to value
-        class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry                !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper              !< Wrapper
         integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -883,7 +883,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(INOUT) :: Value          !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -908,7 +908,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:)       !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -934,7 +934,7 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:)     !< Returned value
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -959,7 +959,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:)   !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -984,7 +984,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -1010,7 +1010,7 @@ contains
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
-        class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry            !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper          !< Wrapper
         integer(I4P)                                        :: Hash             !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -1035,7 +1035,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry              !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper            !< Wrapper
         integer(I4P)                                        :: Hash               !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -1060,7 +1060,7 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
+        class(ParameterEntry_t),     pointer                :: Entry                !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper              !< Wrapper
         integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
@@ -1102,9 +1102,9 @@ contains
     !-----------------------------------------------------------------
         class(ParameterListEntryContainer_t), intent(INOUT) :: this          !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key           !< String Key
-        class(ParameterListEntry_t), pointer                :: PreviousEntry !< The Previous Entry of a given key
-        class(ParameterListEntry_t), pointer                :: CurrentEntry  !< Entry of a given key
-        class(ParameterListEntry_t), pointer                :: NextEntry     !< The Next Node of a given key
+        class(ParameterEntry_t),     pointer                :: PreviousEntry !< The Previous Entry of a given key
+        class(ParameterEntry_t),     pointer                :: CurrentEntry  !< Entry of a given key
+        class(ParameterEntry_t),     pointer                :: NextEntry     !< The Next Node of a given key
         integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
         Hash = this%Hash(Key=Key)
