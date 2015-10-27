@@ -24,22 +24,23 @@ private
     contains
     private
         procedure         ::                  LinkedList_AddNode
-        procedure, public :: Free          => LinkedList_Free
-        procedure, public :: HasNext       => LinkedList_HasNext
-        procedure, public :: SetNext       => LinkedList_SetNext
-        procedure, public :: GetNext       => LinkedList_GetNext
-        procedure, public :: NullifyNext   => LinkedList_NullifyNext
-        procedure, public :: HasKey        => LinkedList_HasKey
-        procedure, public :: SetKey        => LinkedList_SetKey
-        procedure, public :: GetKey        => LinkedList_GetKey
-        procedure, public :: GetNode       => LinkedList_GetNode
-        procedure, public :: DeallocateKey => LinkedList_DeallocateKey
-        procedure, public :: isPresent     => LinkedList_isPresent
-        procedure, public :: RemoveNode    => LinkedList_RemoveNode
-        procedure, public :: GetLength     => LinkedList_GetLength
-        procedure, public :: Print         => LinkedList_Print
-        generic,   public :: AddNode       => LinkedList_AddNode
-        final             ::                  LinkedList_Finalize
+        procedure, public :: Free            => LinkedList_Free
+        procedure, public :: HasNext         => LinkedList_HasNext
+        procedure, public :: SetNext         => LinkedList_SetNext
+        procedure, public :: GetNext         => LinkedList_GetNext
+        procedure, public :: NullifyNext     => LinkedList_NullifyNext
+        procedure, public :: HasKey          => LinkedList_HasKey
+        procedure, public :: SetKey          => LinkedList_SetKey
+        procedure, public :: GetKey          => LinkedList_GetKey
+        procedure, public :: GetNode         => LinkedList_GetNode
+        procedure, public :: GetPreviousNode => LinkedList_GetPreviousNode
+        procedure, public :: DeallocateKey   => LinkedList_DeallocateKey
+        procedure, public :: isPresent       => LinkedList_isPresent
+        procedure, public :: RemoveNode      => LinkedList_RemoveNode
+        procedure, public :: GetLength       => LinkedList_GetLength
+        procedure, public :: Print           => LinkedList_Print
+        generic,   public :: AddNode         => LinkedList_AddNode
+        final             ::                    LinkedList_Finalize
     end type LinkedList_t
 
 contains
@@ -118,7 +119,8 @@ contains
         class(LinkedList_t), intent(IN) :: this                       !< Linked List 
         character(len=:), allocatable   :: Key                        !< Key
     !-----------------------------------------------------------------
-        if(this%HasKey()) allocate(Key, source=this%Key)
+        !if(this%HasKey()) 
+        allocate(Key, source=this%Key)
     end function LinkedList_GetKey
 
 
@@ -185,6 +187,34 @@ contains
     end function LinkedList_GetNode
 
 
+    function LinkedList_GetPreviousNode(this,Key) result(Node)
+    !-----------------------------------------------------------------
+    !< Return a pointer to the provious node of a LinkedList given a Key
+    !-----------------------------------------------------------------
+        class(LinkedList_t), target, intent(IN) :: this               !< Linked List
+        character(len=*),            intent(IN) :: Key                !< String Key
+        class(LinkedList_t),  pointer           :: Node               !< Linked List Node
+        class(LinkedList_t),  pointer           :: Next               !< Linked List Next Node
+    !-----------------------------------------------------------------
+        Node => this
+        do while(associated(Node))
+            if (Node%HasNext()) then
+                Next => Node%GetNext()
+                if(Next%HasKey()) then
+                    if (Next%GetKey()==Key) then
+                        exit
+                    else
+                        Node => Next
+                    endif
+                endif
+            else
+                nullify(Node)
+                exit
+            endif
+        enddo
+    end function LinkedList_GetPreviousNode
+
+
     recursive function LinkedList_IsPresent(this, Key) result(isPresent)
     !-----------------------------------------------------------------
     !< Check if a Key is present in the DataBase
@@ -242,10 +272,13 @@ contains
                     deallocate(NextNode)
                 else
                     call CurrentNode%DeallocateKey()
+                    ! AFM: Is this nullify statement actually needed?
                     nullify(CurrentNode%Next)
                 endif
                 exit
             endif
+        else
+           exit
         endif
         CurrentNode => NextNode
     enddo

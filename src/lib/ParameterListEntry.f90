@@ -13,21 +13,84 @@ private
         class(*), allocatable :: Value
     contains
     private
-        procedure         ::                  ParameterListEntry_AddNode
-        procedure, public :: Free          => ParameterListEntry_Free
-        procedure, public :: Print         => ParameterListEntry_Print
-        procedure, public :: HasValue      => ParameterListEntry_HasValue
-        procedure, public :: SetValue      => ParameterListEntry_SetValue
-        procedure, public :: GetValue      => ParameterListEntry_GetValue
-        procedure, public :: PointToValue  => ParameterListEntry_PointToValue
-        procedure, public :: RemoveNode    => ParameterListEntry_RemoveNode
-        generic,   public :: AddNode       => ParameterListEntry_AddNode     
-        final             ::                  ParameterListEntry_Finalize 
+        procedure         ::                     ParameterListEntry_AddNode
+        procedure, public :: GetEntry         => ParameterListEntry_GetEntry
+        procedure, public :: GetNextEntry     => ParameterListEntry_GetNextEntry
+        procedure, public :: GetPreviousEntry => ParameterListEntry_GetPreviousEntry
+        procedure, public :: Free             => ParameterListEntry_Free
+        procedure, public :: Print            => ParameterListEntry_Print
+        procedure, public :: HasValue         => ParameterListEntry_HasValue
+        procedure, public :: SetValue         => ParameterListEntry_SetValue
+        procedure, public :: GetValue         => ParameterListEntry_GetValue
+        procedure, public :: PointToValue     => ParameterListEntry_PointToValue
+        procedure, public :: RemoveNode       => ParameterListEntry_RemoveNode
+        generic,   public :: AddNode          => ParameterListEntry_AddNode     
+        final             ::                     ParameterListEntry_Finalize 
     end type ParameterListEntry_t
 
 public :: ParameterListEntry_t
 
 contains
+
+    function ParameterListEntry_GetEntry(this,Key) result(Entry)
+    !-----------------------------------------------------------------
+    !< Return a pointer to a ParameterList given a Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntry_t), target, intent(IN) :: this       !< Parameter List
+        character(len=*),            intent(IN)         :: Key        !< String Key
+        class(ParameterListEntry_t), pointer            :: Entry      !< Parameter List Entry
+        class(LinkedList_t),         pointer            :: Node      !< Linked List Node
+    !-----------------------------------------------------------------
+        nullify(Entry)
+        Node => this%GetNode(Key=Key)
+        if(associated(Node)) then
+            select type (Node)
+                type is (ParameterListEntry_t)
+                    Entry => Node
+            end select
+        endif
+    end function ParameterListEntry_GetEntry
+
+
+    function ParameterListEntry_GetNextEntry(this) result(NextEntry)
+    !-----------------------------------------------------------------
+    !< Return a pointer to the Next node
+    !-----------------------------------------------------------------
+        class(ParameterListEntry_t), intent(IN) :: this               !< Linked List 
+        class(ParameterListEntry_t), pointer    :: NextEntry          !< Pointer to Next
+        class(LinkedList_t),         pointer    :: NextNode           !< Pointer to Linked List Next Node
+    !-----------------------------------------------------------------
+        nullify(NextEntry)
+        if(this%HasNext()) then
+            NextNode => this%GetNext()
+            if(associated(NextNode)) then
+                select type(NextNode)
+                    type is (ParameterListEntry_t)
+                        NextEntry => NextNode
+                end select
+            endif
+        endif
+    end function ParameterListEntry_GetNextEntry
+
+
+    function ParameterListEntry_GetPreviousEntry(this,Key) result(PreviousEntry)
+    !-----------------------------------------------------------------
+    !< Return a pointer to the provious node of a Parameter List given a Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntry_t),  target, intent(IN) :: this               !< Parameter List
+        character(len=*),                     intent(IN) :: Key                !< String Key
+        class(ParameterListEntry_t),  pointer            :: PreviousEntry      !< Previous ParameterList List Node
+        class(LinkedList_t),          pointer            :: PreviousNode       !< LinkedList Previous Node
+    !-----------------------------------------------------------------
+        nullify(PreviousEntry)
+        PreviousNode => this%GetPreviousNode(Key=Key)
+        if(associated(PreviousNode)) then
+            select type (PreviousNode)
+                type  is (ParameterListEntry_t)
+                    PreviousEntry => PreviousNode
+            end select
+        endif       
+    end function ParameterListEntry_GetPreviousEntry
 
 
     function ParameterListEntry_HasValue(this) result(hasValue)
@@ -106,7 +169,8 @@ contains
     !-----------------------------------------------------------------
         if (this%HasKey()) then
             if (this%GetKey()/=Key) then
-                if (.not. this%hasNext()) then
+                if (.not. this%hasNext()) then 
+                    ! I reached the end of the list
                     allocate(ParameterListEntry_t::this%Next)
                     select type (Next => this%Next)
                     type is (ParameterListEntry_t)
