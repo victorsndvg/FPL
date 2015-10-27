@@ -34,7 +34,7 @@ private
         procedure, public :: PointToValue     => ParameterListEntry_PointToValue
         procedure, public :: isPresent        => ParameterListEntry_isPresent
         procedure, public :: GetLength        => ParameterListEntry_GetLength
-        procedure, public :: RemoveNode       => ParameterListEntry_RemoveNode
+        procedure, public :: RemoveEntry      => ParameterListEntry_RemoveEntry
         generic,   public :: AddNode          => ParameterListEntry_AddNode     
         final             ::                     ParameterListEntry_Finalize 
     end type ParameterListEntry_t
@@ -132,11 +132,11 @@ contains
     end subroutine ParameterListEntry_DeallocateKey
 
 
-    recursive function ParameterListEntry_IsPresent(this, Key) result(isPresent)
+    function ParameterListEntry_IsPresent(this, Key) result(isPresent)
     !-----------------------------------------------------------------
     !< Check if a Key is present in the DataBase
     !-----------------------------------------------------------------
-        class(ParameterListEntry_t),   intent(IN)  :: this            !< Linked List
+        class(ParameterListEntry_t),   intent(IN)  :: this            !< Parameter List
         character(len=*),              intent(IN)  :: Key             !< String Key
         logical                                    :: isPresent       !< Boolean flag to check if a Key is present
     !-----------------------------------------------------------------
@@ -157,9 +157,9 @@ contains
             deallocate(Next)
             nullify(Next)
         endif
-        if (this%HasKey())   deallocate(this%Key)
-        if (this%HasValue())   deallocate(this%Value)
-        nullify(this%Next)
+        call this%DeallocateKey()
+        call this%DeallocateValue()
+        call this%NullifyNext()
     end subroutine ParameterListEntry_Free
 
 
@@ -183,9 +183,7 @@ contains
                 nullify(Entry)
                 exit
             endif
-            
         enddo
-
     end function ParameterListEntry_GetEntry
 
 
@@ -316,46 +314,50 @@ contains
     end subroutine ParameterListEntry_AddNode
 
 
-    subroutine ParameterListEntry_RemoveNode(this, Key, Root)
+    subroutine ParameterListEntry_RemoveEntry(this, Key, Root)
     !-----------------------------------------------------------------
     !< Remove an Entry given a Key
     !-----------------------------------------------------------------
-        class(ParameterListEntry_t),          intent(INOUT) :: this          !< Parameter List Entry type
+        class(ParameterListEntry_t), target,  intent(INOUT) :: this          !< Parameter List Entry type
         character(len=*),                     intent(IN)    :: Key           !< String Key
         class(ParameterListEntry_t), pointer, intent(INOUT) :: Root          !< The Previous Entry of a given key
         class(ParameterListEntry_t), pointer                :: PreviousEntry !< The Previous Entry of a given key
         class(ParameterListEntry_t), pointer                :: CurrentEntry  !< Entry of a given key
         class(ParameterListEntry_t), pointer                :: NextEntry     !< The Next Node of a given key
     !-----------------------------------------------------------------
-        if(Root%HasKey()) then
-            if(Root%GetKey() == Key) then
-                CurrentEntry => Root
-                NextEntry    => CurrentEntry%GetNext()
-                call CurrentEntry%DeallocateKey()    
-                call CurrentEntry%DeallocateValue()
-                if(CurrentEntry%HasNext()) then
-                    if(NextEntry%HasKey()) then
-                        Root => NextEntry
-                        deallocate(CurrentEntry)
-                    endif
-                endif
-            else
-                PreviousEntry => Root%GetPreviousEntry(Key=Key)
-                if(associated(PreviousEntry)) then
-                    CurrentEntry  => PreviousEntry%GetNext()
-                    NextEntry     => CurrentEntry%GetNext()
+        if(associated(Root,this)) then
+            if(Root%HasKey()) then
+                if(Root%GetKey() == Key) then
+                    CurrentEntry => Root
+                    NextEntry    => CurrentEntry%GetNext()
                     call CurrentEntry%DeallocateKey()    
                     call CurrentEntry%DeallocateValue()
                     if(CurrentEntry%HasNext()) then
                         if(NextEntry%HasKey()) then
-                            call PreviousEntry%SetNext(Next=NextEntry)
+                            call CurrentEntry%NullifyNext()
+                            Root => NextEntry
                             deallocate(CurrentEntry)
                         endif
                     endif
-                endif   
+                else
+                    PreviousEntry => Root%GetPreviousEntry(Key=Key)
+                    if(associated(PreviousEntry)) then
+                        CurrentEntry  => PreviousEntry%GetNext()
+                        NextEntry     => CurrentEntry%GetNext()
+                        call CurrentEntry%DeallocateKey()    
+                        call CurrentEntry%DeallocateValue()
+                        if(CurrentEntry%HasNext()) then
+                            if(NextEntry%HasKey()) then
+                                call CurrentEntry%NullifyNext()
+                                call PreviousEntry%SetNext(Next=NextEntry)
+                                deallocate(CurrentEntry)
+                            endif
+                        endif
+                    endif   
+                endif
             endif
         endif
-    end subroutine ParameterListEntry_RemoveNode
+    end subroutine ParameterListEntry_RemoveEntry
 
 
     function ParameterListEntry_GetLength(this) result(Length)
@@ -393,7 +395,7 @@ contains
         class(ParameterListEntry_t), pointer          :: Node         !< Pointer for scanning the list.
         class(*), pointer                             :: Next         !< Pointer for scanning the list.
     !-----------------------------------------------------------------
-        prefd = '' ; if (present(prefix)) prefd = prefix
+        iostatd = 0 ; iomsgd = ''; prefd = '';if (present(prefix)) prefd = prefix
         Node => this
         if(Node%HasKey()) then
             write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Node%GetKey()//'", '

@@ -30,7 +30,7 @@ implicit none
 private
 save
 
-    integer(I4P), parameter:: DefaultDataBaseSize = 999_I4P
+    integer(I4P), parameter:: DefaultDataBaseSize = 100_I4P
 
     type :: ParameterListRoot_t
         class(ParameterListEntry_t), pointer :: Root => null()
@@ -79,6 +79,7 @@ save
         procedure         :: AddWrapperNode => ParameterListEntryContainer_AddWrapperNode
         procedure, public :: Init           => ParameterListEntryContainer_Init
         procedure, public :: NewSubList     => ParameterListEntryContainer_NewSubList
+        procedure, public :: GetSubList     => ParameterListEntryContainer_GetSubList
         procedure, public :: GetShape       => ParameterListEntryContainer_GetShape
         procedure, public :: Free           => ParameterListEntryContainer_Free
         procedure, public :: Print          => ParameterListEntryContainer_Print
@@ -198,8 +199,8 @@ contains
     !< Set a Key/Wrapper pair into the DataBase
     !-----------------------------------------------------------------
         class(ParameterListEntryContainer_t),    intent(INOUT) :: this    !< Parameter List Entry Containter type
-        character(len=*)                    ,    intent(IN)    :: Key     !< String Key
-        class(DimensionsWrapper_t)          ,    intent(IN)    :: Wrapper !< Wrapper
+        character(len=*),                        intent(IN)    :: Key     !< String Key
+        class(DimensionsWrapper_t),              intent(IN)    :: Wrapper !< Wrapper
     !-----------------------------------------------------------------
         if(.not. this%HasRoot(Key=Key)) then
              allocate(this%DataBase(this%Hash(Key=Key))%Root)  
@@ -217,7 +218,10 @@ contains
     !-----------------------------------------------------------------
         if (allocated(this%DataBase)) THEN
             do DBIterator=lbound(this%DataBase,dim=1),ubound(this%DataBase,dim=1)
-                if(associated(this%DataBase(DBIterator)%Root)) call this%DataBase(DBIterator)%Root%Free()
+                if(associated(this%DataBase(DBIterator)%Root)) then
+                    call this%DataBase(DBIterator)%Root%Free()
+                    deallocate(this%DataBase(DBIterator)%Root)
+                endif
                 nullify(this%DataBase(DBIterator)%Root)
             enddo
             deallocate(this%DataBase)
@@ -236,30 +240,59 @@ contains
     end subroutine ParameterListEntryContainer_Finalize
 
 
-    subroutine ParameterListEntryContainer_NewSubList(this,Key, Size)
+    function ParameterListEntryContainer_NewSubList(this,Key, Size) result(SubListPointer)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
         class(ParameterListEntryContainer_t), intent(INOUT) :: this           !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key            !< String Key
         integer(I4P), optional,               intent(IN)    :: Size           !< Sublist Size
-        class(ParameterListEntry_T), pointer                :: Entry          !< Pointer to a Parameter List Entry
+        class(ParameterListEntryContainer_T), pointer       :: SublistPointer !< Pointer to the New SubList
+        class(*),                             pointer       :: Value          !< Pointer to the New SubList
+        class(ParameterListEntry_T),          pointer       :: Entry          !< Pointer to a Parameter List Entry
         type(ParameterListEntryContainer_t)                 :: Sublist        !< New Sublist
         integer(I4P)                                        :: SublistSize    !< Sublist real Size
-        class(*),                    pointer                :: SublistPointer !< Pointer to the New SubList
     !-----------------------------------------------------------------
+        nullify(SubListPointer)
         SublistSize = DefaultDataBaseSize
         if(present(Size)) SublistSize = Size
+        if(.not. this%HasRoot(Key=Key)) then
+             allocate(this%DataBase(this%Hash(Key=Key))%Root)  
+        endif
         call this%DataBase(this%Hash(Key=Key))%Root%AddNode(Key=Key,Value=Sublist)
         Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
         if(associated(Entry)) then
-            SublistPointer => Entry%PointToValue()
-            select type(SublistPointer)
+            Value => Entry%PointToValue()
+            select type(Value)
                 class is (ParameterListEntryContainer_t)
+                    SubListPointer => Value
                     call SublistPointer%Init(Size=SublistSize)
             end select
         end if
-    end subroutine ParameterListEntryContainer_NewSubList
+    end function ParameterListEntryContainer_NewSubList
+
+
+    function ParameterListEntryContainer_GetSublist(this,Key) result(Sublist)
+    !-----------------------------------------------------------------
+    !< Return a Unlimited polymorphic pointer to a Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t), intent(IN)    :: this    !< Parameter List Entry Containter
+        character(len=*),                     intent(IN)    :: Key     !< String Key
+        class(*),                              pointer      :: Value   !< Returned pointer to value
+        class(ParameterListEntry_t),           pointer      :: Entry   !< Pointer to a Parameter List
+        class(ParameterListEntryContainer_T),  pointer      :: Sublist !< Wrapper
+    !-----------------------------------------------------------------
+        if(this%HasRoot(Key=Key)) then
+            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+            if(associated(Entry)) then
+                Value => Entry%PointToValue()
+                select type(Value)
+                    class is (ParameterListEntryContainer_t)
+                        SubList => Value
+                end select
+            end if
+        endif
+    end function ParameterListEntryContainer_GetSubList
 
 
     subroutine ParameterListEntryContainer_Set0D(this,Key,Value)
@@ -1004,7 +1037,9 @@ contains
         class(ParameterListEntry_t), pointer                :: NextEntry     !< The Next Node of a given key
     !-----------------------------------------------------------------
         if(this%HasRoot(Key=Key)) then
-            call this%DataBase(this%Hash(Key=Key))%Root%RemoveNode(Key=Key,Root=this%DataBase(this%Hash(Key=Key))%Root)
+            if(this%DataBase(this%Hash(Key=Key))%Root%HasKey()) then
+                call this%DataBase(this%Hash(Key=Key))%Root%RemoveEntry(Key=Key, Root=this%DataBase(this%Hash(Key=Key))%Root)
+            endif
         endif
     end subroutine ParameterListEntryContainer_RemoveEntry
 

@@ -58,7 +58,7 @@ contains
         class(*),                         intent(OUT) :: Value(:)
     !-----------------------------------------------------------------
         select type (Value)
-            type is (integer(I4P))
+            type is (integer(I2P))
                 Value = this%Value
         end select
     end subroutine
