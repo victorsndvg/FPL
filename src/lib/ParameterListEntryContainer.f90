@@ -74,8 +74,11 @@ save
         procedure         ::                   ParameterListEntryContainer_GetPolymorphic5D
         procedure         ::                   ParameterListEntryContainer_GetPolymorphic6D
         procedure         ::                   ParameterListEntryContainer_GetPolymorphic7D
+        procedure         ::                   ParameterListEntryContainer_HasRootFromKey
+        procedure         ::                   ParameterListEntryContainer_HasRootFromHash
+        generic           :: HasRoot        => ParameterListEntryContainer_HasRootFromKey, &
+                                               ParameterListEntryContainer_HasRootFromHash
         procedure         :: Hash           => ParameterListEntryContainer_Hash
-        procedure         :: HasRoot        => ParameterListEntryContainer_HasRoot
         procedure         :: AddWrapperNode => ParameterListEntryContainer_AddWrapperNode
         procedure, public :: Init           => ParameterListEntryContainer_Init
         procedure, public :: NewSubList     => ParameterListEntryContainer_NewSubList
@@ -182,7 +185,7 @@ contains
     end function ParameterListEntryContainer_GetShape
 
 
-    function ParameterListEntryContainer_HasRoot(this,Key) result(HasRoot)
+    function ParameterListEntryContainer_HasRootFromKey(this,Key) result(HasRoot)
     !-----------------------------------------------------------------
     !< Check if the DataBase position for a given Key has a root node
     !-----------------------------------------------------------------
@@ -194,6 +197,17 @@ contains
     end function
 
 
+    function ParameterListEntryContainer_HasRootFromHash(this,Hash) result(HasRoot)
+    !-----------------------------------------------------------------
+    !< Check if the DataBase position for a given Key has a root node
+    !-----------------------------------------------------------------
+        class(ParameterListEntryContainer_t),    intent(IN) :: this    !< Parameter List Entry Containter type
+        integer(I4P),                            intent(IN) :: Hash    !< Hash code
+        logical                                             :: HasRoot !< Check if has root node
+    !-----------------------------------------------------------------
+        HasRoot = associated(this%DataBase(Hash)%Root)
+    end function
+
     subroutine ParameterListEntryContainer_AddWrapperNode(this,Key,Wrapper)
     !-----------------------------------------------------------------
     !< Set a Key/Wrapper pair into the DataBase
@@ -201,11 +215,13 @@ contains
         class(ParameterListEntryContainer_t),    intent(INOUT) :: this    !< Parameter List Entry Containter type
         character(len=*),                        intent(IN)    :: Key     !< String Key
         class(DimensionsWrapper_t),              intent(IN)    :: Wrapper !< Wrapper
+        integer(I4P)                                           :: Hash
     !-----------------------------------------------------------------
-        if(.not. this%HasRoot(Key=Key)) then
-             allocate(this%DataBase(this%Hash(Key=Key))%Root)  
+        Hash = this%Hash(Key=Key)
+        if(.not. this%HasRoot(Hash=Hash)) then
+             allocate(this%DataBase(Hash)%Root)  
         endif
-        call this%DataBase(this%Hash(Key=Key))%Root%AddNode(Key=Key,Value=Wrapper)
+        call this%DataBase(Hash)%Root%AddNode(Key=Key,Value=Wrapper)
     end subroutine ParameterListEntryContainer_AddWrapperNode
 
 
@@ -218,7 +234,7 @@ contains
     !-----------------------------------------------------------------
         if (allocated(this%DataBase)) THEN
             do DBIterator=lbound(this%DataBase,dim=1),ubound(this%DataBase,dim=1)
-                if(associated(this%DataBase(DBIterator)%Root)) then
+                if(this%HasRoot(Hash=DBIterator)) then
                     call this%DataBase(DBIterator)%Root%Free()
                     deallocate(this%DataBase(DBIterator)%Root)
                 endif
@@ -252,15 +268,17 @@ contains
         class(ParameterListEntry_T),          pointer       :: Entry          !< Pointer to a Parameter List Entry
         type(ParameterListEntryContainer_t)                 :: Sublist        !< New Sublist
         integer(I4P)                                        :: SublistSize    !< Sublist real Size
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
         nullify(SubListPointer)
         SublistSize = DefaultDataBaseSize
         if(present(Size)) SublistSize = Size
-        if(.not. this%HasRoot(Key=Key)) then
-             allocate(this%DataBase(this%Hash(Key=Key))%Root)  
+        Hash = this%Hash(Key=Key)
+        if(.not. this%HasRoot(Hash=Hash)) then
+             allocate(this%DataBase(Hash)%Root)  
         endif
-        call this%DataBase(this%Hash(Key=Key))%Root%AddNode(Key=Key,Value=Sublist)
-        Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        call this%DataBase(Hash)%Root%AddNode(Key=Key,Value=Sublist)
+        Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
         if(associated(Entry)) then
             Value => Entry%PointToValue()
             select type(Value)
@@ -281,9 +299,11 @@ contains
         class(*),                              pointer      :: Value   !< Returned pointer to value
         class(ParameterListEntry_t),           pointer      :: Entry   !< Pointer to a Parameter List
         class(ParameterListEntryContainer_T),  pointer      :: Sublist !< Wrapper
+        integer(I4P)                                        :: Hash    !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Value => Entry%PointToValue()
                 select type(Value)
@@ -464,9 +484,11 @@ contains
         class(*),                             intent(INOUT) :: Value          !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -487,9 +509,11 @@ contains
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -510,9 +534,11 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -533,9 +559,11 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -556,9 +584,11 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -578,11 +608,13 @@ contains
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
-        class(*),                    pointer                :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper          !< Wrapper
+        integer(I4P)                                        :: Hash             !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -601,11 +633,13 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this               !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
-        class(*),                    pointer                :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper            !< Wrapper
+        integer(I4P)                                        :: Hash               !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -624,11 +658,13 @@ contains
         class(ParameterListEntryContainer_t), intent(IN)    :: this                 !< Parameter List Entry Containter type
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
-        class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
-        class(*),                    pointer                :: Wrapper        !< Wrapper
+        class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
+        class(*),                    pointer                :: Wrapper              !< Wrapper
+        integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -649,9 +685,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value   !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry   !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper !< Wrapper
+        integer(I4P)                                        :: Hash    !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -672,9 +710,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:) !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry    !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper  !< Wrapper
+        integer(I4P)                                        :: Hash     !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -695,9 +735,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:) !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry      !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper    !< Wrapper
+        integer(I4P)                                        :: Hash       !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -718,9 +760,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:)   !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -741,9 +785,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:) !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -764,9 +810,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:) !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper          !< Wrapper
+        integer(I4P)                                        :: Hash             !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -787,9 +835,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper            !< Wrapper
+        integer(I4P)                                        :: Hash               !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -810,9 +860,11 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned pointer to value
         class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper              !< Wrapper
+        integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -833,9 +885,11 @@ contains
         class(*), allocatable,                intent(INOUT) :: Value          !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -856,9 +910,11 @@ contains
         class(*), allocatable,                intent(OUT)   :: Value(:)       !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -880,9 +936,11 @@ contains
         class(*), pointer                                   :: Node           !< Pointer to a Parameter List
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -903,9 +961,11 @@ contains
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:)   !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -926,9 +986,11 @@ contains
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:) !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry          !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: Hash           !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -950,9 +1012,11 @@ contains
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
         class(ParameterListEntry_t), pointer                :: Entry            !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper          !< Wrapper
+        integer(I4P)                                        :: Hash             !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -973,9 +1037,11 @@ contains
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:) !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry              !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper            !< Wrapper
+        integer(I4P)                                        :: Hash               !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -996,9 +1062,11 @@ contains
         class(*), allocatable,                intent(OUT)   :: Value(:,:,:,:,:,:,:) !< Returned value
         class(ParameterListEntry_t), pointer                :: Entry                !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper              !< Wrapper
+        integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            Entry => this%DataBase(this%Hash(Key=Key))%Root%GetEntry(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            Entry => this%DataBase(Hash)%Root%GetEntry(Key=Key)
             if(associated(Entry)) then
                 Wrapper => Entry%PointToValue()
                 select type(Wrapper)
@@ -1018,10 +1086,12 @@ contains
         class(ParameterListEntryContainer_t), intent(IN) :: this      !< Parameter List Entry Containter type
         character(len=*),                     intent(IN) :: Key       !< String Key
         logical                                          :: isPresent !< Boolean flag to check if a Key is present
+        integer(I4P)                                     :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
         isPresent = .false.
-        if(this%HasRoot(Key=Key)) then
-            isPresent = this%DataBase(this%Hash(Key=Key))%Root%isPresent(Key=Key)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            isPresent = this%DataBase(Hash)%Root%isPresent(Key=Key)
         endif
     end function ParameterListEntryContainer_isPresent
 
@@ -1035,10 +1105,12 @@ contains
         class(ParameterListEntry_t), pointer                :: PreviousEntry !< The Previous Entry of a given key
         class(ParameterListEntry_t), pointer                :: CurrentEntry  !< Entry of a given key
         class(ParameterListEntry_t), pointer                :: NextEntry     !< The Next Node of a given key
+        integer(I4P)                                        :: Hash                 !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        if(this%HasRoot(Key=Key)) then
-            if(this%DataBase(this%Hash(Key=Key))%Root%HasKey()) then
-                call this%DataBase(this%Hash(Key=Key))%Root%RemoveEntry(Key=Key, Root=this%DataBase(this%Hash(Key=Key))%Root)
+        Hash = this%Hash(Key=Key)
+        if(this%HasRoot(Hash=Hash)) then
+            if(this%DataBase(Hash)%Root%HasKey()) then
+                call this%DataBase(Hash)%Root%RemoveEntry(Key=Key, Root=this%DataBase(Hash)%Root)
             endif
         endif
     end subroutine ParameterListEntryContainer_RemoveEntry
@@ -1055,7 +1127,7 @@ contains
         Length = 0
         if (allocated(this%DataBase)) THEN
             do DBIterator=lbound(this%DataBase,dim=1),ubound(this%DataBase,dim=1)
-                if(associated(this%DataBase(DBIterator)%Root)) &
+                if(this%HasRoot(Hash=DBIterator)) &
                     Length = Length + this%DataBase(DBIterator)%Root%GetLength()
             enddo
         endif
@@ -1081,7 +1153,7 @@ contains
         write(*,fmt='(A)') prefd//' -----------------------'
         if (allocated(this%DataBase)) then
             do DBIter=lbound(this%DataBase,dim=1), ubound(this%DataBase,dim=1)
-                if(associated(this%DataBase(DBIter)%Root))                              &
+                if(this%HasRoot(Hash=DBIter))                              &
                     call this%DataBase(DBIter)%Root%Print(unit=unit,                    &
                         prefix=prefd//'  ['//trim(str(no_sign=.true., n=DBIter))//'] ', &
                         iostat=iostatd,iomsg=iomsgd)
