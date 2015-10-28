@@ -7,10 +7,11 @@ implicit none
 private
 
     type :: ParameterRootEntry_t
+    private
         class(ParameterEntry_t), pointer :: Root => null()
     contains
     private
-        procedure, public :: init             => ParameterRootEntry_Init
+        procedure, public :: Init             => ParameterRootEntry_Init
         procedure, public :: HasRoot          => ParameterRootEntry_HasRoot
         procedure, public :: SetRoot          => ParameterRootEntry_SetRoot
         procedure, public :: GetRoot          => ParameterRootEntry_GetRoot
@@ -94,6 +95,7 @@ contains
         character(len=*),             intent(IN)    :: Key            !< Key (unique) of the current node.
         class(*),                     intent(IN)    :: Value          !< Parameter Entry Value
         class(ParameterEntry_t),      pointer       :: NextEntry      !< Parameter Entry
+        class(ParameterEntry_t),      pointer       :: NewEntry       !< New Parameter Entry
         character(len=:), allocatable               :: NextEntryKey   !< Key of the NextEntry
     !-----------------------------------------------------------------
         if(.not. this%HasRoot()) then
@@ -106,9 +108,10 @@ contains
                 if (NextEntryKey/=Key) then
                     if (.not. NextEntry%hasNext()) then 
                         ! I reached the end of the list
-                        allocate(ParameterEntry_t::NextEntry%Next)
-                        call NextEntry%Next%SetKey(Key=Key)
-                        call NextEntry%Next%SetValue(Value=Value)
+                        allocate(ParameterEntry_t::NewEntry)
+                        call NewEntry%SetKey(Key=Key)
+                        call NewEntry%SetValue(Value=Value)
+                        call NextEntry%SetNext(NExt=NewEntry)
                         exit
                     else
                         NextEntry => NextEntry%GetNext()

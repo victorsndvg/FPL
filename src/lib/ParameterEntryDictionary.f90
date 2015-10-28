@@ -120,7 +120,7 @@ contains
     !-----------------------------------------------------------------
         Hash = this%Hash(Key=Key)
         if(.not. this%HasRoot(Hash=Hash)) then
-             allocate(this%DataBase(Hash)%Root)  
+             call this%DataBase(Hash)%Init()
         endif
         call this%DataBase(Hash)%AddEntry(Key=Key,Value=Value)
     end subroutine ParameterEntryDictionary_Set
@@ -168,14 +168,8 @@ contains
     !-----------------------------------------------------------------
         class(ParameterEntryDictionary_t),    intent(INOUT) :: this   !< Parameter Entry Dictionary
         character(len=*),                     intent(IN)    :: Key    !< String Key
-        integer(I4P)                                        :: Hash   !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        Hash = this%Hash(Key=Key)
-        if(this%HasRoot(Hash=Hash)) then
-            if(this%DataBase(Hash)%Root%HasKey()) then
-                call this%DataBase(Hash)%RemoveEntry(Key=Key)
-            endif
-        endif
+        call this%DataBase(this%Hash(Key=Key))%RemoveEntry(Key=Key)
     end subroutine ParameterEntryDictionary_Delete
 
 

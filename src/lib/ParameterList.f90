@@ -19,7 +19,7 @@ implicit none
 private
 save
 
-    type, public:: ParameterList_t
+    type :: ParameterList_t
     private
         type(ParameterEntryDictionary_t) :: Dictionary
     contains
@@ -86,6 +86,7 @@ save
         final             ::                   ParameterList_Finalize
     end type ParameterList_t
 
+public :: ParameterList_t
 
 contains
 

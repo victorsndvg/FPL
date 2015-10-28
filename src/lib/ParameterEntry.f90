@@ -9,9 +9,9 @@ private
 
     type :: ParameterEntry_t
     private
-        character(len=:), allocatable                 :: Key
-        class(*),         allocatable                 :: Value
-        class(ParameterEntry_t), public, pointer  :: Next   => null()
+        character(len=:), allocatable         :: Key
+        class(*),         allocatable         :: Value
+        class(ParameterEntry_t),     pointer  :: Next   => null()
     contains
     private
         procedure, public :: Free             => ParameterEntry_Free
