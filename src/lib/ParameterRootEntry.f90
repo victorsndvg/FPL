@@ -94,6 +94,7 @@ contains
         character(len=*),             intent(IN)    :: Key            !< Key (unique) of the current node.
         class(*),                     intent(IN)    :: Value          !< Parameter Entry Value
         class(ParameterEntry_t),      pointer       :: NextEntry      !< Parameter Entry
+        character(len=:), allocatable               :: NextEntryKey   !< Key of the NextEntry
     !-----------------------------------------------------------------
         if(.not. this%HasRoot()) then
             call this%Init()
@@ -101,7 +102,8 @@ contains
         NextEntry => this%GetRoot()
         do while(associated(NextEntry))
             if (NextEntry%HasKey()) then
-                if (NextEntry%GetKey()/=Key) then
+                NExtEntryKey = NextEntry%GetKey()
+                if (NextEntryKey/=Key) then
                     if (.not. NextEntry%hasNext()) then 
                         ! I reached the end of the list
                         allocate(ParameterEntry_t::NextEntry%Next)
@@ -121,6 +123,7 @@ contains
                 exit
             endif
         enddo
+        if(allocated(NextEntryKey)) deallocate(NextEntryKey)
     end subroutine ParameterRootEntry_AddEntry
 
 
@@ -128,17 +131,19 @@ contains
     !-----------------------------------------------------------------
     !< Remove an Entry given a Key
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target,  intent(INOUT) :: this          !< Parameter Root Entry
-        character(len=*),                     intent(IN)    :: Key           !< String Key
-        class(ParameterEntry_t),     pointer                :: PreviousEntry !< The Previous Entry of a given key
-        class(ParameterEntry_t),     pointer                :: CurrentEntry  !< Entry of a given key
-        class(ParameterEntry_t),     pointer                :: NextEntry     !< The Next Entry of a given key
+        class(ParameterRootEntry_t),          intent(INOUT) :: this            !< Parameter Root Entry
+        character(len=*),                     intent(IN)    :: Key             !< String Key
+        character(len=:), allocatable                       :: CurrentEntryKey !< Current Entry Key
+        class(ParameterEntry_t),     pointer                :: PreviousEntry   !< The Previous Entry of a given key
+        class(ParameterEntry_t),     pointer                :: CurrentEntry    !< Entry of a given key
+        class(ParameterEntry_t),     pointer                :: NextEntry       !< The Next Entry of a given key
     !-----------------------------------------------------------------
         if(this%HasRoot()) then
             CurrentEntry => this%GetRoot()
             if(CurrentEntry%HasKey()) then
-                if(CurrentEntry%GetKey() == Key) then
-                    NextEntry    => CurrentEntry%GetNext()
+                CurrentEntryKey = CurrentEntry%GetKey()
+                if(CurrentEntryKey == Key) then
+                    NextEntry => CurrentEntry%GetNext()
                     call CurrentEntry%DeallocateKey()    
                     call CurrentEntry%DeallocateValue()
                     if(CurrentEntry%HasNext()) then
@@ -148,8 +153,9 @@ contains
                             deallocate(CurrentEntry)
                         endif
                     endif
+                    if(allocated(CurrentEntryKey)) deallocate(CurrentEntryKey)
                 else
-                    PreviousEntry => this%GetPreviousEntry(Key=Key)
+                    PreviousEntry     => this%GetPreviousEntry(Key=Key)
                     if(associated(PreviousEntry)) then
                         CurrentEntry  => PreviousEntry%GetNext()
                         NextEntry     => CurrentEntry%GetNext()
@@ -174,14 +180,16 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to a ParameterEntry given a Key
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target, intent(IN) :: this       !< Parameter Root Entry
+        class(ParameterRootEntry_t),         intent(IN) :: this       !< Parameter Root Entry
         character(len=*),                    intent(IN) :: Key        !< String Key
         class(ParameterEntry_t),     pointer            :: Entry      !< Parameter Entry
+        character(len=:), allocatable                   :: EntryKey   !< Entry Key
     !-----------------------------------------------------------------
         Entry => this%GetRoot()
         do while(associated(Entry))
             if (Entry%HasKey()) then
-                if (Entry%GetKey()==Key) exit
+                EntryKey = Entry%GetKey()
+                if (EntryKey==Key) exit
                 Entry => Entry%GetNext()
             elseif (Entry%HasNext()) then
                 Entry => Entry%GetNext()
@@ -190,6 +198,7 @@ contains
                 exit
             endif
         enddo
+        if(allocated(EntryKey)) deallocate(EntryKey)
     end function ParameterrootEntry_GetEntry
 
 
@@ -199,18 +208,20 @@ contains
     !-----------------------------------------------------------------
         class(ParameterRootEntry_t), target, intent(IN) :: this          !< Parameter List
         character(len=*),                    intent(IN) :: Key           !< String Key
-        class(ParameterEntry_t),     pointer            :: PreviousEntry !< Parameter List Node
-        class(ParameterEntry_t),     pointer            :: Next          !< Parameter List Next Node
+        class(ParameterEntry_t),     pointer            :: PreviousEntry !< Parameter List Entry
+        class(ParameterEntry_t),     pointer            :: NextEntry     !< Parameter List Next Entry
+        character(len=:), allocatable                   :: NExtEntryKey  !< NextEntry Key
     !-----------------------------------------------------------------
         PreviousEntry => this%GetRoot()
         do while(associated(PreviousEntry))
             if (PreviousEntry%HasNext()) then
-                Next => PreviousEntry%GetNext()
-                if(Next%HasKey()) then
-                    if (Next%GetKey()==Key) then
+                NextEntry => PreviousEntry%GetNext()
+                if(NextEntry%HasKey()) then
+                    NextEntryKey = NextEntry%GetKey()
+                    if (NextEntryKey==Key) then
                         exit
                     else
-                        PreviousEntry => Next
+                        PreviousEntry => NextEntry
                     endif
                 endif
             else
@@ -218,6 +229,7 @@ contains
                 exit
             endif
         enddo    
+        if(allocated(NextEntryKey)) deallocate(NextEntryKey)
     end function ParameterRootEntry_GetPreviousEntry
 
 
