@@ -4,7 +4,7 @@ USE iso_fortran_env, only: OUTPUT_UNIT
 USE IR_Precision, only: I4P, R4P, str
 USE FPL
 
-type(ParameterListEntryContainer_t) :: Parameters
+type(ParameterList_t) :: Parameters
 integer(I4P),allocatable :: array(:)
 integer :: iter, numiters
 
