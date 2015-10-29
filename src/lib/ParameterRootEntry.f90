@@ -11,15 +11,17 @@ private
         class(ParameterEntry_t), pointer :: Root => null()
     contains
     private
-        procedure, public :: Init             => ParameterRootEntry_Init
-        procedure, public :: HasRoot          => ParameterRootEntry_HasRoot
-        procedure, public :: SetRoot          => ParameterRootEntry_SetRoot
-        procedure, public :: GetRoot          => ParameterRootEntry_GetRoot
+        procedure         :: Init             => ParameterRootEntry_Init
+        procedure         :: HasRoot          => ParameterRootEntry_HasRoot
+        procedure         :: SetRoot          => ParameterRootEntry_SetRoot
+        procedure         :: GetRoot          => ParameterRootEntry_GetRoot
+        procedure         :: NullifyRoot      => ParameterRootEntry_NullifyRoot
+        procedure         :: DeallocateRoot   => ParameterRootEntry_DeallocateRoot
         procedure, public :: GetEntry         => ParameterRootEntry_GetEntry
         procedure, public :: GetPreviousEntry => ParameterRootEntry_GetPreviousEntry
         procedure, public :: Print            => ParameterRootEntry_Print
         procedure, public :: isPresent        => ParameterRootEntry_isPresent
-        procedure, public :: GetLength        => ParameterRootEntry_GetLength
+        procedure, public :: Length           => ParameterRootEntry_Length
         procedure, public :: RemoveEntry      => ParameterRootEntry_RemoveEntry
         procedure, public :: AddEntry         => ParameterRootEntry_AddEntry
         procedure, public :: Free             => ParameterRootEntry_Free
@@ -36,7 +38,7 @@ contains
     !-----------------------------------------------------------------
     !< Set the Root of the list
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target,  intent(INOUT) :: this       !< Parameter Root Entry
+        class(ParameterRootEntry_t),          intent(INOUT) :: this       !< Parameter Root Entry
         class(ParameterEntry_t),     pointer, intent(IN)    :: Root       !< Parameter Entry correspoing to the head of the list
     !-----------------------------------------------------------------
         this%Root => Root
@@ -47,7 +49,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to the Root of the list
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target, intent(IN) :: this       !< Parameter Root Entry
+        class(ParameterRootEntry_t),         intent(IN) :: this       !< Parameter Root Entry
         class(ParameterEntry_t),     pointer            :: Root       !< Parameter Entry correspoing to the head of the list
     !-----------------------------------------------------------------
         Root => this%Root
@@ -58,20 +60,47 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to the Root of the list
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target, intent(IN) :: this       !< Parameter Root Entry
+        class(ParameterRootEntry_t),         intent(IN) :: this       !< Parameter Root Entry
         logical                                         :: hasRoot    !< Check if Root is associated
     !-----------------------------------------------------------------
         hasRoot = associated(this%GetRoot())
     end function ParameterRootEntry_HasRoot
 
 
-    subroutine ParameterRootEntry_Init(this)
+    subroutine ParameterRootEntry_NullifyRoot(this)
+    !-----------------------------------------------------------------
+    !< Set the Root of the list
+    !-----------------------------------------------------------------
+        class(ParameterRootEntry_t),   intent(INOUT) :: this       !< Parameter Root Entry
+    !-----------------------------------------------------------------
+        nullify(this%Root)
+    end subroutine ParameterRootEntry_NullifyRoot
+
+
+    subroutine ParameterRootEntry_DeallocateRoot(this)
+    !-----------------------------------------------------------------
+    !< Set the Root of the list
+    !-----------------------------------------------------------------
+        class(ParameterRootEntry_t),   intent(INOUT) :: this       !< Parameter Root Entry
+    !-----------------------------------------------------------------
+        if(this%HasRoot()) then
+            call this%Root%Free()
+            deallocate(this%Root)
+        endif
+    end subroutine ParameterRootEntry_DeallocateRoot
+
+
+    subroutine ParameterRootEntry_Init(this, Key, Value)
     !-----------------------------------------------------------------
     !< Initialize the Root of the list
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target,  intent(INOUT) :: this       !< Parameter Root Entry
+        class(ParameterRootEntry_t),       intent(INOUT) :: this       !< Parameter Root Entry
+        character(len=*),                  intent(IN)    :: Key        !< Key (unique) of the current node.
+        class(*), pointer,                 intent(IN)    :: Value      !< Parameter Entry Value
     !-----------------------------------------------------------------
         if(.not. this%HasRoot()) allocate(ParameterEntry_t::this%Root)
+        call this%Root%SetKey(Key=Key)
+        call this%Root%SetValue(Value=Value)
     end subroutine ParameterRootEntry_Init
 
 
@@ -99,11 +128,10 @@ contains
         character(len=:), allocatable               :: NextEntryKey   !< Key of the NextEntry
     !-----------------------------------------------------------------
         if(.not. this%HasRoot()) then
-            call this%Init()
-        endif
-        NextEntry => this%GetRoot()
-        do while(associated(NextEntry))
-            if (NextEntry%HasKey()) then
+            call this%Init(Key=Key, Value=Value)
+        else
+            NextEntry => this%GetRoot()
+            do while(associated(NextEntry))
                 NExtEntryKey = NextEntry%GetKey()
                 if (NextEntryKey/=Key) then
                     if (.not. NextEntry%hasNext()) then 
@@ -120,13 +148,9 @@ contains
                     call NextEntry%SetValue(Value=Value)
                     exit
                 endif
-            else
-                call NextEntry%SetKey(Key=Key)
-                call NExtEntry%SetValue(Value=Value)
-                exit
-            endif
-        enddo
-        if(allocated(NextEntryKey)) deallocate(NextEntryKey)
+            enddo
+            if(allocated(NextEntryKey)) deallocate(NextEntryKey)
+        endif
     end subroutine ParameterRootEntry_AddEntry
 
 
@@ -143,37 +167,29 @@ contains
     !-----------------------------------------------------------------
         if(this%HasRoot()) then
             CurrentEntry => this%GetRoot()
-            if(CurrentEntry%HasKey()) then
-                CurrentEntryKey = CurrentEntry%GetKey()
-                if(CurrentEntryKey == Key) then
-                    NextEntry => CurrentEntry%GetNext()
+            CurrentEntryKey = CurrentEntry%GetKey()
+            if(CurrentEntryKey == Key) then
+                NextEntry => CurrentEntry%GetNext()
+                call CurrentEntry%DeallocateKey()    
+                call CurrentEntry%DeallocateValue()
+                call CurrentEntry%NullifyNext()
+                deallocate(CurrentEntry)
+                call this%NullifyRoot()
+                if(allocated(CurrentEntryKey)) deallocate(CurrentEntryKey)
+            else
+                PreviousEntry     => this%GetPreviousEntry(Key=Key)
+                if(associated(PreviousEntry)) then
+                    CurrentEntry  => PreviousEntry%GetNext()
+                    NextEntry     => CurrentEntry%GetNext()
                     call CurrentEntry%DeallocateKey()    
                     call CurrentEntry%DeallocateValue()
-                    if(CurrentEntry%HasNext()) then
-                        if(NextEntry%HasKey()) then
-                            call CurrentEntry%NullifyNext()
-                            call this%SetRoot(Root = NextEntry)
-                            deallocate(CurrentEntry)
-                        endif
-                    endif
-                    if(allocated(CurrentEntryKey)) deallocate(CurrentEntryKey)
-                else
-                    PreviousEntry     => this%GetPreviousEntry(Key=Key)
-                    if(associated(PreviousEntry)) then
-                        CurrentEntry  => PreviousEntry%GetNext()
-                        NextEntry     => CurrentEntry%GetNext()
-                        call CurrentEntry%DeallocateKey()    
-                        call CurrentEntry%DeallocateValue()
-                        if(CurrentEntry%HasNext()) then
-                            if(NextEntry%HasKey()) then
-                                call CurrentEntry%NullifyNext()
-                                call PreviousEntry%SetNext(Next=NextEntry)
-                                deallocate(CurrentEntry)
-                            endif
-                        endif
-                    endif   
-                endif
+                    call CurrentEntry%NullifyNext()
+                    deallocate(CurrentEntry)
+                    call PreviousEntry%NullifyNext()
+                    if(associated(NextEntry)) call PreviousEntry%SetNext(Next=NextEntry)
+                endif   
             endif
+            if(associated(NextEntry)) call this%SetRoot(Root = NextEntry)
         endif
     end subroutine ParameterRootEntry_RemoveEntry
 
@@ -190,16 +206,9 @@ contains
     !-----------------------------------------------------------------
         Entry => this%GetRoot()
         do while(associated(Entry))
-            if (Entry%HasKey()) then
-                EntryKey = Entry%GetKey()
-                if (EntryKey==Key) exit
-                Entry => Entry%GetNext()
-            elseif (Entry%HasNext()) then
-                Entry => Entry%GetNext()
-            else
-                nullify(Entry)
-                exit
-            endif
+            EntryKey = Entry%GetKey()
+            if (EntryKey==Key) exit
+            Entry => Entry%GetNext()
         enddo
         if(allocated(EntryKey)) deallocate(EntryKey)
     end function ParameterrootEntry_GetEntry
@@ -209,7 +218,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to the provious node of a Parameter List given a Key
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target, intent(IN) :: this          !< Parameter List
+        class(ParameterRootEntry_t),         intent(IN) :: this          !< Parameter List
         character(len=*),                    intent(IN) :: Key           !< String Key
         class(ParameterEntry_t),     pointer            :: PreviousEntry !< Parameter List Entry
         class(ParameterEntry_t),     pointer            :: NextEntry     !< Parameter List Next Entry
@@ -219,13 +228,11 @@ contains
         do while(associated(PreviousEntry))
             if (PreviousEntry%HasNext()) then
                 NextEntry => PreviousEntry%GetNext()
-                if(NextEntry%HasKey()) then
-                    NextEntryKey = NextEntry%GetKey()
-                    if (NextEntryKey==Key) then
-                        exit
-                    else
-                        PreviousEntry => NextEntry
-                    endif
+                NextEntryKey = NextEntry%GetKey()
+                if (NextEntryKey==Key) then
+                    exit
+                else
+                    PreviousEntry => NextEntry
                 endif
             else
                 nullify(PreviousEntry)
@@ -236,7 +243,7 @@ contains
     end function ParameterRootEntry_GetPreviousEntry
 
 
-    function ParameterRootEntry_GetLength(this) result(Length)
+    function ParameterRootEntry_Length(this) result(Length)
     !-----------------------------------------------------------------
     !< Return the length of the list
     !-----------------------------------------------------------------
@@ -247,13 +254,11 @@ contains
         Length = 0
         NextEntry => this%GetRoot()
         do while (associated(NextEntry))
-            if (NextEntry%HasKey()) then
-                Length = Length + 1
-            endif
+            Length = Length + 1
             NextEntry => NextEntry%GetNext()
         enddo
         nullify(NextEntry)
-    end function ParameterRootEntry_GetLength
+    end function ParameterRootEntry_Length
 
 
 
@@ -262,14 +267,15 @@ contains
     !< Free the list
     !-----------------------------------------------------------------
         class(ParameterRootEntry_t), intent(INOUT) :: this            !< Parameter Root Entry
-        class(ParameterEntry_t), pointer           :: Root            !< Parameter Entry
-        class(ParameterEntry_t), pointer           :: Next            !< Parameter Entry
+        class(ParameterEntry_t),     pointer       :: Current         !< Current Parameter List Node
+        class(ParameterEntry_t),     pointer       :: Next            !< Next Parameter List Node
     !-----------------------------------------------------------------
-        if(this%HasRoot()) then
-            Root => this%GetRoot()
-            call Root%Free()
-            deallocate(Root)
-        endif
+        do while(this%HasRoot()) 
+            Next => this%Root%GetNext()
+            call this%Root%Free()
+            call this%DeallocateRoot()
+            call this%SetRoot(Root=Next)
+        enddo
     end subroutine ParameterRootEntry_Free
 
 
@@ -278,7 +284,7 @@ contains
     !-----------------------------------------------------------------
     !< Print the keys/value pair contained in the parameter list
     !-----------------------------------------------------------------
-        class(ParameterRootEntry_t), target, intent(IN)  :: this      !< Parameter Root Entry
+        class(ParameterRootEntry_t),         intent(IN)  :: this      !< Parameter Root Entry
         integer(I4P),                        intent(IN)  :: unit      !< Logic unit.
         character(*), optional,              intent(IN)  :: prefix    !< Prefixing string.
         integer(I4P), optional,              intent(OUT) :: iostat    !< IO error.
@@ -292,7 +298,6 @@ contains
         if(this%HasRoot()) then
             NextEntry => this%GetRoot()
             do while(associated(NextEntry))
-                if(.not. NextEntry%HasKey()) exit
                 call NextEntry%Print(unit=unit, prefix=prefix, iostat=iostatd, iomsg=iomsgd )
                 NextEntry => NextEntry%GetNext()
             enddo
@@ -302,7 +307,7 @@ contains
     end subroutine ParameterRootEntry_Print
 
 
-    recursive subroutine ParameterRootEntry_Finalize(this)
+    subroutine ParameterRootEntry_Finalize(this)
     !-----------------------------------------------------------------
     !< Finalize procedure
     !-----------------------------------------------------------------

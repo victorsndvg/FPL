@@ -28,7 +28,6 @@ private
     contains
     private
         procedure         :: Hash       => ParameterEntryDictionary_Hash
-        procedure         :: HasRoot    => ParameterEntryDictionary_HasRoot
         procedure, public :: Init       => ParameterEntryDictionary_Init
         procedure, public :: Set        => ParameterEntryDictionary_Set
         procedure, public :: Get        => ParameterEntryDictionary_Get
@@ -80,18 +79,6 @@ contains
     end subroutine ParameterEntryDictionary_Init
 
 
-    function ParameterEntryDictionary_HasRoot(this,Hash) result(HasRoot)
-    !-----------------------------------------------------------------
-    !< Check if the DataBase position for a given Hash code has a root node
-    !-----------------------------------------------------------------
-        class(ParameterEntryDictionary_t),       intent(IN) :: this    !< Parameter Entry Dictionary
-        integer(I4P),                            intent(IN) :: Hash    !< Hash code
-        logical                                             :: HasRoot !< Check if has root node
-    !-----------------------------------------------------------------
-        HasRoot = associated(this%DataBase(Hash)%GetRoot())
-    end function ParameterEntryDictionary_HasRoot
-
-
     function ParameterEntryDictionary_isPresent(this,Key) result(isPresent)
     !-----------------------------------------------------------------
     !< Check if a Key is present in the DataBase
@@ -99,13 +86,8 @@ contains
         class(ParameterEntryDictionary_t),    intent(IN) :: this      !< Parameter Entry Dictionary
         character(len=*),                     intent(IN) :: Key       !< String Key
         logical                                          :: isPresent !< Boolean flag to check if a Key is present
-        integer(I4P)                                     :: Hash      !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        isPresent = .false.
-        Hash = this%Hash(Key=Key)
-        if(this%HasRoot(Hash=Hash)) then
-            isPresent = this%DataBase(Hash)%isPresent(Key=Key)
-        endif
+        isPresent = this%DataBase(this%Hash(Key=Key))%isPresent(Key=Key)
     end function ParameterEntryDictionary_isPresent
 
 
@@ -116,13 +98,8 @@ contains
         class(ParameterEntryDictionary_t),       intent(INOUT) :: this    !< Parameter Entry Dictionary
         character(len=*),                        intent(IN)    :: Key     !< String Key
         class(*), pointer,                       intent(IN)    :: Value   !< Value
-        integer(I4P)                                           :: Hash
     !-----------------------------------------------------------------
-        Hash = this%Hash(Key=Key)
-        if(.not. this%HasRoot(Hash=Hash)) then
-             call this%DataBase(Hash)%Init()
-        endif
-        call this%DataBase(Hash)%AddEntry(Key=Key,Value=Value)
+        call this%DataBase(this%Hash(Key=Key))%AddEntry(Key=Key,Value=Value)
     end subroutine ParameterEntryDictionary_Set
 
 
@@ -134,13 +111,9 @@ contains
         character(len=*),                     intent(IN)    :: Key    !< String Key
         class(*),                allocatable, intent(INOUT) :: Value  !< Returned value
         class(ParameterEntry_t), pointer                    :: Entry  !< Pointer to a Parameter List
-        integer(I4P)                                        :: Hash   !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        Hash = this%Hash(Key=Key)
-        if(this%HasRoot(Hash=Hash)) then
-            Entry => this%DataBase(Hash)%GetEntry(Key=Key)
-            if(associated(Entry)) call Entry%GetValue(Value=Value)
-        endif
+        Entry => this%DataBase(this%Hash(Key=Key))%GetEntry(Key=Key)
+        if(associated(Entry)) call Entry%GetValue(Value=Value)
     end subroutine ParameterEntryDictionary_Get
 
 
@@ -154,11 +127,8 @@ contains
         class(ParameterEntry_t), pointer                    :: Entry  !< Pointer to a Parameter List
         integer(I4P)                                        :: Hash   !< Hash code corresponding to Key
     !-----------------------------------------------------------------
-        Hash = this%Hash(Key=Key)
-        if(this%HasRoot(Hash=Hash)) then
-            Entry => this%DataBase(Hash)%GetEntry(Key=Key)
-            if(associated(Entry)) Value => Entry%PointToValue()
-        endif
+        Entry => this%DataBase(this%Hash(Key=Key))%GetEntry(Key=Key)
+        if(associated(Entry)) Value => Entry%PointToValue()
     end subroutine ParameterEntryDictionary_GetPointer
 
 
@@ -184,8 +154,7 @@ contains
         Length = 0
         if (allocated(this%DataBase)) THEN
             do DBIterator=lbound(this%DataBase,dim=1),ubound(this%DataBase,dim=1)
-                if(this%HasRoot(Hash=DBIterator)) &
-                    Length = Length + this%DataBase(DBIterator)%GetLength()
+                    Length = Length + this%DataBase(DBIterator)%Length()
             enddo
         endif
     end function ParameterEntryDictionary_Length
@@ -200,9 +169,7 @@ contains
     !-----------------------------------------------------------------
         if (allocated(this%DataBase)) THEN
             do DBIterator=lbound(this%DataBase,dim=1),ubound(this%DataBase,dim=1)
-                if(this%HasRoot(Hash=DBIterator)) then
-                    call this%DataBase(DBIterator)%Free()
-                endif
+                call this%DataBase(DBIterator)%Free()
             enddo
             deallocate(this%DataBase)
         endif
@@ -237,10 +204,9 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         if (allocated(this%DataBase)) then
             do DBIter=lbound(this%DataBase,dim=1), ubound(this%DataBase,dim=1)
-                if(this%HasRoot(Hash=DBIter))                                           &
-                    call this%DataBase(DBIter)%Print(unit=unit,                         &
-                        prefix=prefd//'  ['//trim(str(no_sign=.true., n=DBIter))//'] ', &
-                        iostat=iostatd,iomsg=iomsgd)
+                call this%DataBase(DBIter)%Print(unit=unit,                         &
+                    prefix=prefd//'  ['//trim(str(no_sign=.true., n=DBIter))//'] ', &
+                    iostat=iostatd,iomsg=iomsgd)
             enddo
         endif
         if (present(iostat)) iostat = iostatd

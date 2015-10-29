@@ -48,12 +48,14 @@ save
         procedure         ::                   ParameterList_GetPointer5D
         procedure         ::                   ParameterList_GetPointer6D
         procedure         ::                   ParameterList_GetPointer7D
-        procedure, public :: Init           => ParameterList_Init
-        procedure, public :: NewSubList     => ParameterList_NewSubList
-        procedure, public :: GetSubList     => ParameterList_GetSubList
-        procedure, public :: GetShape       => ParameterList_GetShape
-        procedure, public :: Free           => ParameterList_Free
-        procedure, public :: Print          => ParameterList_Print
+        procedure         ::                   ParameterList_IsOfDataType0D
+        procedure         ::                   ParameterList_IsOfDataType1D
+        procedure         ::                   ParameterList_IsOfDataType2D
+        procedure         ::                   ParameterList_IsOfDataType3D
+        procedure         ::                   ParameterList_IsOfDataType4D
+        procedure         ::                   ParameterList_IsOfDataType5D
+        procedure         ::                   ParameterList_IsOfDataType6D
+        procedure         ::                   ParameterList_IsOfDataType7D
         generic,   public :: Set            => ParameterList_Set0D, &
                                                ParameterList_Set1D, &
                                                ParameterList_Set2D, &
@@ -78,10 +80,23 @@ save
                                                ParameterList_GetPointer5D, &
                                                ParameterList_GetPointer6D, &
                                                ParameterList_GetPointer7D
-        procedure, public :: isPresent      => ParameterList_isPresent
-!        procedure, public :: isOfDataType   => ParameterList_isOfDataType
-!        procedure, public :: isSubList      => ParameterList_isSubList
+        generic,   public :: isOfDataType   => ParameterList_IsOfDataType0D, &
+                                               ParameterList_IsOfDataType1D, &
+                                               ParameterList_IsOfDataType2D, &
+                                               ParameterList_IsOfDataType3D, &
+                                               ParameterList_IsOfDataType4D, &
+                                               ParameterList_IsOfDataType5D, &
+                                               ParameterList_IsOfDataType6D, &
+                                               ParameterList_IsOfDataType7D
         procedure, public :: Del            => ParameterList_RemoveEntry
+        procedure, public :: Init           => ParameterList_Init
+        procedure, public :: GetShape       => ParameterList_GetShape
+        procedure, public :: NewSubList     => ParameterList_NewSubList
+        procedure, public :: GetSubList     => ParameterList_GetSubList
+        procedure, public :: isPresent      => ParameterList_isPresent
+        procedure, public :: isSubList      => ParameterList_isSubList
+        procedure, public :: Free           => ParameterList_Free
+        procedure, public :: Print          => ParameterList_Print
         procedure, public :: Length         => ParameterList_Length
         final             ::                   ParameterList_Finalize
     end type ParameterList_t
@@ -640,14 +655,184 @@ contains
 
     function ParameterList_isPresent(this,Key) result(isPresent)
     !-----------------------------------------------------------------
-    !< Check if a Key is present in the DataBase
+    !< Check if a Key is present at the DataBase
     !-----------------------------------------------------------------
-        class(ParameterList_t),               intent(IN) :: this      !< Parameter List Entry Containter type
+        class(ParameterList_t),               intent(IN) :: this      !< Parameter List
         character(len=*),                     intent(IN) :: Key       !< String Key
         logical                                          :: isPresent !< Boolean flag to check if a Key is present
     !-----------------------------------------------------------------
         isPresent = this%Dictionary%IsPresent(Key=Key)
     end function ParameterList_isPresent
+
+
+    function ParameterList_isSubList(this,Key) result(isSubList)
+    !-----------------------------------------------------------------
+    !< Check if a Key is a SubList
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*), pointer               :: SubListPointer             !< Pointer to a SubList
+        logical                         :: isSubList                  !< Check if is a SubList
+    !-----------------------------------------------------------------
+        isSubList = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=SubListPointer)
+        select type (SubListPointer)
+            class is (ParameterList_t)
+                    isSubList =.true.
+        end select
+    end function ParameterList_isSubList
+
+
+    function ParameterList_isOfDataType0D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold                       !< Mold
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold)
+        end select
+    end function ParameterList_isOfDataType0D
+
+
+    function ParameterList_isOfDataType1D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold(1:)                   !< Mold
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1))
+        end select
+    end function ParameterList_isOfDataType1D
+
+
+    function ParameterList_isOfDataType2D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold(1:,1:)                !< Mold
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1))
+        end select
+    end function ParameterList_isOfDataType2D
+
+
+    function ParameterList_isOfDataType3D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold(1:,1:,1:)             !< Mold
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1))
+        end select
+    end function ParameterList_isOfDataType3D
+
+
+    function ParameterList_isOfDataType4D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold(1:,1:,1:,1:)          !< Mold
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1))
+        end select
+    end function ParameterList_isOfDataType4D
+
+
+    function ParameterList_isOfDataType5D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold(1:,1:,1:,1:,1:)       !< Mold
+        class(*),  pointer              :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1))
+        end select
+    end function ParameterList_isOfDataType5D
+
+
+    function ParameterList_isOfDataType6D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold(1:,1:,1:,1:,1:,1:)    !< Mold
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1,1))
+        end select
+    end function ParameterList_isOfDataType6D
+
+
+    function ParameterList_isOfDataType7D(this,Key, Mold) result(IsOfDataType)
+    !-----------------------------------------------------------------
+    !< Check if the data type of Mold agrees with the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*),         intent(IN)    :: Mold(1:,1:,1:,1:,1:,1:,1:) !< Mold
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        logical                         :: isOfDataType               !< Check if has the same type
+    !-----------------------------------------------------------------
+        isOfDataType = .false.
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1,1,1))
+        end select
+    end function ParameterList_isOfDataType7D
 
 
     subroutine ParameterList_RemoveEntry(this, Key)

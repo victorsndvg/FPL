@@ -124,19 +124,12 @@ contains
     end subroutine ParameterEntry_DeallocateKey
 
 
-    recursive subroutine ParameterEntry_Free(this)
+    subroutine ParameterEntry_Free(this)
     !-----------------------------------------------------------------
-    !< Free the list
+    !< Free the Entry
     !-----------------------------------------------------------------
         class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter List 
-        class(ParameterEntry_t),  pointer      :: Next                !< Parameter List Node
     !-----------------------------------------------------------------
-        if (this%HasNext()) then
-            Next => this%GetNext()
-            call Next%Free()
-            deallocate(Next)
-            nullify(Next)
-        endif
         call this%DeallocateKey()
         call this%DeallocateValue()
         call this%NullifyNext()
@@ -197,7 +190,7 @@ contains
     end subroutine ParameterEntry_DeallocateValue
 
 
-    recursive subroutine ParameterEntry_Finalize(this)
+    subroutine ParameterEntry_Finalize(this)
     !-----------------------------------------------------------------
     !< Finalize procedure
     !-----------------------------------------------------------------
@@ -207,11 +200,11 @@ contains
     end subroutine ParameterEntry_Finalize
 
 
-    recursive subroutine ParameterEntry_Print(this, unit, prefix, iostat, iomsg)
+    subroutine ParameterEntry_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print the keys/value pair contained in the parameter list
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), target,  intent(IN)  :: this         !< Parameter list
+        class(ParameterEntry_t),          intent(IN)  :: this         !< Parameter list
         integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
         character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
         integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
