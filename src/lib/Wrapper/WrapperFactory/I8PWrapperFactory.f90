@@ -169,7 +169,7 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine I8PWrapperFactory_Wrap5D
+    end function I8PWrapperFactory_Wrap5D
 
 
     function I8PWrapperFactory_Wrap6D(this, Value) result(Wrapper)
