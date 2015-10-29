@@ -115,7 +115,7 @@ contains
     !-----------------------------------------------------------------
         class(ParameterEntryDictionary_t),       intent(INOUT) :: this    !< Parameter Entry Dictionary
         character(len=*),                        intent(IN)    :: Key     !< String Key
-        class(*),                                intent(IN)    :: Value   !< Value
+        class(*), pointer,                       intent(IN)    :: Value   !< Value
         integer(I4P)                                           :: Hash
     !-----------------------------------------------------------------
         Hash = this%Hash(Key=Key)

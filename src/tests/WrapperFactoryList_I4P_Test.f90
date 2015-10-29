@@ -9,7 +9,7 @@ USE DimensionsWrapper
 implicit none
 
 class(WrapperFactory_t),    pointer     :: factory
-class(DimensionsWrapper_t), allocatable :: wrapper
+class(DimensionsWrapper_t), pointer     :: wrapper
 integer(I4P)                            :: val0D = 9
 integer(I4P)                            :: val1D(-1:1) = (/1,2,3/)
 integer(I4P)                            :: val2D(1,1) = 9
@@ -25,50 +25,46 @@ call TheWrapperFactoryList_Init()
 call TheWrapperFactoryList%Print(unit=OUTPUT_UNIT)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val0D)
-if(associated(factory)) call factory%Wrap(Value=val0D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val1D)
-if(associated(factory)) call factory%Wrap(Value=val1D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val2D)
-if(associated(factory)) call factory%Wrap(Value=val2D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val3D)
-if(associated(factory)) call factory%Wrap(Value=val3D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val4D)
-if(associated(factory)) call factory%Wrap(Value=val4D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val5D)
-if(associated(factory)) call factory%Wrap(Value=val5D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val6D)
-if(associated(factory)) call factory%Wrap(Value=val6D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
 factory => TheWrapperFactoryList%GetFactory(Value=val7D)
-if(associated(factory)) call factory%Wrap(Value=val7D, Wrapper=wrapper)
-if(allocated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
-nullify(factory)    
+if(associated(factory)) wrapper => factory%Wrap(Value=val0D)
+if(associated(wrapper)) call Wrapper%Print(unit=OUTPUT_UNIT)
+nullify(factory); call wrapper%Free(); deallocate(wrapper)
 
-call wrapper%Free()
 call TheWrapperFactoryList%Free()
-nullify(factory)
-if(allocated(wrapper)) deallocate(wrapper)
-
 
 end program WrapperFactoryList_I4P_Test
 

@@ -10,7 +10,7 @@ private
     type :: ParameterEntry_t
     private
         character(len=:), allocatable         :: Key
-        class(*),         allocatable         :: Value
+        class(*),                    pointer  :: Value
         class(ParameterEntry_t),     pointer  :: Next   => null()
     contains
     private
@@ -99,8 +99,7 @@ contains
         class(ParameterEntry_t),               intent(INOUT) :: this  !< Parameter List 
         character(len=*),                      intent(IN)    :: Key   !< Key
     !-----------------------------------------------------------------
-        if(this%HasKey()) deallocate(this%Key)
-        allocate(this%Key, source=Key)
+        this%Key = Key
     end subroutine ParameterEntry_SetKey
 
 
@@ -111,7 +110,7 @@ contains
         class(ParameterEntry_t),     intent(IN) :: this               !< Parameter List 
         character(len=:), allocatable           :: Key                !< Key
     !-----------------------------------------------------------------
-        if(this%HasKey()) allocate(Key, source=this%Key)
+        Key = this%Key
     end function ParameterEntry_GetKey
 
 
@@ -151,7 +150,7 @@ contains
         class(ParameterEntry_t), intent(IN) :: this                   !< Parameter List 
         logical                             :: hasValue               !< Check if Value is allocated
     !-----------------------------------------------------------------
-        hasValue = allocated(this%Value)
+        hasValue = associated(this%Value)
     end function ParameterEntry_HasValue
 
 
@@ -160,10 +159,9 @@ contains
     !< Set a concrete Wrapper
     !-----------------------------------------------------------------
         class(ParameterEntry_t), intent(INOUT)  :: this               !< Parameter List
-        class(*),                intent(IN)     :: Value              !< Concrete Wrapper
+        class(*), pointer,       intent(IN)     :: Value              !< Concrete Wrapper
     !-----------------------------------------------------------------
-        if(this%HasValue()) deallocate(this%Value)
-        allocate(this%Value, source=Value)
+        this%Value => Value
     end subroutine ParameterEntry_SetValue
 
 
@@ -182,7 +180,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to a concrete WrapperFactory
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), target, intent(IN)  :: this          !< Parameter List
+        class(ParameterEntry_t),         intent(IN)  :: this          !< Parameter List
         class(*), pointer                            :: Value         !< Concrete Wrapper
     !-----------------------------------------------------------------
         Value => this%Value

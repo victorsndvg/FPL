@@ -153,24 +153,20 @@ contains
         class(ParameterList_t),               intent(INOUT) :: this           !< Parameter List
         character(len=*),                     intent(IN)    :: Key            !< String Key
         integer(I4P), optional,               intent(IN)    :: Size           !< Sublist Size
-        class(ParameterList_t),               Pointer       :: SublistPointer !< Pointer to the New SubList
-        class(*),                             pointer       :: Value          !< Aux Pointer to the New SubList
-        type(ParameterList_t)                               :: Sublist        !< New Sublist
+        class(*),                             pointer       :: Sublist        !< New Sublist
+        class(ParameterList_t),               pointer       :: SublistPointer !< New Sublist pointer
     !-----------------------------------------------------------------
-        nullify(SubListPointer)
+        allocate(ParameterList_t :: SubList)
         call this%Dictionary%Set(Key=Key,Value=Sublist)
-        call this%Dictionary%GetPointer(Key=Key, Value=Value)
-        if(associated(Value)) then
-            select type(Value)
-                class is (ParameterList_t)
-                    SubListPointer => Value
-                    if(present(Size)) then
-                        call SublistPointer%Init(Size=Size)
-                    else
-                        call SublistPointer%Init(Size=Size)
-                    endif
-            end select
-        end if
+        select type(SubList)
+            class is (ParameterList_t)
+                SublistPointer => SubList
+                if(present(Size)) then
+                    call Sublist%Init(Size=Size)
+                else
+                    call Sublist%Init(Size=Size)
+                endif
+        end select
     end function ParameterList_NewSubList
 
 
@@ -201,14 +197,12 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(IN)    :: Value          !< Unlimited polymorphic Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(*),                   pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set0D
 
@@ -221,14 +215,12 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(IN)    :: Value(:)       !< Unlimited polymorphic 1D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(*),                   pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set1D
 
@@ -241,14 +233,12 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(IN)    :: Value(:,:)     !< Unlimited polymorphic 2D array value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(*),                   pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set2D
 
@@ -261,14 +251,12 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(IN)    :: Value(:,:,:)   !< Unlimited Polimorphic 3D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(*),                   pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set3D
 
@@ -281,14 +269,12 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(IN)    :: Value(:,:,:,:) !< Unlimited Polymorphic 4D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper        !< Wrapper
+        class(*),                   pointer                 :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set4D
 
@@ -301,14 +287,12 @@ contains
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*),                             intent(IN)    :: Value(:,:,:,:,:) !< Unlimited Polymorphic 5D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper          !< Wrapper
+        class(*),                   pointer                 :: Wrapper          !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set5D
 
@@ -321,14 +305,12 @@ contains
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*),                             intent(IN)    :: Value(:,:,:,:,:,:) !< Unlimited Polymorphic 5D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory     !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper            !< Wrapper
+        class(*),                   pointer                 :: Wrapper            !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set6D
 
@@ -341,14 +323,12 @@ contains
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*),                             intent(IN)    :: Value(:,:,:,:,:,:,:) !< Unlimited Polymorphic 7D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory       !< WrapperFactory
-        class(DimensionsWrapper_t), allocatable             :: Wrapper              !< Wrapper
+        class(*),                   pointer                 :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
-            call WrapperFactory%Wrap(Value=Value, Wrapper=Wrapper)
-            call this%Dictionary%Set(Key=Key,Value=Wrapper)
-            call Wrapper%Free()
-            deallocate(Wrapper)
+            Wrapper => WrapperFactory%Wrap(Value=Value)
+            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
         endif
     end subroutine ParameterList_Set7D
 
