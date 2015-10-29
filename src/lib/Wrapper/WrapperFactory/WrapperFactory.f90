@@ -53,75 +53,75 @@ private
             logical                             :: hasSameType
         end function
 
-        subroutine WrapperFactory_Wrap0D(this, Value, Wrapper)
+        function WrapperFactory_Wrap0D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
-        subroutine WrapperFactory_Wrap1D(this, Value, Wrapper)
+        function WrapperFactory_Wrap1D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value(:)
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
-        subroutine WrapperFactory_Wrap2D(this, Value, Wrapper)
+        function WrapperFactory_Wrap2D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value(:,:)
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
-        subroutine WrapperFactory_Wrap3D(this, Value, Wrapper)
+        function WrapperFactory_Wrap3D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value(:,:,:)
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
-        subroutine WrapperFactory_Wrap4D(this, Value, Wrapper)
+        function WrapperFactory_Wrap4D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value(:,:,:,:)
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
-        subroutine WrapperFactory_Wrap5D(this, Value, Wrapper)
+        function WrapperFactory_Wrap5D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value(:,:,:,:,:)
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
-        subroutine WrapperFactory_Wrap6D(this, Value, Wrapper)
+        function WrapperFactory_Wrap6D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value(:,:,:,:,:,:)
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
-        subroutine WrapperFactory_Wrap7D(this, Value, Wrapper)
+        function WrapperFactory_Wrap7D(this, Value) result(Wrapper)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
             class(*),                                intent(IN)    :: Value(:,:,:,:,:,:,:)
-            class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
-        end subroutine
+            class(DimensionsWrapper_t), pointer                    :: Wrapper
+        end function
 
         subroutine WrapperFactory_UnWrap0D(this, Wrapper, Value)
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value
         end subroutine
 
@@ -129,7 +129,7 @@ private
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value(:)
         end subroutine
 
@@ -137,7 +137,7 @@ private
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value(:,:)
         end subroutine
 
@@ -145,7 +145,7 @@ private
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value(:,:,:)
         end subroutine
 
@@ -153,7 +153,7 @@ private
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value(:,:,:,:)
         end subroutine
 
@@ -161,7 +161,7 @@ private
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value(:,:,:,:,:)
         end subroutine
 
@@ -169,7 +169,7 @@ private
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:)
         end subroutine
 
@@ -177,7 +177,7 @@ private
             import WrapperFactory_t
             import DimensionsWrapper_t
             class(WrapperFactory_t),                 intent(IN)    :: this
-            class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+            class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
             class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:,:)
         end subroutine
 

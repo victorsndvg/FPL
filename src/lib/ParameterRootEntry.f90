@@ -93,7 +93,7 @@ contains
     !-----------------------------------------------------------------
         class(ParameterRootEntry_t),  intent(INOUT) :: this           !< Parameter Root Entry
         character(len=*),             intent(IN)    :: Key            !< Key (unique) of the current node.
-        class(*),                     intent(IN)    :: Value          !< Parameter Entry Value
+        class(*), pointer,            intent(IN)    :: Value          !< Parameter Entry Value
         class(ParameterEntry_t),      pointer       :: NextEntry      !< Parameter Entry
         class(ParameterEntry_t),      pointer       :: NewEntry       !< New Parameter Entry
         character(len=:), allocatable               :: NextEntryKey   !< Key of the NextEntry

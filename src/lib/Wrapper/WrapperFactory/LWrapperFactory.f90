@@ -43,9 +43,13 @@ private
 contains
 
     function LWrapperFactory_hasSameType(this, Value) result(hasSameType)
-        class(LWrapperFactory_t), intent(IN) :: this
+    !-----------------------------------------------------------------
+    !< Check if Value type agrees with wrapper type
+    !-----------------------------------------------------------------
+        class(LWrapperFactory_t),   intent(IN) :: this
         class(*),                   intent(IN) :: Value
         logical                                :: hasSameType
+    !-----------------------------------------------------------------
         hasSameType = .false.
         select type(Value)
             type is (logical)
@@ -54,18 +58,14 @@ contains
     end function LWrapperFactory_hasSameType
 
 
-    subroutine LWrapperFactory_Wrap0D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap0D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 0D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value)) then
             allocate(DimensionsWrapper0D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=0_I1P)
@@ -74,21 +74,17 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap0D
+    end function LWrapperFactory_Wrap0D
 
 
-    subroutine LWrapperFactory_Wrap1D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap1D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 1D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value(1:)
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value(1))) then
             allocate(DimensionsWrapper1D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=1_I1P)
@@ -97,21 +93,17 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap1D
+    end function LWrapperFactory_Wrap1D
 
 
-    subroutine LWrapperFactory_Wrap2D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap2D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 2D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value(1:,1:)
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value(1,1))) then
             allocate(DimensionsWrapper2D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=2_I1P)
@@ -120,21 +112,17 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap2D
+    end function LWrapperFactory_Wrap2D
 
 
-    subroutine LWrapperFactory_Wrap3D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap3D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 3D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value(1:,1:,1:)
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value(1,1,1))) then
             allocate(DimensionsWrapper3D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=3_I1P)
@@ -143,21 +131,17 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap3D
+    end function LWrapperFactory_Wrap3D
 
 
-    subroutine LWrapperFactory_Wrap4D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap4D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 4D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value(1:,1:,1:,1:)
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value(1,1,1,1))) then
             allocate(DimensionsWrapper4D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=4_I1P)
@@ -166,21 +150,17 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap4D
+    end function LWrapperFactory_Wrap4D
 
 
-    subroutine LWrapperFactory_Wrap5D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap5D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 5D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:)
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value(1,1,1,1,1))) then
             allocate(DimensionsWrapper5D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=5_I1P)
@@ -189,21 +169,17 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap5D
+    end function LWrapperFactory_Wrap5D
 
 
-    subroutine LWrapperFactory_Wrap6D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap6D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 6D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:,1:)
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value(1,1,1,1,1,1))) then
             allocate(DimensionsWrapper6D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=6_I1P)
@@ -212,21 +188,17 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap6D
+    end function LWrapperFactory_Wrap6D
 
 
-    subroutine LWrapperFactory_Wrap7D(this, Value, Wrapper)
+    function LWrapperFactory_Wrap7D(this, Value) result(Wrapper)
     !-----------------------------------------------------------------
     !< Create L 7D Wrapper
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
         class(*),                                intent(IN)    :: Value(1:,1:,1:,1:,1:,1:,1:)
-        class(DimensionsWrapper_t), allocatable, intent(INOUT) :: Wrapper
+        class(DimensionsWrapper_t), pointer                    :: Wrapper
     !-----------------------------------------------------------------
-        if(allocated(Wrapper)) then
-            call Wrapper%Free()
-            deallocate(Wrapper)
-        endif
         if(this%hasSameType(Value(1,1,1,1,1,1,1))) then
             allocate(DimensionsWrapper7D_L_t::Wrapper)
             call Wrapper%SetDimensions(Dimensions=7_I1P)
@@ -235,7 +207,7 @@ contains
                     call Wrapper%Set(Value=Value)
             end select
         endif
-    end subroutine LWrapperFactory_Wrap7D
+    end function LWrapperFactory_Wrap7D
 
 
     subroutine LWrapperFactory_UnWrap0D(this, Wrapper, Value)
@@ -243,7 +215,7 @@ contains
     !< Return the L 0D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value
     !-----------------------------------------------------------------
         select type (Wrapper)
@@ -258,7 +230,7 @@ contains
     !< Return the L 1D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value(:)
     !-----------------------------------------------------------------
         select type (Wrapper)
@@ -273,7 +245,7 @@ contains
     !< Return the L 2D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value(:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
@@ -288,7 +260,7 @@ contains
     !< Return the L 3D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value(:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
@@ -303,7 +275,7 @@ contains
     !< Return the L 4D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value(:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
@@ -318,7 +290,7 @@ contains
     !< Return the L 5D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value(:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
@@ -333,7 +305,7 @@ contains
     !< Return the L 6D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
@@ -348,7 +320,7 @@ contains
     !< Return the L 7D Wrapped Value
     !-----------------------------------------------------------------
         class(LWrapperFactory_t),                intent(IN)    :: this
-        class(DimensionsWrapper_t), allocatable, intent(IN)    :: Wrapper
+        class(DimensionsWrapper_t), pointer,     intent(IN)    :: Wrapper
         class(*),                                intent(INOUT) :: Value(:,:,:,:,:,:,:)
     !-----------------------------------------------------------------
         select type (Wrapper)
