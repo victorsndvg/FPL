@@ -48,7 +48,8 @@ contains
         select type (Value)
             type is (integer(I1P))
                 allocate(this%Value(size(Value,dim=1)), &
-                                    source=Value, stat=err)
+                                    stat=err)
+                this%Value = Value
                 if(err/=0) &
                     call msg%Error( txt='Setting Value: Allocation error ('//&
                                     str(no_sign=.true.,n=err)//')', &

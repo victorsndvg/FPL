@@ -47,7 +47,7 @@ contains
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                allocate(this%Value, source=Value, stat=err)
+                this%Value = Value
                 if(err/=0) &
                     call msg%Error(txt='Setting Value: Allocation error ('// &
                                    str(no_sign=.true.,n=err)//')',           &

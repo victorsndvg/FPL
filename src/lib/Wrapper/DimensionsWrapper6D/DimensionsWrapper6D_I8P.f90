@@ -54,7 +54,8 @@ contains
                                     size(Value,dim=4),  &
                                     size(Value,dim=5),  &
                                     size(Value,dim=6)), &
-                                    source=Value, stat=err)
+                                    stat=err)
+                this%Value = Value
                 if(err/=0) &
                     call msg%Error( txt='Setting Value: Allocation error ('//&
                                     str(no_sign=.true.,n=err)//')', &

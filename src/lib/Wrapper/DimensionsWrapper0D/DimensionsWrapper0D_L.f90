@@ -47,7 +47,8 @@ contains
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                allocate(this%Value, source=Value, stat=err)
+                allocate(this%Value, stat=err)
+                this%Value = Value
                 if(err/=0) call msg%Error(txt='Setting Value: Allocation error ('// &
                                           str(no_sign=.true.,n=err)//')', &
                                           file=__FILE__, line=__LINE__ )
@@ -82,7 +83,7 @@ contains
         class(DimensionsWrapper0D_L_t), intent(IN)  :: this
         integer(I4P), allocatable                   :: ValueShape(:)
     !-----------------------------------------------------------------
-		allocate(ValueShape(this%GetDimensions()))
+1		allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value)
     end function
 
