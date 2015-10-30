@@ -154,6 +154,7 @@ contains
         class(ParameterEntry_t), intent(INOUT)  :: this               !< Parameter List
         class(*), pointer,       intent(IN)     :: Value              !< Concrete Wrapper
     !-----------------------------------------------------------------
+        if(this%HasValue()) deallocate(this%Value)
         this%Value => Value
     end subroutine ParameterEntry_SetValue
 
