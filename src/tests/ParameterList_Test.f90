@@ -6,7 +6,7 @@ USE FPL
 
 type(ParameterList_t) :: Parameters
 integer(I4P),allocatable :: array(:)
-integer :: iter, numiters
+integer :: iter, numiters, loop
 
 numiters = 7
 
@@ -14,6 +14,7 @@ call FPL_Init()
 
 call Parameters%Init(Size=3)
 
+do loop = 1, numiters
 do iter = 1, numiters
     if(allocated(array)) deallocate(array); allocate(array(iter)); array = iter
     write(unit=OUTPUT_UNIT, fmt='(A,$)') 'Setting: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
@@ -25,8 +26,10 @@ do iter = 1, numiters
         stop -1
     endif
 enddo
+enddo
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'Parameter List Length: ',Parameters%Length()
 call Parameters%Print(unit=OUTPUT_UNIT)
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 

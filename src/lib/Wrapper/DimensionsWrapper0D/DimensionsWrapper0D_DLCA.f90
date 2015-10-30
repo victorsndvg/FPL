@@ -48,10 +48,6 @@ contains
         select type (Value)
             type is (character(len=*))
                 this%Value = Value
-                if(err/=0) &
-                    call msg%Error(txt='Setting Value: Allocation error ('// &
-                                   str(no_sign=.true.,n=err)//')',           &
-                                   file=__FILE__, line=__LINE__ )
             class Default
                 call msg%Warn(txt='Setting value: Expected data type (character(*))',&
                               file=__FILE__, line=__LINE__ )
