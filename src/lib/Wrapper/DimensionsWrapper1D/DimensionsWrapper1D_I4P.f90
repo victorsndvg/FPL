@@ -2,6 +2,7 @@ module DimensionsWrapper1D_I4P
 
 USE DimensionsWrapper1D
 USE IR_Precision, only: I4P, str
+USE ErrorMessages
 
 implicit none
 private
@@ -13,8 +14,8 @@ private
         procedure, public :: Set            => DimensionsWrapper1D_I4P_Set
         procedure, public :: Get            => DimensionsWrapper1D_I4P_Get
         procedure, public :: GetShape       => DimensionsWrapper1D_I4P_GetShape
-        procedure, public :: GetPointer     => DimensionsWrapper1D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_I4P_GetPolymorphic
+        procedure, public :: GetPointer     => DimensionsWrapper1D_I4P_GetPointer
         procedure, public :: isOfDataType   => DimensionsWrapper1D_I4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_I4P_Free
         procedure, public :: Print          => DimensionsWrapper1D_I4P_Print
@@ -42,10 +43,18 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I4P_t), intent(INOUT) :: this
         class(*),                         intent(IN)    :: Value(:)
+        integer                                         :: err
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                allocate(this%Value(size(Value,dim=1)), source=Value)
+                allocate(this%Value(size(Value,dim=1)), source=Value, stat=err)
+                if(err/=0) &
+                    call msg%Error( txt='Setting Value: Allocation error ('//&
+                                    str(no_sign=.true.,n=err)//')', &
+                                    file=__FILE__, line=__LINE__ )
+            class Default
+                call msg%Warn( txt='Setting value: Expected data type (I4P)', &
+                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
@@ -54,12 +63,21 @@ contains
     !-----------------------------------------------------------------
     !< Get I4P Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_I4P_t), intent(IN)    :: this
+        class(DimensionsWrapper1D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                Value = this%Value
+                if(all(this%GetShape() == shape(Value))) then
+                    Value = this%Value
+                else
+                    call msg%Warn(txt='Getting value: Expected shape ('//    &
+                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                                  file=__FILE__, line=__LINE__ )
+                endif
+            class Default
+                call msg%Warn(txt='Getting value: Expected data type (I4P)',&
+                              file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
@@ -71,7 +89,7 @@ contains
         class(DimensionsWrapper1D_I4P_t), intent(IN) :: this
         integer(I4P), allocatable                    :: ValueShape(:)
     !-----------------------------------------------------------------
-        ValueShape = shape(this%Value)
+        allocate(ValueShape, source = shape(this%Value))
     end function
 
 
@@ -102,8 +120,12 @@ contains
     !< Free a DimensionsWrapper1D
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I4P_t), intent(INOUT) :: this
+        integer                                         :: err
     !-----------------------------------------------------------------
-        if(allocated(this%Value)) deallocate(this%Value)
+        if(allocated(this%Value)) deallocate(this%Value, stat=err)
+        if(err/=0) call msg%Error(txt='Freeing Value: Deallocation error ('// &
+                                  str(no_sign=.true.,n=err)//')',             &
+                                  file=__FILE__, line=__LINE__ )
     end subroutine
 
 

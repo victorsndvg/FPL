@@ -2,6 +2,7 @@ module DimensionsWrapper4D_DLCA
 
 USE DimensionsWrapper4D
 USE IR_Precision, only: I4P, str
+USE ErrorMessages
 
 implicit none
 private
@@ -41,7 +42,8 @@ contains
     !< Set DLCA Wrapper Value
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_DLCA_t), intent(INOUT) :: this
-        class(*),                         intent(IN)    :: Value(:,:,:,:)
+        class(*),                          intent(IN)    :: Value(:,:,:,:)
+        integer                                          :: err
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
@@ -49,7 +51,14 @@ contains
 !                                    size(Value,dim=2),  &
 !                                    size(Value,dim=3),  &
 !                                    size(Value,dim=4)), &
-!                                    source=Value)
+!                                    source=Value, stat=err)
+!                if(err/=0) &
+!                    call msg%Error( txt='Setting Value: Allocation error ('//&
+!                                    str(no_sign=.true.,n=err)//')', &
+!                                    file=__FILE__, line=__LINE__ )
+            class Default
+                call msg%Warn( txt='Setting value: Expected data type (character(*))', &
+                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
@@ -63,7 +72,16 @@ contains
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                Value = this%Value
+                if(all(this%GetShape() == shape(Value))) then
+                    Value = this%Value
+                else
+                    call msg%Warn(txt='Getting value: Expected shape ('//    &
+                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                                  file=__FILE__, line=__LINE__ )
+                endif
+            class Default
+                call msg%Warn(txt='Getting value: Expected data type (character(*))',&
+                              file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
@@ -110,8 +128,12 @@ contains
     !< Free a DimensionsWrapper4D
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_DLCA_t), intent(INOUT) :: this
+        integer                                          :: err
     !-----------------------------------------------------------------
-        if(allocated(this%Value)) deallocate(this%Value)
+        if(allocated(this%Value)) deallocate(this%Value, stat=err)
+        if(err/=0) call msg%Error(txt='Freeing Value: Deallocation error ('// &
+                                  str(no_sign=.true.,n=err)//')',             &
+                                  file=__FILE__, line=__LINE__ )
     end subroutine
 
 

@@ -52,8 +52,8 @@ contains
     !-----------------------------------------------------------------
     !< Set the pointer to the Next node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),         intent(INOUT) :: this        !< Parameter List 
-        class(ParameterEntry_t), target, intent(IN)    :: Next        !< Pointer to Next 
+        class(ParameterEntry_t),          intent(INOUT) :: this        !< Parameter List 
+        class(ParameterEntry_t), pointer, intent(IN)    :: Next        !< Pointer to Next 
     !-----------------------------------------------------------------
         this%Next => Next
     end subroutine ParameterEntry_SetNext
