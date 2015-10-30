@@ -92,6 +92,7 @@ contains
         class(DimensionsWrapper3D_I2P_t), intent(IN)  :: this
         integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
+        allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value)
     end function
 

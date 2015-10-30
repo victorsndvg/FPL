@@ -47,7 +47,8 @@ contains
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                allocate(this%Value(size(Value,dim=1)), source=Value, stat=err)
+                allocate(this%Value(size(Value,dim=1)), stat=err)
+				this%Value = Value
                 if(err/=0) &
                     call msg%Error( txt='Setting Value: Allocation error ('//&
                                     str(no_sign=.true.,n=err)//')', &
@@ -89,7 +90,8 @@ contains
         class(DimensionsWrapper1D_I4P_t), intent(IN) :: this
         integer(I4P), allocatable                    :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape, source = shape(this%Value))
+        allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value)
     end function
 
 
