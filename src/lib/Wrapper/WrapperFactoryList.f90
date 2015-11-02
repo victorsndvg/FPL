@@ -172,6 +172,7 @@ contains
         class(*),                             intent(IN)  :: Value           !< Polymorphic Mold
         class(WrapperFactory_t), pointer                  :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value)) then
                 WrapperFactory => this%Value
@@ -193,6 +194,7 @@ contains
         class(*),                         intent(IN)  :: Value(1:)       !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1))) then
                 WrapperFactory => this%Value
@@ -214,6 +216,7 @@ contains
         class(*),                         intent(IN)  :: Value(1:,1:)    !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1))) then
                 WrapperFactory => this%Value
@@ -235,6 +238,7 @@ contains
         class(*),                         intent(IN)  :: Value(1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1))) then
                 WrapperFactory => this%Value
@@ -256,6 +260,7 @@ contains
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory     !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1))) then
                 WrapperFactory => this%Value
@@ -277,6 +282,7 @@ contains
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory        !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1))) then
                 WrapperFactory => this%Value
@@ -298,6 +304,7 @@ contains
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory           !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1,1))) then
                 allocate(WrapperFactory, source=this%Value)
@@ -319,6 +326,7 @@ contains
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory              !< Wrapper Factory
     !-----------------------------------------------------------------
+        nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1,1,1))) then
                 WrapperFactory => this%Value

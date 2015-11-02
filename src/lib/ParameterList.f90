@@ -1,5 +1,6 @@
 module ParameterList
 
+USE ErrorMessages
 USE IR_Precision
 USE ParameterEntryDictionary
 USE ParameterEntry
@@ -218,7 +219,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set0D
 
@@ -236,7 +245,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set1D
 
@@ -254,7 +271,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set2D
 
@@ -272,7 +297,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set3D
 
@@ -290,7 +323,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set4D
 
@@ -308,7 +349,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set5D
 
@@ -326,7 +375,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set6D
 
@@ -344,7 +401,15 @@ contains
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
-            if(associated(Wrapper)) call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            if(associated(Wrapper)) then
+                call this%Dictionary%Set(Key=Key,Value=Wrapper)
+            else
+                call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
+            endif
+        else
+            call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Set7D
 
@@ -364,7 +429,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper0D_t)
                     call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get0D
 
@@ -384,7 +455,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper1D_t)
                 call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get1D
 
@@ -404,7 +481,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper2D_t)
                     call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get2D
 
@@ -424,7 +507,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper3D_t)
                     call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get3D
 
@@ -444,7 +533,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper4D_t)
                     call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get4D
 
@@ -465,7 +560,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper5D_t)
                     call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get5D
 
@@ -484,7 +585,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper6D_t)
                     call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get6D
 
@@ -504,7 +611,13 @@ contains
             select type(Wrapper)
                 class is (DimensionsWrapper7D_t)
                     call Wrapper%Get(Value=Value)
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_Get7D
 
@@ -518,12 +631,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value   !< Returned pointer to value
         class(*),                    pointer                :: Wrapper !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper0D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer0D
 
@@ -537,12 +657,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper  !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper1D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer1D
 
@@ -556,12 +683,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper    !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper2D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer2D
 
@@ -575,12 +709,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:)   !< Returned pointer to value
         class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper3D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer3D
 
@@ -594,12 +735,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper4D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer4D
 
@@ -613,12 +761,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper          !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper5D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer5D
 
@@ -632,12 +787,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper            !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper6D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer6D
 
@@ -651,12 +813,19 @@ contains
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper7D_t)
                     Value => Wrapper%GetPointer()
+                class Default
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
             end select
+        else
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end subroutine ParameterList_GetPointer7D
 
@@ -720,7 +889,7 @@ contains
         class(*), pointer               :: Wrapper                    !< Wrapper
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
-        isOfDataType = .false.
+        isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         select type (Wrapper)
             class is (DimensionsWrapper_t)
@@ -739,7 +908,7 @@ contains
         class(*), pointer               :: Wrapper                    !< Wrapper
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
-        isOfDataType = .false.
+        isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         select type (Wrapper)
             class is (DimensionsWrapper_t)
@@ -758,7 +927,7 @@ contains
         class(*), pointer               :: Wrapper                    !< Wrapper
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
-        isOfDataType = .false.
+        isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         select type (Wrapper)
             class is (DimensionsWrapper_t)
@@ -777,7 +946,7 @@ contains
         class(*), pointer               :: Wrapper                    !< Wrapper
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
-        isOfDataType = .false.
+        isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         select type (Wrapper)
             class is (DimensionsWrapper_t)
@@ -796,7 +965,7 @@ contains
         class(*),  pointer              :: Wrapper                    !< Wrapper
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
-        isOfDataType = .false.
+        isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         select type (Wrapper)
             class is (DimensionsWrapper_t)
@@ -815,7 +984,7 @@ contains
         class(*), pointer               :: Wrapper                    !< Wrapper
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
-        isOfDataType = .false.
+        isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         select type (Wrapper)
             class is (DimensionsWrapper_t)
@@ -834,7 +1003,7 @@ contains
         class(*), pointer               :: Wrapper                    !< Wrapper
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
-        isOfDataType = .false.
+        isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         select type (Wrapper)
             class is (DimensionsWrapper_t)

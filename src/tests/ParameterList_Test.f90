@@ -29,8 +29,8 @@ enddo
 enddo
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
-write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'Parameter List Length: ',Parameters%Length()
 call Parameters%Print(unit=OUTPUT_UNIT)
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') ' Parameter List Length: ',Parameters%Length()
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 
 do iter = 1, numiters
