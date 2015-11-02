@@ -40,6 +40,15 @@ call Parameters%Set(Key='R8P',  Value=R8PArray)
 call Parameters%Set(Key='L',    Value=LArray)
 call Parameters%Set(Key='DLCA', Value=DLCAArray)
 
+if(.not. Parameters%isPresent(Key='I1P'))  Stop -1
+if(.not. Parameters%isPresent(Key='I2P'))  Stop -1
+if(.not. Parameters%isPresent(Key='I4P'))  Stop -1
+if(.not. Parameters%isPresent(Key='I8P'))  Stop -1
+if(.not. Parameters%isPresent(Key='R4P'))  Stop -1
+if(.not. Parameters%isPresent(Key='R8P'))  Stop -1
+if(.not. Parameters%isPresent(Key='L'))    Stop -1
+if(.not. Parameters%isPresent(Key='DLCA')) Stop -1
+
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'Parameter List Length: ',Parameters%Length()
 call Parameters%Print(unit=OUTPUT_UNIT)

@@ -45,17 +45,24 @@ contains
         class(*),                          intent(IN)    :: Value(:)
         integer                                          :: err
     !-----------------------------------------------------------------
+#ifdef __GFORTRAN__ 
+        call msg%Warn(txt='Setting value: Array of deferred length allocatable arrays not supported in Gfortran)',&
+                      file=__FILE__, line=__LINE__ )
+#else   
         select type (Value)
             type is (character(len=*))
-!                allocate(this%Value(size(Value,dim=1)), stat=err)
-!                this%Value = Value
-!                if(err/=0) call msg%Error(txt='Setting Value: Allocation error ('// &
-!                                          str(no_sign=.true.,n=err)//')',           &
-!                                          file=__FILE__, line=__LINE__ )
+
+
+                allocate(character(len=len(Value))::this%Value(size(Value,dim=1)), stat=err)
+                this%Value = Value
+                if(err/=0) call msg%Error(txt='Setting Value: Allocation error ('// &
+                                          str(no_sign=.true.,n=err)//')',           &
+                                          file=__FILE__, line=__LINE__ )
             class Default
                 call msg%Warn(txt='Setting value: Expected data type (character(*))',&
                               file=__FILE__, line=__LINE__ )
         end select
+#endif
     end subroutine
 
 
@@ -90,7 +97,7 @@ contains
         integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
+        ValueShape = shape(this%Value, kind=I4P)
     end function
 
 
@@ -160,9 +167,11 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
-                            ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
-                            ', Value = '//this%Value
+        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
+                        ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Value = '
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
+
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper1D_DLCA_Print

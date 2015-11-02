@@ -45,24 +45,30 @@ contains
         class(*),                          intent(IN)    :: Value(:,:,:,:,:)
         integer                                          :: err
     !-----------------------------------------------------------------
+#ifdef __GFORTRAN__ 
+        call msg%Warn(txt='Setting value: Array of deferred length allocatable arrays not supported in Gfortran)',&
+                      file=__FILE__, line=__LINE__ )
+#else   
         select type (Value)
             type is (character(len=*))
-!                allocate(this%Value(size(Value,dim=1),  &
-!                                    size(Value,dim=2),  &
-!                                    size(Value,dim=3),  &
-!                                    size(Value,dim=4),  &
-!                                    size(Value,dim=5)), &
-!                                    stat=err)
-!                this%Value = Value
-!                if(err/=0) &
-!                    call msg%Error( txt='Setting Value: Allocation error ('//&
-!                                    str(no_sign=.true.,n=err)//')', &
-!                                    file=__FILE__, line=__LINE__ )
+                allocate(character(len=len(Value))::               &
+                                    this%Value(size(Value,dim=1),  &
+                                    size(Value,dim=2),             &
+                                    size(Value,dim=3),             &
+                                    size(Value,dim=4),             &
+                                    size(Value,dim=5)),            &
+                                    stat=err)
+                this%Value = Value
+                if(err/=0) &
+                    call msg%Error( txt='Setting Value: Allocation error ('//&
+                                    str(no_sign=.true.,n=err)//')', &
+                                    file=__FILE__, line=__LINE__ )
             class Default
                 call msg%Warn( txt='Setting value: Expected data type (character(*))', &
                                file=__FILE__, line=__LINE__ )
 
         end select
+#endif
     end subroutine
 
 

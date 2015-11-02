@@ -135,6 +135,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
+                    allocate(ValueShape(Wrapper%GetDimensions()))
                     ValueShape = Wrapper%GetShape()
             end select
         endif
@@ -357,6 +358,7 @@ contains
         class(*),                             intent(INOUT) :: Value          !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -376,6 +378,7 @@ contains
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -395,6 +398,7 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -414,6 +418,7 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -433,6 +438,7 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -453,6 +459,7 @@ contains
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper          !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -491,6 +498,7 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
         class(*),                    pointer                :: Wrapper              !< Wrapper
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)

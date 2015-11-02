@@ -22,7 +22,7 @@ if(allocated(I8Parray))  deallocate(I8Parray);  allocate(I8Parray(4));  I8Parray
 if(allocated(R4Parray))  deallocate(R4Parray);  allocate(R4Parray(5));  R4Parray  = 0.4
 if(allocated(R8Parray))  deallocate(R8Parray);  allocate(R8Parray(6));  R8Parray  = 0.8
 if(allocated(Larray))    deallocate(Larray);    allocate(Larray(7));    Larray    = .true.
-if(allocated(DLCAarray)) deallocate(DLCAarray); allocate(character(len=6):: DLCAarray(8)); DLCAarray = 'DLCA'
+if(allocated(DLCAarray)) deallocate(DLCAarray); allocate(character(len=6):: DLCAarray(8)); DLCAarray = 'String'
 
 call FPL_Init()
 
@@ -39,6 +39,15 @@ call Parameters%Set(Key='R4P',  Value=R4PArray)
 call Parameters%Set(Key='R8P',  Value=R8PArray)
 call Parameters%Set(Key='L',    Value=LArray)
 call Parameters%Set(Key='DLCA', Value=DLCAArray)
+
+if(.not. Parameters%isPresent(Key='I1P'))  Stop -1
+if(.not. Parameters%isPresent(Key='I2P'))  Stop -1
+if(.not. Parameters%isPresent(Key='I4P'))  Stop -1
+if(.not. Parameters%isPresent(Key='I8P'))  Stop -1
+if(.not. Parameters%isPresent(Key='R4P'))  Stop -1
+if(.not. Parameters%isPresent(Key='R8P'))  Stop -1
+if(.not. Parameters%isPresent(Key='L'))    Stop -1
+if(.not. Parameters%isPresent(Key='DLCA')) Stop -1
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 call Parameters%Print(unit=OUTPUT_UNIT)
@@ -59,14 +68,14 @@ write(unit=OUTPUT_UNIT, fmt=*) 'DLCA isOfDataType:', Parameters%isOfDataType(Key
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Checking shapes ...'
 
-!write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'I1P Shape:',  Parameters%GetShape(Key='I1P')
-!write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'I2P Shape:',  Parameters%GetShape(Key='I2P')
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'I1P Shape:',  Parameters%GetShape(Key='I1P')
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'I2P Shape:',  Parameters%GetShape(Key='I2P')
 write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'I4P Shape:',  Parameters%GetShape(Key='I4P')
-!write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'I8P Shape:',  Parameters%GetShape(Key='I8P')
-!write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'R4P Shape:',  Parameters%GetShape(Key='R4P')
-!write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'R8P Shape:',  Parameters%GetShape(Key='R8P')
-!write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'L Shape:',    Parameters%GetShape(Key='L')
-!write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'DLCA Shape:', Parameters%GetShape(Key='DLCA')
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'I8P Shape:',  Parameters%GetShape(Key='I8P')
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'R4P Shape:',  Parameters%GetShape(Key='R4P')
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'R8P Shape:',  Parameters%GetShape(Key='R8P')
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'L Shape:',    Parameters%GetShape(Key='L')
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'DLCA Shape:', Parameters%GetShape(Key='DLCA')
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Getting Values ...'
