@@ -187,26 +187,37 @@ contains
     end function ParameterList_NewSubList
 
 
-    function ParameterList_GetSublist(this,Key) result(Sublist)
+    function ParameterList_GetSublist(this,Key, Sublist) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN)    :: this    !< Parameter List
         character(len=*),                     intent(IN)    :: Key     !< String Key
-        class(*),                              pointer      :: Value   !< Returned pointer to value
-        class(ParameterList_T),                pointer      :: Sublist !< Wrapper
+        class(ParameterList_T),      pointer, intent(INOUT) :: Sublist !< Wrapper
+        class(*),                    pointer                :: Value   !< Returned pointer to value
+        integer(I4P)                                        :: FPLerror!< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
+        nullify(Value)
         call this%Dictionary%GetPointer(Key=Key, Value=Value)
         if(associated(Value)) then
             select type(Value)
                 class is (ParameterList_t)
                     SubList => Value
+                class Default
+                    FPLerror = FPLSublistError
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Is not a sublist.', &
+                           file=__FILE__, line=__LINE__ )
             end select
+        else
+            FPLerror = FPLSublistError
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end function ParameterList_GetSubList
 
 
-    subroutine ParameterList_Set0D(this,Key,Value)
+    function ParameterList_Set0D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the Dictionary
     !-----------------------------------------------------------------
@@ -215,24 +226,28 @@ contains
         class(*),                             intent(IN)    :: Value          !< Unlimited polymorphic Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
         class(*),                   pointer                 :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set0D
+    end function ParameterList_Set0D
 
 
-    subroutine ParameterList_Set1D(this,Key,Value)
+    function ParameterList_Set1D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
@@ -241,24 +256,28 @@ contains
         class(*),                             intent(IN)    :: Value(:)       !< Unlimited polymorphic 1D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
         class(*),                   pointer                 :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set1D
+    end function ParameterList_Set1D
 
 
-    subroutine ParameterList_Set2D(this,Key,Value)
+    function ParameterList_Set2D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
@@ -267,24 +286,28 @@ contains
         class(*),                             intent(IN)    :: Value(:,:)     !< Unlimited polymorphic 2D array value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
         class(*),                   pointer                 :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set2D
+    end function ParameterList_Set2D
 
 
-    subroutine ParameterList_Set3D(this,Key,Value)
+    function ParameterList_Set3D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
@@ -293,24 +316,28 @@ contains
         class(*),                             intent(IN)    :: Value(:,:,:)   !< Unlimited Polimorphic 3D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
         class(*),                   pointer                 :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set3D
+    end function ParameterList_Set3D
 
 
-    subroutine ParameterList_Set4D(this,Key,Value)
+    function ParameterList_Set4D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
@@ -319,24 +346,28 @@ contains
         class(*),                             intent(IN)    :: Value(:,:,:,:) !< Unlimited Polymorphic 4D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory !< WrapperFactory
         class(*),                   pointer                 :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set4D
+    end function ParameterList_Set4D
 
 
-    subroutine ParameterList_Set5D(this,Key,Value)
+    function ParameterList_Set5D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
@@ -345,24 +376,28 @@ contains
         class(*),                             intent(IN)    :: Value(:,:,:,:,:) !< Unlimited Polymorphic 5D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory   !< WrapperFactory
         class(*),                   pointer                 :: Wrapper          !< Wrapper
+        integer(I4P)                                        :: FPLerror         !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set5D
+    end function ParameterList_Set5D
 
 
-    subroutine ParameterList_Set6D(this,Key,Value)
+    function ParameterList_Set6D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
@@ -371,24 +406,28 @@ contains
         class(*),                             intent(IN)    :: Value(:,:,:,:,:,:) !< Unlimited Polymorphic 5D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory     !< WrapperFactory
         class(*),                   pointer                 :: Wrapper            !< Wrapper
+        integer(I4P)                                        :: FPLerror           !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set6D
+    end function ParameterList_Set6D
 
 
-    subroutine ParameterList_Set7D(this,Key,Value)
+    function ParameterList_Set7D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Set a Key/Value pair into the DataBase
     !-----------------------------------------------------------------
@@ -397,24 +436,28 @@ contains
         class(*),                             intent(IN)    :: Value(:,:,:,:,:,:,:) !< Unlimited Polymorphic 7D array Value
         class(WrapperFactory_t),    pointer                 :: WrapperFactory       !< WrapperFactory
         class(*),                   pointer                 :: Wrapper              !< Wrapper
+        integer(I4P)                                        :: FPLerror             !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
             if(associated(Wrapper)) then
                 call this%Dictionary%Set(Key=Key,Value=Wrapper)
             else
+                FPLerror = FPLWrapperError
                 call msg%Error(txt='Setting [Key="'//Key//'"]: Nonexistent wrapper. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
             endif
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Setting [Key="'//Key//'"]: Unsupported data type. Not added to the list.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Set7D
+    end function ParameterList_Set7D
 
 
-    subroutine ParameterList_Get0D(this,Key,Value)
+    function ParameterList_Get0D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a scalar Value given the Key
     !-----------------------------------------------------------------
@@ -422,7 +465,9 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value          !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -430,17 +475,19 @@ contains
                 class is (DimensionsWrapper0D_t)
                     call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get0D
+    end function ParameterList_Get0D
 
 
-    subroutine ParameterList_Get1D(this,Key,Value)
+    function ParameterList_Get1D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a vector Value given the Key
     !-----------------------------------------------------------------
@@ -448,7 +495,9 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -456,17 +505,19 @@ contains
                 class is (DimensionsWrapper1D_t)
                 call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get1D
+    end function ParameterList_Get1D
 
 
-    subroutine ParameterList_Get2D(this,Key,Value)
+    function ParameterList_Get2D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a 2D array Value given the Key
     !-----------------------------------------------------------------
@@ -474,7 +525,9 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -482,17 +535,19 @@ contains
                 class is (DimensionsWrapper2D_t)
                     call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get2D
+    end function ParameterList_Get2D
 
 
-    subroutine ParameterList_Get3D(this,Key,Value)
+    function ParameterList_Get3D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a 3D array Value given the Key
     !-----------------------------------------------------------------
@@ -500,7 +555,9 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -508,17 +565,19 @@ contains
                 class is (DimensionsWrapper3D_t)
                     call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get3D
+    end function ParameterList_Get3D
 
 
-    subroutine ParameterList_Get4D(this,Key,Value)
+    function ParameterList_Get4D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a 4D array Value given the Key
     !-----------------------------------------------------------------
@@ -526,7 +585,9 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -534,17 +595,19 @@ contains
                 class is (DimensionsWrapper4D_t)
                     call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get4D
+    end function ParameterList_Get4D
 
 
-    subroutine ParameterList_Get5D(this,Key,Value)
+    function ParameterList_Get5D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a 5D array Value given the Key
     !-----------------------------------------------------------------
@@ -553,7 +616,9 @@ contains
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
         class(*), pointer                                   :: Node             !< Pointer to a Parameter List
         class(*),                    pointer                :: Wrapper          !< Wrapper
+        integer(I4P)                                        :: FPLerror         !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -561,17 +626,19 @@ contains
                 class is (DimensionsWrapper5D_t)
                     call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get5D
+    end function ParameterList_Get5D
 
 
-    subroutine ParameterList_Get6D(this,Key,Value)
+    function ParameterList_Get6D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a 6D array Value given the Key
     !-----------------------------------------------------------------
@@ -579,24 +646,28 @@ contains
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
         class(*),                    pointer                :: Wrapper            !< Wrapper
+        integer(I4P)                                        :: FPLerror           !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper6D_t)
                     call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get6D
+    end function ParameterList_Get6D
 
 
-    subroutine ParameterList_Get7D(this,Key,Value)
+    function ParameterList_Get7D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a 7D array Value given the Key
     !-----------------------------------------------------------------
@@ -604,7 +675,9 @@ contains
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
         class(*),                    pointer                :: Wrapper              !< Wrapper
+        integer(I4P)                                        :: FPLerror             !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -612,17 +685,19 @@ contains
                 class is (DimensionsWrapper7D_t)
                     call Wrapper%Get(Value=Value)
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_Get7D
+    end function ParameterList_Get7D
 
 
-    subroutine ParameterList_GetPointer0D(this,Key,Value)
+    function ParameterList_GetPointer0D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -630,7 +705,9 @@ contains
         character(len=*),                     intent(IN)    :: Key     !< String Key
         class(*), pointer,                    intent(INOUT) :: Value   !< Returned pointer to value
         class(*),                    pointer                :: Wrapper !< Wrapper
+        integer(I4P)                                        :: FPLerror!< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -638,17 +715,19 @@ contains
                 class is (DimensionsWrapper0D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer0D
+    end function ParameterList_GetPointer0D
 
 
-    subroutine ParameterList_GetPointer1D(this,Key,Value)
+    function ParameterList_GetPointer1D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -656,7 +735,9 @@ contains
         character(len=*),                     intent(IN)    :: Key      !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper  !< Wrapper
+        integer(I4P)                                        :: FPLerror !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -664,17 +745,19 @@ contains
                 class is (DimensionsWrapper1D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer1D
+    end function ParameterList_GetPointer1D
 
 
-    subroutine ParameterList_GetPointer2D(this,Key,Value)
+    function ParameterList_GetPointer2D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -682,7 +765,9 @@ contains
         character(len=*),                     intent(IN)    :: Key        !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper    !< Wrapper
+        integer(I4P)                                        :: FPLerror   !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -690,17 +775,19 @@ contains
                 class is (DimensionsWrapper2D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer2D
+    end function ParameterList_GetPointer2D
 
 
-    subroutine ParameterList_GetPointer3D(this,Key,Value)
+    function ParameterList_GetPointer3D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -708,7 +795,9 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:)   !< Returned pointer to value
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -716,17 +805,19 @@ contains
                 class is (DimensionsWrapper3D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer3D
+    end function ParameterList_GetPointer3D
 
 
-    subroutine ParameterList_GetPointer4D(this,Key,Value)
+    function ParameterList_GetPointer4D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -734,7 +825,9 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -742,17 +835,19 @@ contains
                 class is (DimensionsWrapper4D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer4D
+    end function ParameterList_GetPointer4D
 
 
-    subroutine ParameterList_GetPointer5D(this,Key,Value)
+    function ParameterList_GetPointer5D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -760,7 +855,9 @@ contains
         character(len=*),                     intent(IN)    :: Key              !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper          !< Wrapper
+        integer(I4P)                                        :: FPLerror         !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -768,17 +865,19 @@ contains
                 class is (DimensionsWrapper5D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer5D
+    end function ParameterList_GetPointer5D
 
 
-    subroutine ParameterList_GetPointer6D(this,Key,Value)
+    function ParameterList_GetPointer6D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -786,7 +885,9 @@ contains
         character(len=*),                     intent(IN)    :: Key                !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper            !< Wrapper
+        integer(I4P)                                        :: FPLerror           !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -794,17 +895,19 @@ contains
                 class is (DimensionsWrapper6D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer6D
+    end function ParameterList_GetPointer6D
 
 
-    subroutine ParameterList_GetPointer7D(this,Key,Value)
+    function ParameterList_GetPointer7D(this,Key,Value) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
@@ -812,7 +915,9 @@ contains
         character(len=*),                     intent(IN)    :: Key                  !< String Key
         class(*), pointer,                    intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned pointer to value
         class(*),                    pointer                :: Wrapper              !< Wrapper
+        integer(I4P)                                        :: FPLerror             !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
@@ -820,14 +925,16 @@ contains
                 class is (DimensionsWrapper7D_t)
                     Value => Wrapper%GetPointer()
                 class Default
+                    FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Dimensions do not match. Value was not modified.', &
                                file=__FILE__, line=__LINE__ )
             end select
         else
+            FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
                            file=__FILE__, line=__LINE__ )
         endif
-    end subroutine ParameterList_GetPointer7D
+    end function ParameterList_GetPointer7D
 
 
     function ParameterList_isPresent(this,Key) result(isPresent)

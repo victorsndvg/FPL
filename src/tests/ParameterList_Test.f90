@@ -18,7 +18,7 @@ do loop = 1, numiters
 do iter = 1, numiters
     if(allocated(array)) deallocate(array); allocate(array(iter)); array = iter
     write(unit=OUTPUT_UNIT, fmt='(A,$)') 'Setting: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
-    call Parameters%Set(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)), Value=array)
+    if(Parameters%Set(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)), Value=array) /= 0) stop -1
     if(Parameters%isPresent(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)))) then
         write(unit=OUTPUT_UNIT, fmt='(A)') ' Ok!'
     else
@@ -36,7 +36,7 @@ write(unit=OUTPUT_UNIT, fmt='(A)') ''
 do iter = 1, numiters
     if(allocated(array)) deallocate(array); allocate(array(iter))
     write(unit=OUTPUT_UNIT, fmt='(A,$)') 'Getting: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
-    call Parameters%Get(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)), Value=array)
+    if(Parameters%Get(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)), Value=array) /= 0) stop -1
     if(all(array == iter)) then
         write(unit=OUTPUT_UNIT, fmt='(A)') ' Ok!'
     else
