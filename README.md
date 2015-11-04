@@ -1,7 +1,7 @@
 #FPL
 Fortran Parameter List
 
-[![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=master)](https://travis-ci.org/victorsndvg/FPL.svg)
+[![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=master)](https://travis-ci.org/victorsndvg/FPL)
 
 ##What is FPL?
 
