@@ -1,11 +1,13 @@
 #FPL
-Fortran Parameter List 
+Fortran Parameter List
+
+[![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=master)](https://travis-ci.org/victorsndvg/FPL.svg)
 
 ##What is FPL?
 
-FPL can manage the parameters of your program from a single point.
+FPL is pure fortran 2003 library that can manage the parameters of your program from a single point.
 
-FPL is an extendible container of <Key, Value> pairs, where the Key is a character string and the value can be, by the default, of the following data types:
+FPL is an extendible container of ```<Key, Value>``` pairs, where the Key is a character string and the value can be, by the default, of the following data types:
 
 - Integer (kinds 1, 2, 4, 8)
 - Real (kinds 4, 8)
@@ -14,11 +16,12 @@ FPL is an extendible container of <Key, Value> pairs, where the Key is a charact
 
 Value can be a scalar or an array of any dimension.
 
+FPL stores copies of the passed data by assignment.
+
 FPL is based in [Teuchos::ParameterList](https://trilinos.org/docs/dev/packages/teuchos/doc/html/classTeuchos_1_1ParameterList.html)  of the [Trilinos](https://trilinos.org/) project.
 
 ##Getting started with FPL
 
-FPL stores copies by assignment of the passed data.
 
 ###Using FPL in your program
 
