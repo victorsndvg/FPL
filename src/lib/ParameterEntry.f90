@@ -221,7 +221,7 @@ contains
                 class is (DimensionsWrapper_t)
                     call Wrapper%Print(unit=unit)
                 class Default
-                    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) ' is not a Wrapper'
+                    write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) ' is a Parameter SubList'
             end select
         endif
         if (present(iostat)) iostat = iostatd

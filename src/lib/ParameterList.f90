@@ -1,5 +1,6 @@
 module ParameterList
 
+USE iso_fortran_env, only: OUTPUT_UNIT
 USE ErrorMessages
 USE IR_Precision
 USE ParameterEntryDictionary
@@ -1040,18 +1041,20 @@ contains
     !< Print the content of the DataBase
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN)  :: this    !< Linked List
-        integer(I4P),                         intent(IN)  :: unit    !< Logic unit.
+        integer(I4P), optional,               intent(IN)  :: unit    !< Logic unit.
         character(*), optional,               intent(IN)  :: prefix  !< Prefixing string.
         integer(I4P), optional,               intent(OUT) :: iostat  !< IO error.
         character(*), optional,               intent(OUT) :: iomsg   !< IO error message.
         character(len=:), allocatable                     :: prefd   !< Prefixing string.
+        integer(I4P)                                      :: unitd   !< Logic unit.
         integer(I4P)                                      :: iostatd !< IO error.
         character(500)                                    :: iomsgd  !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
+        unitd = OUTPUT_UNIT; if(present(unit)) unitd = unit
         write(*,fmt='(A)') prefd//' PARAMETER LIST CONTENT:'
         write(*,fmt='(A)') prefd//' -----------------------'
-        call this%Dictionary%Print(unit=unit, prefix=prefd, iostat=iostatd, iomsg=iomsgd)
+        call this%Dictionary%Print(unit=unitd, prefix=prefd, iostat=iostatd, iomsg=iomsgd)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine ParameterList_Print
