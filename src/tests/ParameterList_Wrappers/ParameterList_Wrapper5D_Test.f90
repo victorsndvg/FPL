@@ -31,14 +31,14 @@ call Parameters%Init(Size=3)
 
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Setting Values ...'
 
-call Parameters%Set(Key='I1P',  Value=I1PArray)
-call Parameters%Set(Key='I2P',  Value=I2PArray)
-call Parameters%Set(Key='I4P',  Value=I4PArray)
-call Parameters%Set(Key='I8P',  Value=I8PArray)
-call Parameters%Set(Key='R4P',  Value=R4PArray)
-call Parameters%Set(Key='R8P',  Value=R8PArray)
-call Parameters%Set(Key='L',    Value=LArray)
-call Parameters%Set(Key='DLCA', Value=DLCAArray)
+if(Parameters%Set(Key='I1P',  Value=I1PArray) /= 0) stop -1
+if(Parameters%Set(Key='I2P',  Value=I2PArray) /= 0) stop -1
+if(Parameters%Set(Key='I4P',  Value=I4PArray) /= 0) stop -1
+if(Parameters%Set(Key='I8P',  Value=I8PArray) /= 0) stop -1
+if(Parameters%Set(Key='R4P',  Value=R4PArray) /= 0) stop -1
+if(Parameters%Set(Key='R8P',  Value=R8PArray) /= 0) stop -1
+if(Parameters%Set(Key='L',    Value=LArray) /= 0) stop -1
+if(Parameters%Set(Key='DLCA', Value=DLCAArray) /= 0) stop -1
 
 if(.not. Parameters%isPresent(Key='I1P'))  Stop -1
 if(.not. Parameters%isPresent(Key='I2P'))  Stop -1
@@ -50,8 +50,8 @@ if(.not. Parameters%isPresent(Key='L'))    Stop -1
 if(.not. Parameters%isPresent(Key='DLCA')) Stop -1
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
-write(unit=OUTPUT_UNIT, fmt='(A,I4)') 'Parameter List Length: ',Parameters%Length()
 call Parameters%Print(unit=OUTPUT_UNIT)
+write(unit=OUTPUT_UNIT, fmt='(A,I4)') ' Parameter List Length: ',Parameters%Length()
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Checking Data Types ...'
@@ -80,14 +80,14 @@ write(unit=OUTPUT_UNIT, fmt='(A,6I4)') 'DLCA Shape:', Parameters%GetShape(Key='D
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Getting Values ...'
 
-call Parameters%Get(Key='I1P',  Value=I1PArray)
-call Parameters%Get(Key='I2P',  Value=I2PArray)
-call Parameters%Get(Key='I4P',  Value=I4PArray)
-call Parameters%Get(Key='I8P',  Value=I8PArray)
-call Parameters%Get(Key='R4P',  Value=R4PArray)
-call Parameters%Get(Key='R8P',  Value=R8PArray)
-call Parameters%Get(Key='L',    Value=LArray)
-call Parameters%Get(Key='DLCA', Value=DLCAArray)
+if(Parameters%Get(Key='I1P',  Value=I1PArray) /= 0) stop -1
+if(Parameters%Get(Key='I2P',  Value=I2PArray) /= 0) stop -1
+if(Parameters%Get(Key='I4P',  Value=I4PArray) /= 0) stop -1
+if(Parameters%Get(Key='I8P',  Value=I8PArray) /= 0) stop -1
+if(Parameters%Get(Key='R4P',  Value=R4PArray) /= 0) stop -1
+if(Parameters%Get(Key='R8P',  Value=R8PArray) /= 0) stop -1
+if(Parameters%Get(Key='L',    Value=LArray) /= 0) stop -1
+if(Parameters%Get(Key='DLCA', Value=DLCAArray) /= 0) stop -1
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Deleting entries ...'

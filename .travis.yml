@@ -1,0 +1,37 @@
+language: python
+
+python:
+  - 2.7
+
+sudo: false
+
+cache:
+  apt: true
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gfortran-5
+
+before_install:
+  - git submodule update --init --recursive
+
+install:
+  - export FC=/usr/bin/gfortran-5
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
+
+script:
+  - ctest -VV -T Start -T Build -T Test
+
+after_script:
+  - cd ..
+  - rm -rf build
+
+os:
+  - linux
