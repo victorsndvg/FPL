@@ -123,8 +123,12 @@ contains
         class(DimensionsWrapper1D_I8P_t), intent(INOUT) :: this
         integer                                         :: err
     !-----------------------------------------------------------------
-        if(allocated(this%Value)) deallocate(this%Value, stat=err)
-        if(err/=0) call msg%Error(txt='Freeing Value: Deallocation error ('//str(no_sign=.true.,n=err)//')')
+        if(allocated(this%Value)) then
+            deallocate(this%Value, stat=err)
+            if(err/=0) call msg%Error(txt='Freeing Value: Deallocation error ('// &
+                                      str(no_sign=.true.,n=err)//')',             &
+                                      file=__FILE__, line=__LINE__ )
+        endif
     end subroutine
 
 
