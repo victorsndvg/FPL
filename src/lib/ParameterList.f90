@@ -8,14 +8,6 @@ USE ParameterEntry
 USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper
-USE DimensionsWrapper0D
-USE DimensionsWrapper1D
-USE DimensionsWrapper2D
-USE DimensionsWrapper3D
-USE DimensionsWrapper4D
-USE DimensionsWrapper5D
-USE DimensionsWrapper6D
-USE DimensionsWrapper7D
 
 implicit none
 private

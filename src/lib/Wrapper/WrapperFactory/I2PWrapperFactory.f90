@@ -3,14 +3,6 @@ module I2PWrapperFactory
 USE WrapperFactory
 USE IR_Precision, only: I1P, I2P
 USE DimensionsWrapper
-USE DimensionsWrapper0D_I2P
-USE DimensionsWrapper1D_I2P
-USE DimensionsWrapper2D_I2P
-USE DimensionsWrapper3D_I2P
-USE DimensionsWrapper4D_I2P
-USE DimensionsWrapper5D_I2P
-USE DimensionsWrapper6D_I2P
-USE DimensionsWrapper7D_I2P
 
 implicit none
 private

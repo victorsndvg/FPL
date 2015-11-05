@@ -3,14 +3,6 @@ module DLCAWrapperFactory
 USE IR_Precision, only: I1P
 USE WrapperFactory
 USE DimensionsWrapper
-USE DimensionsWrapper0D_DLCA
-USE DimensionsWrapper1D_DLCA
-USE DimensionsWrapper2D_DLCA
-USE DimensionsWrapper3D_DLCA
-USE DimensionsWrapper4D_DLCA
-USE DimensionsWrapper5D_DLCA
-USE DimensionsWrapper6D_DLCA
-USE DimensionsWrapper7D_DLCA
 
 implicit none
 private

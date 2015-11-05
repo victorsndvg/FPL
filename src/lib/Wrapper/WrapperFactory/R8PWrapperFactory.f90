@@ -3,14 +3,6 @@ module R8PWrapperFactory
 USE WrapperFactory
 USE IR_Precision, only: I1P, R8P
 USE DimensionsWrapper
-USE DimensionsWrapper0D_R8P
-USE DimensionsWrapper1D_R8P
-USE DimensionsWrapper2D_R8P
-USE DimensionsWrapper3D_R8P
-USE DimensionsWrapper4D_R8P
-USE DimensionsWrapper5D_R8P
-USE DimensionsWrapper6D_R8P
-USE DimensionsWrapper7D_R8P
 
 implicit none
 private
