@@ -1,14 +1,7 @@
 module WrapperFactoryListSingleton
 
 USE WrapperFactoryList
-USE DLCAWrapperFactory
-USE I1PWrapperFactory
-USE I2PWrapperFactory
-USE I4PWrapperFactory
-USE I8PWrapperFactory
-USE LWrapperFactory
-USE R4PWrapperFactory
-USE R8PWrapperFactory
+USE WrapperFactory
 
 implicit none
 private
