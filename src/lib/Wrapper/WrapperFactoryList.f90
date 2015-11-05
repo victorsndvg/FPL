@@ -1,43 +1,141 @@
 module WrapperFactoryList
 
-USE LinkedList
+USE IR_Precision, only: I4P
 USE WrapperFactory
 
 implicit none
 private
 
-    type, extends(LinkedList_t), public :: WrapperFactoryList_t
+    type, public :: WrapperFactoryList_t
     private
+        character(len=:), allocatable :: Key
         class(WrapperFactory_t), pointer :: Value          => null()
+        class(WrapperFactoryList_t), public, pointer  :: Next   => null()
     contains
     private
-        procedure         ::                      WrapperFactoryList_AddNode
-        procedure         ::                      WrapperFactoryList_GetFactory0D
-        procedure         ::                      WrapperFactoryList_GetFactory1D
-        procedure         ::                      WrapperFactoryList_GetFactory2D
-        procedure         ::                      WrapperFactoryList_GetFactory3D
-        procedure         ::                      WrapperFactoryList_GetFactory4D
-        procedure         ::                      WrapperFactoryList_GetFactory5D
-        procedure         ::                      WrapperFactoryList_GetFactory6D
-        procedure         ::                      WrapperFactoryList_GetFactory7D
-        procedure, public :: Free              => WrapperFactoryList_Free
-        procedure, public :: HasValue          => WrapperFactoryList_HasValue
-        procedure, public :: SetValue          => WrapperFactoryList_SetValue
-        procedure, public :: GetValue          => WrapperFactoryList_GetValue
-        procedure, public :: RemoveNode        => WrapperFactoryList_RemoveNode
-        generic,   public :: GetFactory        => WrapperFactoryList_GetFactory0D, &
-                                                  WrapperFactoryList_GetFactory1D, &
-                                                  WrapperFactoryList_GetFactory2D, &
-                                                  WrapperFactoryList_GetFactory3D, &
-                                                  WrapperFactoryList_GetFactory4D, &
-                                                  WrapperFactoryList_GetFactory5D, &
-                                                  WrapperFactoryList_GetFactory6D, &
-                                                  WrapperFactoryList_GetFactory7D
-        generic,   public :: AddNode           => WrapperFactoryList_AddNode
-        final             ::                      WrapperFactoryList_Finalize
+        procedure, public :: HasNext         => WrapperFactoryList_HasNext
+        procedure, public :: SetNext         => WrapperFactoryList_SetNext
+        procedure, public :: GetNext         => WrapperFactoryList_GetNext
+        procedure, public :: NullifyNext     => WrapperFactoryList_NullifyNext
+        procedure, public :: HasKey          => WrapperFactoryList_HasKey
+        procedure, public :: SetKey          => WrapperFactoryList_SetKey
+        procedure, public :: GetKey          => WrapperFactoryList_GetKey
+        procedure, public :: DeallocateKey   => WrapperFactoryList_DeallocateKey
+        procedure, public :: HasValue        => WrapperFactoryList_HasValue
+        procedure, public :: SetValue        => WrapperFactoryList_SetValue
+        procedure, public :: GetValue        => WrapperFactoryList_GetValue
+        procedure, public :: Free            => WrapperFactoryList_Free
+        procedure, public :: AddNode         => WrapperFactoryList_AddNode
+        procedure, public :: Print           => WrapperFactoryList_Print
+        procedure         ::                    WrapperFactoryList_GetFactory0D
+        procedure         ::                    WrapperFactoryList_GetFactory1D
+        procedure         ::                    WrapperFactoryList_GetFactory2D
+        procedure         ::                    WrapperFactoryList_GetFactory3D
+        procedure         ::                    WrapperFactoryList_GetFactory4D
+        procedure         ::                    WrapperFactoryList_GetFactory5D
+        procedure         ::                    WrapperFactoryList_GetFactory6D
+        procedure         ::                    WrapperFactoryList_GetFactory7D
+        generic,   public :: GetFactory      => WrapperFactoryList_GetFactory0D, &
+                                                WrapperFactoryList_GetFactory1D, &
+                                                WrapperFactoryList_GetFactory2D, &
+                                                WrapperFactoryList_GetFactory3D, &
+                                                WrapperFactoryList_GetFactory4D, &
+                                                WrapperFactoryList_GetFactory5D, &
+                                                WrapperFactoryList_GetFactory6D, &
+                                                WrapperFactoryList_GetFactory7D
+        final             ::                    WrapperFactoryList_Finalize
     end type WrapperFactoryList_t
 
 contains
+
+    function WrapperFactoryList_HasNext(this) result(hasNext)
+    !-----------------------------------------------------------------
+    !< Check if Next is associated for the current Node
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        logical                                 :: hasNext            !< Check if Next is associated
+    !-----------------------------------------------------------------
+        hasNext = associated(this%Next)
+    end function WrapperFactoryList_HasNext
+
+
+    subroutine WrapperFactoryList_SetNext(this, Next)
+    !-----------------------------------------------------------------
+    !< Set the pointer to the Next node
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t),         intent(INOUT) :: this    !< Wrapper Factory List 
+        class(WrapperFactoryList_t), target, intent(IN)    :: Next    !< Pointer to Next 
+    !-----------------------------------------------------------------
+        this%Next => Next
+    end subroutine WrapperFactoryList_SetNext
+
+
+    function WrapperFactoryList_GetNext(this) result(Next)
+    !-----------------------------------------------------------------
+    !< Return a pointer to the Next node
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        class(WrapperFactoryList_t), pointer    :: Next               !< Pointer to Next
+    !-----------------------------------------------------------------
+        nullify(Next)
+        if(this%HasNext()) Next => this%Next
+    end function WrapperFactoryList_GetNext
+
+
+    subroutine WrapperFactoryList_NullifyNext(this)
+    !-----------------------------------------------------------------
+    !< Nullify Next
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t), intent(INOUT) :: this            !< Wrapper Factory List 
+    !-----------------------------------------------------------------
+        nullify(this%Next)
+    end subroutine WrapperFactoryList_NullifyNext
+
+
+    function WrapperFactoryList_HasKey(this) result(hasKey)
+    !-----------------------------------------------------------------
+    !< Check if Key is allocated for the current Node
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        logical                         :: hasKey                     !< Check if Key is associated
+    !-----------------------------------------------------------------
+        hasKey = allocated(this%Key)
+    end function WrapperFactoryList_HasKey
+
+
+    subroutine WrapperFactoryList_SetKey(this, Key) 
+    !-----------------------------------------------------------------
+    !< Check if Next is associated for the current Node
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t),   intent(INOUT) :: this          !< Wrapper Factory List 
+        character(len=*),              intent(IN)    :: Key           !< Key
+    !-----------------------------------------------------------------
+        if(this%HasKey()) deallocate(this%Key)
+        allocate(this%Key, source=Key)
+    end subroutine WrapperFactoryList_SetKey
+
+
+    function WrapperFactoryList_GetKey(this) result(Key)
+    !-----------------------------------------------------------------
+    !< Check if Next is associated for the current Node
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        character(len=:), allocatable           :: Key                !< Key
+    !-----------------------------------------------------------------
+        !if(this%HasKey()) 
+        allocate(Key, source=this%Key)
+    end function WrapperFactoryList_GetKey
+
+
+    subroutine WrapperFactoryList_DeallocateKey(this)
+    !-----------------------------------------------------------------
+    !< Deallocate Key if allocated
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t), intent(INOUT) :: this            !< Wrapper Factory List 
+    !-----------------------------------------------------------------
+        if(this%HasKey()) deallocate(this%Key)
+    end subroutine WrapperFactoryList_DeallocateKey
+
 
     function WrapperFactoryList_HasValue(this) result(hasValue)
     !-----------------------------------------------------------------
@@ -54,8 +152,8 @@ contains
     !-----------------------------------------------------------------
     !< Return a concrete WrapperFactory
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(INOUT)  :: this     !< Wrapper Factory List
-        class(WrapperFactory_t), target,      intent(IN)     :: Value    !< Concrete WrapperFactory
+        class(WrapperFactoryList_t),          intent(INOUT)  :: this  !< Wrapper Factory List
+        class(WrapperFactory_t), target,      intent(IN)     :: Value !< Concrete WrapperFactory
     !-----------------------------------------------------------------
         this%Value => Value
     end subroutine WrapperFactoryList_SetValue
@@ -78,8 +176,16 @@ contains
     !< Free the list
     !-----------------------------------------------------------------
         class(WrapperFactoryList_t), intent(INOUT):: this             !< Wrapper Factory List 
+        class(WrapperFactoryList_t),  pointer     :: Next             !< Wrapper Factory List Node
     !-----------------------------------------------------------------
-        call this%LinkedList_t%Free()
+        if (this%HasNext()) then
+            Next => this%GetNext()
+            call Next%Free()
+            deallocate(Next)
+            nullify(Next)
+        endif
+        if (this%HasKey())   deallocate(this%Key)
+        nullify(this%Next)
         nullify(this%Value)
     end subroutine WrapperFactoryList_Free
 
@@ -88,7 +194,7 @@ contains
     !-----------------------------------------------------------------
     !< Finalize procedure
     !-----------------------------------------------------------------
-        type(WrapperFactoryList_t), intent(INOUT):: this             !< Wrapper Factory List 
+        type(WrapperFactoryList_t), intent(INOUT):: this              !< Wrapper Factory List 
     !-----------------------------------------------------------------
         call this%Free()
     end subroutine WrapperFactoryList_Finalize
@@ -98,7 +204,7 @@ contains
     !-----------------------------------------------------------------
     !< Add a new Node if key does not Exist
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_T),          intent(INOUT) :: this           !< Linked List
+        class(WrapperFactoryList_T),          intent(INOUT) :: this           !< Wrapper Factory List
         character(len=*),                     intent(IN)    :: Key            !< Key (unique) of the current node.
         class(WrapperFactory_t), target,      intent(IN)    :: WrapperFactory !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -126,49 +232,11 @@ contains
     end subroutine WrapperFactoryList_AddNode
 
 
-    subroutine WrapperFactoryList_RemoveNode(this, Key)
-    !-----------------------------------------------------------------
-    !< Remove an LinkedList given a Key
-    !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), target,  intent(INOUT) :: this        !< Wrapper Factory List
-        character(len=*),                     intent(IN)    :: Key         !< String Key
-        class(WrapperFactoryList_t),  pointer               :: CurrentNode !< Pointer to the current Wrapper Factory List
-        class(WrapperFactoryList_t),  pointer               :: NextNode    !< Pointer to a next Wrapper Factory List
-    !-----------------------------------------------------------------
-        CurrentNode => this
-        do while(associated(CurrentNode))
-            if (CurrentNode%HasKey()) then
-                if (CurrentNode%GetKey()==Key) then
-                    if (CurrentNode%HasNext()) then
-                        if (NextNode%HasKey()) then
-                            call CurrentNode%SetKey(Key=NextNode%GetKey())
-                        else
-                            call CurrentNode%DeallocateKey()
-                        endif
-                        if (NextNode%HasValue()) then
-                            CurrentNode%Value => NextNode%Value
-                        else
-                            deallocate(CurrentNode%Value)
-                        endif
-                        call CurrentNode%SetNext(Next=NextNode%GetNext())
-                    else
-                        call CurrentNode%DeallocateKey()
-                        nullify(CurrentNode%Value)
-                        call CurrentNode%NullifyNext()
-                    endif
-                    exit
-                endif
-            endif
-            CurrentNode => NextNode
-        enddo
-    end subroutine WrapperFactoryList_RemoveNode
-
-
     recursive function WrapperFactoryList_GetFactory0D(this, Value) result(WrapperFactory)
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),          intent(IN)  :: this            !< Linked List
+        class(WrapperFactoryList_t),          intent(IN)  :: this            !< Wrapper Factory List
         class(*),                             intent(IN)  :: Value           !< Polymorphic Mold
         class(WrapperFactory_t), pointer                  :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -190,7 +258,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Linked List
+        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Wrapper Factory List
         class(*),                         intent(IN)  :: Value(1:)       !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -212,7 +280,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Linked List
+        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Wrapper Factory List
         class(*),                         intent(IN)  :: Value(1:,1:)    !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -234,7 +302,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Linked List
+        class(WrapperFactoryList_t),      intent(IN)  :: this            !< Wrapper Factory List
         class(*),                         intent(IN)  :: Value(1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory  !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -256,7 +324,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),      intent(IN)  :: this               !< Linked List
+        class(WrapperFactoryList_t),      intent(IN)  :: this               !< Wrapper Factory List
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory     !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -278,7 +346,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),      intent(IN)  :: this                  !< Linked List
+        class(WrapperFactoryList_t),      intent(IN)  :: this                  !< Wrapper Factory List
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory        !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -300,7 +368,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),      intent(IN)  :: this                     !< Linked List
+        class(WrapperFactoryList_t),      intent(IN)  :: this                     !< Wrapper Factory List
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory           !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -322,7 +390,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a WrapperFactory given a value
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),      intent(IN)  :: this                        !< Linked List
+        class(WrapperFactoryList_t),      intent(IN)  :: this                        !< Wrapper Factory List
         class(*),                         intent(IN)  :: Value(1:,1:,1:,1:,1:,1:,1:) !< Polymorphic Mold
         class(WrapperFactory_t), pointer              :: WrapperFactory              !< Wrapper Factory
     !-----------------------------------------------------------------
@@ -338,6 +406,36 @@ contains
             endif
         endif
     end function WrapperFactoryList_GetFactory7D
+
+
+    subroutine WrapperFactoryList_Print(this, unit, prefix, iostat, iomsg)
+    !-----------------------------------------------------------------
+    !< Print the keys contained in the list
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t), target, intent(IN)  :: this      !< Wrapper Factory List
+        integer(I4P),                        intent(IN)  :: unit      !< Logic unit.
+        character(*), optional,              intent(IN)  :: prefix    !< Prefixing string.
+        integer(I4P), optional,              intent(OUT) :: iostat    !< IO error.
+        character(*), optional,              intent(OUT) :: iomsg     !< IO error message.
+        character(len=:), allocatable                    :: prefd     !< Prefixing string.
+        integer(I4P)                                     :: iostatd   !< IO error.
+        character(500)                                   :: iomsgd    !< Temporary variable for IO error message.
+        class(WrapperFactoryList_T), pointer             :: Node      !< Pointer for scanning the list.
+    !-----------------------------------------------------------------
+        prefd = '' ; if (present(prefix)) prefd = prefix
+        Node => this
+        write(*,fmt='(A)') prefd//' WRAPPER FACTORY LIST KEYS:'
+        do while(Node%HasKey())
+            write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd)prefd//'   Key = '//Node%GetKey()
+            if (Node%HasNExt()) then
+                Node => Node%GetNext()
+            else
+                exit
+            endif
+        enddo
+        if (present(iostat)) iostat = iostatd
+        if (present(iomsg))  iomsg  = iomsgd
+    end subroutine WrapperFactoryList_Print
 
 
 end module WrapperFactoryList
