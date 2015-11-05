@@ -11,7 +11,6 @@ private
         procedure(DimensionsWrapper5D_Set),            deferred :: Set
         procedure(DimensionsWrapper5D_Get),            deferred :: Get
         procedure(DimensionsWrapper5D_GetPointer),     deferred :: GetPointer
-        procedure(DimensionsWrapper5D_GetPolymorphic), deferred :: GetPolymorphic
     end type
 
     abstract interface
