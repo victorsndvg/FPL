@@ -9,7 +9,7 @@
 
 ##Compilation
 
-FPL compile with GNU Fortran compiler 5.1 (and newer versions) and Intel Fortran compiler 15.0.1 (and newer versions).
+**FPL** compile with GNU Fortran compiler 5.1 (and newer versions) and Intel Fortran compiler 15.0.1 (and newer versions).
 
 **Note:** *Due to an issue with IBM XLF 14.0.1 Fortran compiler, if you want to use this compiler use the branch XLF_workaround*
 
@@ -25,7 +25,7 @@ $ cmake ../
 $ make
 ```
 
-*To compile **FPL** under Windows use de equivalent commands*
+*To compile FPL under Windows use de equivalent commands*
 
 ##What is FPL?
 
@@ -101,6 +101,14 @@ real    :: Tolerance
 
 has_same_type = My_List%isOfDataType(Key='Tolerance', Mold=Tolerance)
 ```
+
+###Checking the shape of a parameter
+
+```fortran
+logical :: has_same_type
+integer, allocatable :: Shape
+
+Shape = My_List%Shape(Key='Tolerance')
 
 ###Working with parameter sublists
 
