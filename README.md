@@ -1,13 +1,37 @@
 #FPL
-Fortran Parameter List
+**F**ortran **P**arameter **L**ist
 
 [![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=master)](https://travis-ci.org/victorsndvg/FPL)
 
+##How to get FPL
+
+```git clone --recursive https://github.com/victorsndvg/FPL.git ```
+
+##Compilation
+
+FPL compile with GNU Fortran compiler 5.1 (and newer versions) and Intel Fortran compiler 15.0.1 (and newer versions).
+
+**Note:** *Due to an issue with IBM XLF 14.0.1 Fortran compiler, if you want to use this compiler use the branch XLF_workaround*
+
+**FPL** uses [CMake](https://cmake.org/) as a portable compilation system. 
+
+The easiest way to compile **FPL** under Linux is:
+
+```
+$ cd FPL
+$ mkdir build
+$ cd build
+$ cmake ../
+$ make
+```
+
+*To compile **FPL** under Windows use de equivalent commands*
+
 ##What is FPL?
 
-FPL is pure fortran 2003 library that can manage the parameters of your program from a single point.
+**FPL** is pure fortran 2003 library that can manage the parameters of your program from a single point.
 
-FPL is an extendible container of ```<Key, Value>``` pairs, where the Key is a character string and the value can be, by the default, of the following data types:
+**FPL** is an extendible container of ```<Key, Value>``` pairs, where the Key is a character string and the value can be, by the default, of the following data types:
 
 - Integer (kinds 1, 2, 4, 8)
 - Real (kinds 4, 8)
@@ -16,9 +40,9 @@ FPL is an extendible container of ```<Key, Value>``` pairs, where the Key is a c
 
 Value can be a scalar or an array of any dimension.
 
-FPL stores copies of the passed data by assignment.
+**FPL** stores copies of the passed data by assignment.
 
-FPL is based in [Teuchos::ParameterList](https://trilinos.org/docs/dev/packages/teuchos/doc/html/classTeuchos_1_1ParameterList.html)  of the [Trilinos](https://trilinos.org/) project.
+**FPL** is based in [Teuchos::ParameterList](https://trilinos.org/docs/dev/packages/teuchos/doc/html/classTeuchos_1_1ParameterList.html)  of the [Trilinos](https://trilinos.org/) project.
 
 ##Getting started with FPL
 
