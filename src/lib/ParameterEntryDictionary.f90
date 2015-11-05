@@ -1,14 +1,34 @@
-    !-----------------------------------------------------------------
-    ! ParameterEntryDictionary is a datatype containing a Database
-    ! array of ParameterListEntries made to store diferent Entries
-    ! depending on the hash of its Key.
-    !
-    ! This work takes as a starting point the previou work of
-    ! Stefano Zaghi (@szaghi, https://github.com/szaghi).
-    !
-    ! You can find the original source at:
-    ! https://github.com/szaghi/OFF/blob/95691ca15e6d68128ba016e40df74e42123f1c54/src/Data_Type_Hash_Table.f90
-    !-----------------------------------------------------------------
+!-----------------------------------------------------------------
+! FPL (Fortran Parameter List)
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Javier Principe and Víctor Sande.
+! All rights reserved.
+!
+! This library is free software; you can redistribute it and/or
+! modify it under the terms of the GNU Lesser General Public
+! License as published by the Free Software Foundation; either
+! version 3.0 of the License, or (at your option) any later version.
+!
+! This library is distributed in the hope that it will be useful,
+! but WITHOUT ANY WARRANTY; without even the implied warranty of
+! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+! Lesser General Public License for more details.
+!
+! You should have received a copy of the GNU Lesser General Public
+! License along with this library.
+!-----------------------------------------------------------------
+
+!-----------------------------------------------------------------
+! ParameterEntryDictionary is a datatype containing a Database
+! array of ParameterListEntries made to store diferent Entries
+! depending on the hash of its Key.
+!
+! This work takes as a starting point the previou work of
+! Stefano Zaghi (@szaghi, https://github.com/szaghi).
+!
+! You can find the original source at:
+! https://github.com/szaghi/OFF/blob/95691ca15e6d68128ba016e40df74e42123f1c54/src/Data_Type_Hash_Table.f90
+!-----------------------------------------------------------------
 
 module ParameterEntryDictionary
 

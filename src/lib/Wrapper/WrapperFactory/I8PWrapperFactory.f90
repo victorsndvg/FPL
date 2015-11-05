@@ -1,3 +1,23 @@
+!-----------------------------------------------------------------
+! FPL (Fortran Parameter List)
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Javier Principe and Víctor Sande.
+! All rights reserved.
+!
+! This library is free software; you can redistribute it and/or
+! modify it under the terms of the GNU Lesser General Public
+! License as published by the Free Software Foundation; either
+! version 3.0 of the License, or (at your option) any later version.
+!
+! This library is distributed in the hope that it will be useful,
+! but WITHOUT ANY WARRANTY; without even the implied warranty of
+! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+! Lesser General Public License for more details.
+!
+! You should have received a copy of the GNU Lesser General Public
+! License along with this library.
+!-----------------------------------------------------------------
+
 module I8PWrapperFactory
 
 USE WrapperFactory
@@ -38,7 +58,7 @@ private
         procedure, public :: hasSameType => I8PWrapperFactory_hasSameType
     end type
 
-    type(I8PWrapperFactory_t), public, target :: WrapperFactoryI8P
+    type(I8PWrapperFactory_t), public :: WrapperFactoryI8P
 
 contains
 
