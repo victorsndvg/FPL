@@ -11,7 +11,7 @@
 
 **FPL** is pure fortran 2003 library that can manage the parameters of your program from a single point.
 
-**FPL** is an extendible container of ```<Key, Value>``` pairs, where the Key is a character string and the value can be, by the default, of the following data types:
+**FPL** is an extendible container (dictionary) of ```<Key, Value>``` pairs, where the Key is a character string and the value can be, by the default, of the following data types:
 
 - Integer (kinds 1, 2, 4, 8)
 - Real (kinds 4, 8)
@@ -114,8 +114,11 @@ logical :: has_same_type
 integer, allocatable :: Shape
 
 Shape = My_List%Shape(Key='Tolerance')
+```
 
 ###Working with parameter sublists
+
+Every parameter list can recursively store other parameter sublists that have the same functionality of the original.
 
 ```fortran
 type(ParameterList_t), pointer :: Prec_List
@@ -126,7 +129,7 @@ call Prec_List%Set(Key='Type', Value='ILU')
 call Prec_List%Set(Key='Drop Tolerance', Value=1.e-3)
 ```
 
-###Checking if is a sublist parameter
+###Checking if is a parameter sublist
 
 ```fortran
 logical :: solver_defined
