@@ -11,7 +11,7 @@
 
 **FPL** is pure fortran 2003 library that can manage the parameters of your program from a single point.
 
-**FPL** is an extendible container (dictionary) of ```<Key, Value>``` pairs, where the Key is a character string and the value can be, by the default, of the following data types:
+**FPL** is an extendible container (dictionary) of ```<Key, Value>``` pairs, where the *Key* is a character string and the *Value* can be, by the default, of the following data types:
 
 - Integer (kinds 1, 2, 4, 8)
 - Real (kinds 4, 8)
@@ -111,7 +111,7 @@ has_same_type = My_List%isOfDataType(Key='Tolerance', Mold=Tolerance)
 
 ```fortran
 logical :: has_same_type
-integer, allocatable :: Shape
+integer, allocatable :: Shape(:)
 
 Shape = My_List%Shape(Key='Tolerance')
 ```
