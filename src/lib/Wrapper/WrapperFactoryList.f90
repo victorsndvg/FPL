@@ -33,37 +33,37 @@ private
         class(WrapperFactoryList_t), public, pointer  :: Next   => null()
     contains
     private
-        procedure, public :: HasNext         => WrapperFactoryList_HasNext
-        procedure, public :: SetNext         => WrapperFactoryList_SetNext
-        procedure, public :: GetNext         => WrapperFactoryList_GetNext
-        procedure, public :: NullifyNext     => WrapperFactoryList_NullifyNext
-        procedure, public :: HasKey          => WrapperFactoryList_HasKey
-        procedure, public :: SetKey          => WrapperFactoryList_SetKey
-        procedure, public :: GetKey          => WrapperFactoryList_GetKey
-        procedure, public :: DeallocateKey   => WrapperFactoryList_DeallocateKey
-        procedure, public :: HasValue        => WrapperFactoryList_HasValue
-        procedure, public :: SetValue        => WrapperFactoryList_SetValue
-        procedure, public :: GetValue        => WrapperFactoryList_GetValue
-        procedure, public :: Free            => WrapperFactoryList_Free
-        procedure, public :: AddNode         => WrapperFactoryList_AddNode
-        procedure, public :: Print           => WrapperFactoryList_Print
-        procedure         ::                    WrapperFactoryList_GetFactory0D
-        procedure         ::                    WrapperFactoryList_GetFactory1D
-        procedure         ::                    WrapperFactoryList_GetFactory2D
-        procedure         ::                    WrapperFactoryList_GetFactory3D
-        procedure         ::                    WrapperFactoryList_GetFactory4D
-        procedure         ::                    WrapperFactoryList_GetFactory5D
-        procedure         ::                    WrapperFactoryList_GetFactory6D
-        procedure         ::                    WrapperFactoryList_GetFactory7D
-        generic,   public :: GetFactory      => WrapperFactoryList_GetFactory0D, &
-                                                WrapperFactoryList_GetFactory1D, &
-                                                WrapperFactoryList_GetFactory2D, &
-                                                WrapperFactoryList_GetFactory3D, &
-                                                WrapperFactoryList_GetFactory4D, &
-                                                WrapperFactoryList_GetFactory5D, &
-                                                WrapperFactoryList_GetFactory6D, &
-                                                WrapperFactoryList_GetFactory7D
-        final             ::                    WrapperFactoryList_Finalize
+        procedure, public :: HasNext           => WrapperFactoryList_HasNext
+        procedure, public :: SetNext           => WrapperFactoryList_SetNext
+        procedure, public :: GetNext           => WrapperFactoryList_GetNext
+        procedure, public :: NullifyNext       => WrapperFactoryList_NullifyNext
+        procedure, public :: HasKey            => WrapperFactoryList_HasKey
+        procedure, public :: SetKey            => WrapperFactoryList_SetKey
+        procedure, public :: GetKey            => WrapperFactoryList_GetKey
+        procedure, public :: DeallocateKey     => WrapperFactoryList_DeallocateKey
+        procedure, public :: HasValue          => WrapperFactoryList_HasValue
+        procedure, public :: SetValue          => WrapperFactoryList_SetValue
+        procedure, public :: GetValue          => WrapperFactoryList_GetValue
+        procedure, public :: Free              => WrapperFactoryList_Free
+        procedure, public :: AddWrapperFactory => WrapperFactoryList_AddWrapperFactory
+        procedure, public :: Print             => WrapperFactoryList_Print
+        procedure         ::                      WrapperFactoryList_GetFactory0D
+        procedure         ::                      WrapperFactoryList_GetFactory1D
+        procedure         ::                      WrapperFactoryList_GetFactory2D
+        procedure         ::                      WrapperFactoryList_GetFactory3D
+        procedure         ::                      WrapperFactoryList_GetFactory4D
+        procedure         ::                      WrapperFactoryList_GetFactory5D
+        procedure         ::                      WrapperFactoryList_GetFactory6D
+        procedure         ::                      WrapperFactoryList_GetFactory7D
+        generic,   public :: GetFactory        => WrapperFactoryList_GetFactory0D, &
+                                                  WrapperFactoryList_GetFactory1D, &
+                                                  WrapperFactoryList_GetFactory2D, &
+                                                  WrapperFactoryList_GetFactory3D, &
+                                                  WrapperFactoryList_GetFactory4D, &
+                                                  WrapperFactoryList_GetFactory5D, &
+                                                  WrapperFactoryList_GetFactory6D, &
+                                                  WrapperFactoryList_GetFactory7D
+        final             ::                      WrapperFactoryList_Finalize
     end type WrapperFactoryList_t
 
 contains
@@ -220,7 +220,7 @@ contains
     end subroutine WrapperFactoryList_Finalize
 
 
-    recursive subroutine WrapperFactoryList_AddNode(this,Key, WrapperFactory)
+    recursive subroutine WrapperFactoryList_AddWrapperFactory(this,Key, WrapperFactory)
     !-----------------------------------------------------------------
     !< Add a new Node if key does not Exist
     !-----------------------------------------------------------------
@@ -234,12 +234,12 @@ contains
                     allocate(WrapperFactoryList_t::this%Next)
                     select type (Next => this%Next)
                     type is (WrapperFactoryList_t)
-                        call Next%AddNode(Key=Key, WrapperFactory=WrapperFactory)
+                        call Next%AddWrapperFactory(Key=Key, WrapperFactory=WrapperFactory)
                     end select
                 else
                     select type (Next => this%Next)
                     type is (WrapperFactoryList_t)
-                        call Next%AddNode(Key=Key, WrapperFactory=WrapperFactory)
+                        call Next%AddWrapperFactory(Key=Key, WrapperFactory=WrapperFactory)
                     end select
                 endif
             else
@@ -249,7 +249,7 @@ contains
             call this%SetKey(Key=Key)
             call this%SetValue(Value=WrapperFactory)
         endif
-    end subroutine WrapperFactoryList_AddNode
+    end subroutine WrapperFactoryList_AddWrapperFactory
 
 
     recursive function WrapperFactoryList_GetFactory0D(this, Value) result(WrapperFactory)

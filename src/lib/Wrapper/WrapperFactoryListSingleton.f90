@@ -45,14 +45,14 @@ contains
     !< Set the dimensions of the Value contained in the wrapper
     !-----------------------------------------------------------------
         ! Add some Wrapper Factories to the list
-        call TheWrapperFactoryList%AddNode(key='I1P',  WrapperFactory=WrapperFactoryI1P)
-        call TheWrapperFactoryList%AddNode(key='I2P',  WrapperFactory=WrapperFactoryI2P)
-        call TheWrapperFactoryList%AddNode(key='I4P',  WrapperFactory=WrapperFactoryI4P)
-        call TheWrapperFactoryList%AddNode(key='I8P',  WrapperFactory=WrapperFactoryI8P)
-        call TheWrapperFactoryList%AddNode(key='R4P',  WrapperFactory=WrapperFactoryR4P)
-        call TheWrapperFactoryList%AddNode(key='R8P',  WrapperFactory=WrapperFactoryR8P)
-        call TheWrapperFactoryList%AddNode(key='L',    WrapperFactory=WrapperFactoryL)
-        call TheWrapperFactoryList%AddNode(key='DLCA', WrapperFactory=WrapperFactoryDLCA)
+        call TheWrapperFactoryList%AddWrapperFactory(key='I1P',  WrapperFactory=WrapperFactoryI1P)
+        call TheWrapperFactoryList%AddWrapperFactory(key='I2P',  WrapperFactory=WrapperFactoryI2P)
+        call TheWrapperFactoryList%AddWrapperFactory(key='I4P',  WrapperFactory=WrapperFactoryI4P)
+        call TheWrapperFactoryList%AddWrapperFactory(key='I8P',  WrapperFactory=WrapperFactoryI8P)
+        call TheWrapperFactoryList%AddWrapperFactory(key='R4P',  WrapperFactory=WrapperFactoryR4P)
+        call TheWrapperFactoryList%AddWrapperFactory(key='R8P',  WrapperFactory=WrapperFactoryR8P)
+        call TheWrapperFactoryList%AddWrapperFactory(key='L',    WrapperFactory=WrapperFactoryL)
+        call TheWrapperFactoryList%AddWrapperFactory(key='DLCA', WrapperFactory=WrapperFactoryDLCA)
     end subroutine TheWrapperFactoryList_Init
 
 end module WrapperFactoryListSingleton

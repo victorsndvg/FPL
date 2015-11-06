@@ -18,14 +18,6 @@ private
         procedure(WrapperFactory_Wrap5D),              deferred :: Wrap5D
         procedure(WrapperFactory_Wrap6D),              deferred :: Wrap6D
         procedure(WrapperFactory_Wrap7D),              deferred :: Wrap7D
-        procedure(WrapperFactory_UnWrap0D),            deferred :: UnWrap0D
-        procedure(WrapperFactory_UnWrap1D),            deferred :: UnWrap1D
-        procedure(WrapperFactory_UnWrap2D),            deferred :: UnWrap2D
-        procedure(WrapperFactory_UnWrap3D),            deferred :: UnWrap3D
-        procedure(WrapperFactory_UnWrap4D),            deferred :: UnWrap4D
-        procedure(WrapperFactory_UnWrap5D),            deferred :: UnWrap5D
-        procedure(WrapperFactory_UnWrap6D),            deferred :: UnWrap6D
-        procedure(WrapperFactory_UnWrap7D),            deferred :: UnWrap7D
         procedure(WrapperFactory_hasSameType), public, deferred :: hasSameType 
         generic, public :: Wrap =>   Wrap0D, &
                                      Wrap1D, &
@@ -35,14 +27,6 @@ private
                                      Wrap5D, &
                                      Wrap6D, &
                                      Wrap7D
-        generic, public :: UnWrap => UnWrap0D, &
-                                     UnWrap1D, &
-                                     UnWrap2D, &
-                                     UnWrap3D, &
-                                     UnWrap4D, &
-                                     UnWrap5D, &
-                                     UnWrap6D, &
-                                     UnWrap7D
     end type
 
     abstract interface
