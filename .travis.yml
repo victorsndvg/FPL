@@ -28,7 +28,7 @@ before_script:
   - cmake ..
 
 script:
-  - ctest -VV -T Start -T Build -T Test
+  - ctest -VV -T Start -T Build -T Test -T Coverage
 
 after_success:
   - codecov
