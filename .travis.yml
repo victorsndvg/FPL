@@ -16,6 +16,7 @@ addons:
       - gfortran-5
 
 before_install:
+  - pip install codecov
   - git submodule update --init --recursive
 
 install:
@@ -28,6 +29,9 @@ before_script:
 
 script:
   - ctest -VV -T Start -T Build -T Test
+
+after_success:
+  - codecov
 
 after_script:
   - cd ..
