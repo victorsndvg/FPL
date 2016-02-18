@@ -6,7 +6,7 @@
 
 ##License
 
-[LGPL v3](http://www.gnu.org/licenses/lgpl-3.0.txt)
+[![License](https://img.shields.io/badge/license-GNU%20LESSER%20GENERAL%20PUBLIC%20LICENSE%20v3%2C%20LGPLv3-red.svg)](http://www.gnu.org/licenses/lgpl-3.0.txt)
 
 ##What is FPL?
 
