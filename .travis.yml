@@ -15,6 +15,8 @@ addons:
     packages:
       - gcc-5
       - gfortran-5
+      - cmake
+      - cmake-data
 
 before_install:
   - pip install codecov
@@ -22,26 +24,21 @@ before_install:
 
 install:
   - export FC=/usr/bin/gfortran-5
-  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
-  - |
-    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      CMAKE_URL="http://www.cmake.org/files/v3.3/cmake-3.3.2-Linux-x86_64.tar.gz"
-      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-      export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    else
-      brew install cmake
-    fi
+  - $FC --version
+  - cmake --version
 
 before_script:
   - mkdir build
   - cd build
-  - cmake -DCOVERAGE_COMMAND=/usr/bin/gcov-5 ..
+  - cmake ..
 
 script:
   - ctest -VV -T Start -T Build -T Test -T Coverage
 
 after_success:
-  - codecov
+  - find . -name '*.gcno' -print
+  - gcov-5 --version
+  - bash <(curl -s https://codecov.io/bash) -x $(which gcov-5)
 
 after_script:
   - cd ..
