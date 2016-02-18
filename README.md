@@ -2,6 +2,7 @@
 **F**ortran **P**arameter **L**ist
 
 [![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=master)](https://travis-ci.org/victorsndvg/FPL)
+[![codecov.io](https://codecov.io/github/victorsndvg/FPL/coverage.svg?branch=master)](https://codecov.io/github/victorsndvg/FPL?branch=master)
 
 ##License
 
