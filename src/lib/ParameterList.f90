@@ -102,6 +102,7 @@ save
                                                ParameterList_IsOfDataType5D, &
                                                ParameterList_IsOfDataType6D, &
                                                ParameterList_IsOfDataType7D
+        procedure, public :: DataSizeInBytes=> ParameterList_DataSizeInBytes
         procedure, public :: Del            => ParameterList_RemoveEntry
         procedure, public :: Init           => ParameterList_Init
         procedure, public :: GetShape       => ParameterList_GetShape
@@ -145,6 +146,7 @@ contains
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P), allocatable                           :: ValueShape(:)  !< Shape of the stored value
     !-----------------------------------------------------------------
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -242,6 +244,8 @@ contains
         integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -272,6 +276,8 @@ contains
         integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -302,6 +308,8 @@ contains
         integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -332,6 +340,8 @@ contains
         integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -362,6 +372,8 @@ contains
         integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -392,6 +404,8 @@ contains
         integer(I4P)                                        :: FPLerror         !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -422,6 +436,8 @@ contains
         integer(I4P)                                        :: FPLerror           !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -452,6 +468,8 @@ contains
         integer(I4P)                                        :: FPLerror             !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(WrapperFactory)
+        nullify(Wrapper)
         WrapperFactory => TheWrapperFactoryList%GetFactory(Value=Value)
         if(associated(WrapperFactory)) then
             Wrapper => WrapperFactory%Wrap(Value=Value)
@@ -662,6 +680,7 @@ contains
         integer(I4P)                                        :: FPLerror           !< Error flag
     !-----------------------------------------------------------------
         FPLerror = FPLSuccess
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
@@ -972,12 +991,36 @@ contains
         logical                         :: isSubList                  !< Check if is a SubList
     !-----------------------------------------------------------------
         isSubList = .false.
+        nullify(SubListPointer)
         call this%Dictionary%GetPointer(Key=Key, Value=SubListPointer)
-        select type (SubListPointer)
-            class is (ParameterList_t)
-                    isSubList =.true.
-        end select
+        if(associated(SubListPointer)) then
+            select type (SubListPointer)
+                class is (ParameterList_t)
+                        isSubList =.true.
+            end select
+        endif
     end function ParameterList_isSubList
+
+
+    function ParameterList_DataSizeInBytes(this,Key) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the data size in bytes of the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        integer(I4P)                    :: DataSizeInBytes            !< Size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        nullify(Wrapper)
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+!                    DataSizeInBytes = Wrapper%DataSizeInBytes()
+            end select
+        endif
+    end function ParameterList_DataSizeInBytes
 
 
     function ParameterList_isOfDataType0D(this,Key, Mold) result(IsOfDataType)
@@ -991,11 +1034,14 @@ contains
         logical                         :: isOfDataType               !< Check if has the same type
     !-----------------------------------------------------------------
         isOfDataType = .false.
+        nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
-        select type (Wrapper)
-            class is (DimensionsWrapper_t)
-                isOfDataType = Wrapper%isOfDataType(Mold=Mold)
-        end select
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+                    isOfDataType = Wrapper%isOfDataType(Mold=Mold)
+            end select
+        endif
     end function ParameterList_isOfDataType0D
 
 
@@ -1011,10 +1057,12 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
-        select type (Wrapper)
-            class is (DimensionsWrapper_t)
-                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1))
-        end select
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+                    isOfDataType = Wrapper%isOfDataType(Mold=Mold(1))
+            end select
+        endif
     end function ParameterList_isOfDataType1D
 
 
@@ -1030,10 +1078,12 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
-        select type (Wrapper)
-            class is (DimensionsWrapper_t)
-                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1))
-        end select
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+                    isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1))
+            end select
+        endif
     end function ParameterList_isOfDataType2D
 
 
@@ -1068,10 +1118,12 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
-        select type (Wrapper)
-            class is (DimensionsWrapper_t)
-                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1))
-        end select
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+                    isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1))
+            end select
+        endif
     end function ParameterList_isOfDataType4D
 
 
@@ -1087,10 +1139,12 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
-        select type (Wrapper)
-            class is (DimensionsWrapper_t)
-                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1))
-        end select
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+                    isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1))
+            end select
+        endif
     end function ParameterList_isOfDataType5D
 
 
@@ -1106,10 +1160,12 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
-        select type (Wrapper)
-            class is (DimensionsWrapper_t)
-                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1,1))
-        end select
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+                    isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1,1))
+            end select
+        endif
     end function ParameterList_isOfDataType6D
 
 
@@ -1125,10 +1181,12 @@ contains
     !-----------------------------------------------------------------
         isOfDataType = .false.; nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
-        select type (Wrapper)
-            class is (DimensionsWrapper_t)
-                isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1,1,1))
-        end select
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper_t)
+                    isOfDataType = Wrapper%isOfDataType(Mold=Mold(1,1,1,1,1,1,1))
+            end select
+        endif
     end function ParameterList_isOfDataType7D
 
 

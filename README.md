@@ -1,17 +1,18 @@
 #FPL
 **F**ortran **P**arameter **L**ist
 
-[![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=master)](https://travis-ci.org/victorsndvg/FPL)
+[![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=XLF_workaround)](https://travis-ci.org/victorsndvg/FPL)
+[![codecov.io](https://codecov.io/github/victorsndvg/FPL/coverage.svg?branch=XLF_workaround)](https://codecov.io/github/victorsndvg/FPL?branch=master)
 
 ##License
 
-[LGPL v3](http://www.gnu.org/licenses/lgpl-3.0.txt)
+[![License](https://img.shields.io/badge/license-GNU%20LESSER%20GENERAL%20PUBLIC%20LICENSE%20v3%2C%20LGPLv3-red.svg)](http://www.gnu.org/licenses/lgpl-3.0.txt)
 
 ##What is FPL?
 
 **FPL** is pure fortran 2003 library that can manage the parameters of your program from a single point.
 
-**FPL** is an extendible container of ```<Key, Value>``` pairs, where the Key is a character string and the value can be, by the default, of the following data types:
+**FPL** is an extendible container (dictionary) of ```<Key, Value>``` pairs, where the *Key* is a character string and the *Value* can be, by the default, of the following data types:
 
 - Integer (kinds 1, 2, 4, 8)
 - Real (kinds 4, 8)
