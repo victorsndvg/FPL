@@ -21,6 +21,7 @@
 module DimensionsWrapper6D_L
 
 USE DimensionsWrapper6D
+USE FPL_Utils
 USE IR_Precision, only: I4P, str
 USE ErrorMessages
 
@@ -36,6 +37,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_L_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_L_Print
         procedure, public :: Free           => DimensionsWrapper6D_L_Free
@@ -166,6 +168,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_L_DataSizeInBytes(this) result(DatasizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the stored data in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_L_t), intent(IN) :: this            !< Dimensions wrapper 6D
+        integer(I4P)                               :: DataSizeInBytes !< Size of the stored data in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_L_DataSizeInBytes
+
+
     function DimensionsWrapper6D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -198,6 +211,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd

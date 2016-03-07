@@ -21,7 +21,7 @@
 module DimensionsWrapper3D_DLCA
 
 USE DimensionsWrapper3D
-USE IR_Precision, only: I4P, str
+USE IR_Precision, only: I4P, str, byte_size
 USE ErrorMessages
 
 implicit none
@@ -36,6 +36,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_DLCA_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper3D_DLCA_Print
@@ -165,6 +166,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size in bytes of the stored data
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 3D
+        integer(I4P)                                  :: DataSizeInBytes !< Size of the stored data in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper3D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -197,6 +210,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
 

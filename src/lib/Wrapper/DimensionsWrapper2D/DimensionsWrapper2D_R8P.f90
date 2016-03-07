@@ -21,7 +21,7 @@
 module DimensionsWrapper2D_R8P
 
 USE DimensionsWrapper2D
-USE IR_Precision, only: I4P, R8P, str
+USE IR_Precision, only: I4P, R8P, str, byte_size
 USE ErrorMessages
 
 implicit none
@@ -36,6 +36,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_R8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_R8P_Free
         procedure, public :: Print          => DimensionsWrapper2D_R8P_Print
@@ -157,6 +158,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size in bytes of stored data
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_R8P_t), intent(IN) :: this             !< Dimensions wrapper 2D
+        integer(I4P)                                 :: DataSizeinBytes  !< Size in bytes of the stored data
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper2D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -189,6 +201,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 

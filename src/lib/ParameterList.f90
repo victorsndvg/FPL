@@ -110,6 +110,7 @@ save
                                                ParameterList_IsOfDataType5D, &
                                                ParameterList_IsOfDataType6D, &
                                                ParameterList_IsOfDataType7D
+        procedure, public :: DataSizeInBytes=> ParameterList_DataSizeInBytes
         procedure, public :: Del            => ParameterList_RemoveEntry
         procedure, public :: Init           => ParameterList_Init
         procedure, public :: GetShape       => ParameterList_GetShape
@@ -986,6 +987,24 @@ contains
                     isSubList =.true.
         end select
     end function ParameterList_isSubList
+
+
+    function ParameterList_DataSizeInBytes(this,Key) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the data size in bytes of the value associated with Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent(IN) :: this                    !< Parameter List
+        character(len=*), intent(IN)    :: Key                        !< String Key
+        class(*), pointer               :: Wrapper                    !< Wrapper
+        integer(I4P)                    :: DataSizeInBytes            !< Size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        select type (Wrapper)
+            class is (DimensionsWrapper_t)
+                DataSizeInBytes = Wrapper%DataSizeInBytes()
+        end select
+    end function ParameterList_DataSizeInBytes
 
 
     function ParameterList_isOfDataType0D(this,Key, Mold) result(IsOfDataType)

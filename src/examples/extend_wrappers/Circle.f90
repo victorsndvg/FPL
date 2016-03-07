@@ -8,10 +8,11 @@ private
         real :: Radius
     contains
     private
-        procedure         ::                  Circle_Assign
-        procedure, public :: SetRadius     => Circle_SetRadius
-        procedure, public :: GetRadius     => Circle_GetRadius
-        generic,   public :: assignment(=) => Circle_Assign
+        procedure         ::                    Circle_Assign
+        procedure, public :: SetRadius       => Circle_SetRadius
+        procedure, public :: GetRadius       => Circle_GetRadius
+        procedure, public :: DataSizeInBytes => Circle_DataSizeInBytes
+        generic,   public :: assignment(=)   => Circle_Assign
     end type Circle_t
 
 public :: Circle_t
@@ -52,5 +53,16 @@ contains
     !-----------------------------------------------------------------
         Radius = this%Radius
     end subroutine
+
+
+    function Circle_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Check if Mold and Value are of the same datatype 
+    !-----------------------------------------------------------------
+        class(Circle_t),           intent(IN) :: this             !< Circle wrapper 0D
+        integer                               :: DataSizeInBytes  !< Data size of the stored data in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 4
+    end function Circle_DataSizeInBytes
 
 end module

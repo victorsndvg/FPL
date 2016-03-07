@@ -33,9 +33,10 @@ private
         procedure, public :: SetDimensions => DimensionsWrapper_SetDimensions
         procedure, public :: GetDimensions => DimensionsWrapper_GetDimensions
         procedure, public :: Print         => DimensionsWrapper_Print
-        procedure(DimensionsWrapper_isOfDataType), public, deferred :: isOfDataType
-        procedure(DimensionsWrapper_Free),         public, deferred :: Free
-        procedure(DimensionsWrapper_GetShape),     public, deferred :: GetShape
+        procedure(DimensionsWrapper_isOfDataType),    public, deferred :: isOfDataType
+        procedure(DimensionsWrapper_DataSizeInBytes), public, deferred :: DataSizeInBytes
+        procedure(DimensionsWrapper_Free),            public, deferred :: Free
+        procedure(DimensionsWrapper_GetShape),        public, deferred :: GetShape
     end type
 
     abstract interface
@@ -49,6 +50,13 @@ private
             class(DimensionsWrapper_t), intent(IN) :: this
             class(*),                   intent(IN) :: Mold
             logical                                :: isOfDataType
+        end function
+
+        function DimensionsWrapper_DataSizeInBytes(this) result(DataSizeInBytes)
+            import DimensionsWrapper_t
+            import I4P
+            class(DimensionsWrapper_t), intent(IN) :: this
+            integer(I4P)                           :: DataSizeInBytes
         end function
 
         function DimensionsWrapper_GetShape(this) result(ValueShape)

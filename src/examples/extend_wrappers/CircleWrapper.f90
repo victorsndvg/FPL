@@ -16,6 +16,7 @@ private
         procedure, public :: Get            => CircleWrapper_Get            !< Gets the Value from the Wrapper
         procedure, public :: GetShape       => CircleWrapper_GetShape       !< Return the shape of the stored Value (0, scalar value)
         procedure, public :: GetPointer     => CircleWrapper_GetPointer     !< Return an unlimited polymorphic pointer to the Value
+        procedure, public :: DataSizeInBytes=> CircleWrapper_DataSizeInBytes!< Return the size of the stored data in bytes
         procedure, public :: isOfDataType   => CircleWrapper_isOfDataType   !< Check if the data type of a input Mold is Circle_t
         procedure, public :: Free           => CircleWrapper_Free           !< Free the Wrapper
         procedure, public :: Print          => CircleWrapper_Print          !< Print the Wrapper content
@@ -101,6 +102,17 @@ contains
                                       file=__FILE__, line=__LINE__ )
         endif
     end subroutine
+
+
+    function CircleWrapper_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Check if Mold and Value are of the same datatype 
+    !-----------------------------------------------------------------
+        class(CircleWrapper_t),           intent(IN) :: this          !< Circle wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes  !< Data size of the stored data in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = this%value%DataSizeInBytes()
+    end function CircleWrapper_DataSizeInBytes
 
 
     function CircleWrapper_isOfDataType(this, Mold) result(isOfDataType)
