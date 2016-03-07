@@ -1017,7 +1017,7 @@ contains
         if(associated(Wrapper)) then
             select type (Wrapper)
                 class is (DimensionsWrapper_t)
-!                    DataSizeInBytes = Wrapper%DataSizeInBytes()
+                    DataSizeInBytes = Wrapper%DataSizeInBytes()
             end select
         endif
     end function ParameterList_DataSizeInBytes

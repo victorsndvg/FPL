@@ -20,7 +20,8 @@
 
 module DimensionsWrapper
 
-USE IR_Precision, only: I1P, I2P, I4P, I8P, R4P, R8P, str
+USE IR_Precision, only: I1P, I2P, I4P, I8P, R4P, R8P, str, byte_size
+USE FPL_utils
 USE ErrorMessages
 
 implicit none
@@ -34,9 +35,10 @@ private
         procedure, public :: SetDimensions => DimensionsWrapper_SetDimensions
         procedure, public :: GetDimensions => DimensionsWrapper_GetDimensions
         procedure, public :: Print         => DimensionsWrapper_Print
-        procedure(DimensionsWrapper_isOfDataType), public, deferred :: isOfDataType
-        procedure(DimensionsWrapper_Free),         public, deferred :: Free
-        procedure(DimensionsWrapper_GetShape),     public, deferred :: GetShape
+        procedure(DimensionsWrapper_DataSizeInBytes), public, deferred :: DataSizeInBytes
+        procedure(DimensionsWrapper_isOfDataType),    public, deferred :: isOfDataType
+        procedure(DimensionsWrapper_Free),            public, deferred :: Free
+        procedure(DimensionsWrapper_GetShape),        public, deferred :: GetShape
     end type
 
     type, extends(DimensionsWrapper_t), abstract :: DimensionsWrapper0D_t
@@ -112,6 +114,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_DLCA_isOfDataType
         procedure, public :: Free           => DimensionsWrapper0D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper0D_DLCA_Print
@@ -127,6 +130,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_I1P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper0D_I1P_Free
         procedure, public :: Print          => DimensionsWrapper0D_I1P_Print
@@ -142,6 +146,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_I2P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper0D_I2P_Free
         procedure, public :: Print          => DimensionsWrapper0D_I2P_Print
@@ -157,6 +162,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_I4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_I4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper0D_I4P_Free
         procedure, public :: Print          => DimensionsWrapper0D_I4P_Print
@@ -172,6 +178,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_I8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper0D_I8P_Free
         procedure, public :: Print          => DimensionsWrapper0D_I8P_Print
@@ -187,6 +194,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_L_isOfDataType
         procedure, public :: Free           => DimensionsWrapper0D_L_Free
         procedure, public :: Print          => DimensionsWrapper0D_L_Print
@@ -202,6 +210,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_R4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper0D_R4P_Print
         procedure, public :: Free           => DimensionsWrapper0D_R4P_Free
@@ -217,6 +226,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper0D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper0D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_R8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper0D_R8P_Free
         procedure, public :: Print          => DimensionsWrapper0D_R8P_Print
@@ -232,6 +242,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper1D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper1D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_DLCA_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper1D_DLCA_Print
@@ -247,6 +258,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper1D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper1D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_I1P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_I1P_Free
         procedure, public :: Print          => DimensionsWrapper1D_I1P_Print
@@ -262,6 +274,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper1D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper1D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_I2P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_I2P_Free
         procedure, public :: Print          => DimensionsWrapper1D_I2P_Print
@@ -275,8 +288,9 @@ private
         procedure, public :: Set            => DimensionsWrapper1D_I4P_Set
         procedure, public :: Get            => DimensionsWrapper1D_I4P_Get
         procedure, public :: GetShape       => DimensionsWrapper1D_I4P_GetShape
-        procedure, public :: GetPolymorphic => DimensionsWrapper1D_I4P_GetPolymorphic
         procedure, public :: GetPointer     => DimensionsWrapper1D_I4P_GetPointer
+        procedure, public :: GetPolymorphic => DimensionsWrapper1D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_I4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_I4P_Free
         procedure, public :: Print          => DimensionsWrapper1D_I4P_Print
@@ -292,6 +306,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper1D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper1D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_I8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper1D_I8P_Print
         procedure, public :: Free           => DimensionsWrapper1D_I8P_Free
@@ -307,6 +322,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper1D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper1D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_L_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_L_Free
         procedure, public :: Print          => DimensionsWrapper1D_L_Print
@@ -322,6 +338,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper1D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper1D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_R4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_R4P_Free
         procedure, public :: Print          => DimensionsWrapper1D_R4P_Print
@@ -337,6 +354,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper1D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper1D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_R8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper1D_R8P_Free
         procedure, public :: Print          => DimensionsWrapper1D_R8P_Print
@@ -352,6 +370,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_DLCA_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper2D_DLCA_Print
@@ -367,6 +386,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_I1P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_I1P_Free
         procedure, public :: Print          => DimensionsWrapper2D_I1P_Print
@@ -382,6 +402,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_I2P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_I2P_Free
         procedure, public :: Print          => DimensionsWrapper2D_I2P_Print
@@ -397,6 +418,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_I4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_I4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_I4P_Free
         procedure, public :: Print          => DimensionsWrapper2D_I4P_Print
@@ -412,6 +434,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_I8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_I8P_Free
         procedure, public :: Print          => DimensionsWrapper2D_I8P_Print
@@ -427,6 +450,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_L_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_L_Free
         procedure, public :: Print          => DimensionsWrapper2D_L_Print
@@ -442,6 +466,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_R4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_R4P_Free
         procedure, public :: Print          => DimensionsWrapper2D_R4P_Print
@@ -457,6 +482,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper2D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper2D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_R8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper2D_R8P_Free
         procedure, public :: Print          => DimensionsWrapper2D_R8P_Print
@@ -472,6 +498,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_DLCA_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper3D_DLCA_Print
@@ -487,6 +514,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_I1P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_I1P_Free
         procedure, public :: Print          => DimensionsWrapper3D_I1P_Print
@@ -502,6 +530,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_I2P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_I2P_Free
         procedure, public :: Print          => DimensionsWrapper3D_I2P_Print
@@ -517,6 +546,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_I4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_I4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_I4P_Free
         procedure, public :: Print          => DimensionsWrapper3D_I4P_Print
@@ -532,6 +562,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_I8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_I8P_Free
         procedure, public :: Print          => DimensionsWrapper3D_I8P_Print
@@ -547,6 +578,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_L_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_L_Free
         procedure, public :: Print          => DimensionsWrapper3D_L_Print
@@ -562,6 +594,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_R4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_R4P_Free
         procedure, public :: Print          => DimensionsWrapper3D_R4P_Print
@@ -577,6 +610,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper3D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper3D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_R8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_R8P_Free
         procedure, public :: Print          => DimensionsWrapper3D_R8P_Print
@@ -592,6 +626,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_DLCA_isOfDataType
         procedure, public :: Print          => DimensionsWrapper4D_DLCA_Print
         procedure, public :: Free           => DimensionsWrapper4D_DLCA_Free
@@ -607,6 +642,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_I1P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper4D_I1P_Print
         procedure, public :: Free           => DimensionsWrapper4D_I1P_Free
@@ -622,6 +658,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_I2P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper4D_I2P_Print
         procedure, public :: Free           => DimensionsWrapper4D_I2P_Free
@@ -637,6 +674,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_I4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_I4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper4D_I4P_Print
         procedure, public :: Free           => DimensionsWrapper4D_I4P_Free
@@ -652,6 +690,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_I8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper4D_I8P_Print
         procedure, public :: Free           => DimensionsWrapper4D_I8P_Free
@@ -667,6 +706,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_L_isOfDataType
         procedure, public :: Print          => DimensionsWrapper4D_L_Print
         procedure, public :: Free           => DimensionsWrapper4D_L_Free
@@ -682,6 +722,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_R4P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper4D_R4P_Free
         procedure, public :: Print          => DimensionsWrapper4D_R4P_Print
@@ -697,6 +738,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper4D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper4D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper4D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper4D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper4D_R8P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper4D_R8P_Free
         procedure, public :: Print          => DimensionsWrapper4D_R8P_Print
@@ -712,6 +754,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_DLCA_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_DLCA_Print
         procedure, public :: Free           => DimensionsWrapper5D_DLCA_Free
@@ -727,6 +770,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_I1P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_I1P_Print
         procedure, public :: Free           => DimensionsWrapper5D_I1P_Free
@@ -742,6 +786,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_I2P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_I2P_Print
         procedure, public :: Free           => DimensionsWrapper5D_I2P_Free
@@ -757,6 +802,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_I4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_I4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_I4P_Print
         procedure, public :: Free           => DimensionsWrapper5D_I4P_Free
@@ -772,6 +818,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_I8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_I8P_Print
         procedure, public :: Free           => DimensionsWrapper5D_I8P_Free
@@ -787,6 +834,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_L_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_L_Print
         procedure, public :: Free           => DimensionsWrapper5D_L_Free
@@ -802,6 +850,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_R4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_R4P_Print
         procedure, public :: Free           => DimensionsWrapper5D_R4P_Free
@@ -817,6 +866,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper5D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper5D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_R8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper5D_R8P_Print
         procedure, public :: Free           => DimensionsWrapper5D_R8P_Free
@@ -832,6 +882,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_DLCA_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_DLCA_Print
         procedure, public :: Free           => DimensionsWrapper6D_DLCA_Free
@@ -847,6 +898,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_I1P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_I1P_Print
         procedure, public :: Free           => DimensionsWrapper6D_I1P_Free
@@ -862,6 +914,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_I2P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_I2P_Print
         procedure, public :: Free           => DimensionsWrapper6D_I2P_Free
@@ -877,6 +930,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_I4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_I4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_I4P_Print
         procedure, public :: Free           => DimensionsWrapper6D_I4P_Free
@@ -892,6 +946,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_I8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_I8P_Print
         procedure, public :: Free           => DimensionsWrapper6D_I8P_Free
@@ -907,6 +962,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_L_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_L_Print
         procedure, public :: Free           => DimensionsWrapper6D_L_Free
@@ -922,6 +978,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_R4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_R4P_Print
         procedure, public :: Free           => DimensionsWrapper6D_R4P_Free
@@ -937,6 +994,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper6D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper6D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper6D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper6D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper6D_R8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper6D_R8P_Print
         procedure, public :: Free           => DimensionsWrapper6D_R8P_Free
@@ -952,6 +1010,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_DLCA_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_DLCA_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_DLCA_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_DLCA_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_DLCA_Print
         procedure, public :: Free           => DimensionsWrapper7D_DLCA_Free
@@ -967,6 +1026,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_I1P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_I1P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_I1P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_I1P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_I1P_Print
         procedure, public :: Free           => DimensionsWrapper7D_I1P_Free
@@ -982,6 +1042,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_I2P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_I2P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_I2P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_I2P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_I2P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_I2P_Print
         procedure, public :: Free           => DimensionsWrapper7D_I2P_Free
@@ -997,6 +1058,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_I4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_I4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_I4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_I4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_I4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_I4P_Print
         procedure, public :: Free           => DimensionsWrapper7D_I4P_Free
@@ -1012,6 +1074,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_I8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_I8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_I8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_I8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_I8P_Print
         procedure, public :: Free           => DimensionsWrapper7D_I8P_Free
@@ -1027,6 +1090,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_L_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_L_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_L_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_L_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_L_Print
         procedure, public :: Free           => DimensionsWrapper7D_L_Free
@@ -1042,6 +1106,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_R4P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_R4P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_R4P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_R4P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_R4P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_R4P_Print
         procedure, public :: Free           => DimensionsWrapper7D_R4P_Free
@@ -1057,6 +1122,7 @@ private
         procedure, public :: GetShape       => DimensionsWrapper7D_R8P_GetShape
         procedure, public :: GetPointer     => DimensionsWrapper7D_R8P_GetPointer
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_R8P_GetPolymorphic
+        procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_R8P_isOfDataType
         procedure, public :: Print          => DimensionsWrapper7D_R8P_Print
         procedure, public :: Free           => DimensionsWrapper7D_R8P_Free
@@ -1068,6 +1134,13 @@ private
             import DimensionsWrapper_t
             class(DimensionsWrapper_t), intent(INOUT) :: this
         end subroutine
+
+        function DimensionsWrapper_DataSizeInBytes(this) result(DataSizeInBytes)
+            import DimensionsWrapper_t
+            import I4P
+            class(DimensionsWrapper_t), intent(IN) :: this
+            integer(I4P)                           :: DataSizeInBytes
+        end function
 
         function DimensionsWrapper_isOfDataType(this, Mold) result(isOfDataType)
             import DimensionsWrapper_t
@@ -1516,10 +1589,23 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//trim(this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper0D_DLCA_Print
+
+
+    function DimensionsWrapper0D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value)
+    end function DimensionsWrapper0D_DLCA_DataSizeInBytes
 
 
     function DimensionsWrapper0D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
@@ -1637,6 +1723,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper0D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value)
+    end function DimensionsWrapper0D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper0D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -1669,6 +1766,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -1774,6 +1872,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper0D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value)
+    end function DimensionsWrapper0D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper0D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -1806,6 +1915,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -1911,6 +2021,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper0D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value)
+    end function DimensionsWrapper0D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper0D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -1942,6 +2063,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -2046,6 +2168,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper0D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value)
+    end function DimensionsWrapper0D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper0D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -2078,6 +2211,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -2183,6 +2317,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper0D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                               :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value)
+    end function DimensionsWrapper0D_L_DataSizeInBytes
+
+
     function DimensionsWrapper0D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -2215,6 +2360,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//str(n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -2320,6 +2466,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper0D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value)
+    end function DimensionsWrapper0D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper0D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -2352,6 +2509,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -2457,6 +2615,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper0D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value)
+    end function DimensionsWrapper0D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper0D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -2489,6 +2658,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -2607,6 +2777,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper1D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper1D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -2639,6 +2821,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
 
@@ -2754,6 +2937,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper1D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper1D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -2786,6 +2980,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//trim(str(no_sign=.true., n=this%Value))
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -2898,6 +3093,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper1D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper1D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -2930,6 +3136,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//trim(str(no_sign=.true., n=this%Value))
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -3042,6 +3249,18 @@ contains
     end subroutine
 
 
+
+    function DimensionsWrapper1D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper1D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -3074,6 +3293,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//trim(str(no_sign=.true., n=this%Value))
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -3185,6 +3405,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper1D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper1D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -3217,6 +3448,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//trim(str(no_sign=.true., n=this%Value))
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -3328,6 +3560,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper1D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_L_DataSizeInBytes
+
+
     function DimensionsWrapper1D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -3360,6 +3603,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -3472,6 +3716,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper1D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper1D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -3504,6 +3759,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//trim(str(no_sign=.true., n=this%Value))
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -3615,6 +3871,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper1D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1))*size(this%value)
+    end function DimensionsWrapper1D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper1D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -3647,6 +3914,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                            ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                             ', Value = '//trim(str(no_sign=.true., n=this%Value))
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
@@ -3769,6 +4037,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper2D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -3801,6 +4081,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
 
@@ -3919,6 +4200,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper2D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -3951,6 +4243,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -4053,6 +4346,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper2D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -4101,6 +4405,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -4219,6 +4524,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper2D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -4251,6 +4567,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true.,n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -4368,6 +4685,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper2D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -4400,6 +4728,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -4518,6 +4847,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                               :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_L_DataSizeInBytes
+
+
     function DimensionsWrapper2D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -4550,6 +4890,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -4667,6 +5008,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper2D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -4699,6 +5051,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -4817,6 +5170,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper2D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1))*size(this%value)
+    end function DimensionsWrapper2D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper2D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -4849,6 +5213,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -4975,6 +5340,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper3D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -5007,6 +5384,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
 
@@ -5128,6 +5506,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper3D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -5160,6 +5549,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -5280,6 +5670,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper3D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -5312,6 +5713,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -5432,6 +5834,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper3D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -5464,6 +5877,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -5584,6 +5998,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper3D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -5616,6 +6041,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -5736,6 +6162,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_L_DataSizeInBytes
+
+
     function DimensionsWrapper3D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -5768,6 +6205,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -5887,6 +6325,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper3D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -5919,6 +6368,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -6038,6 +6488,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper3D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1))*size(this%value)
+    end function DimensionsWrapper3D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper3D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -6070,6 +6531,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -6198,6 +6660,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper4D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -6230,6 +6704,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
 
@@ -6352,6 +6827,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper4D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -6384,6 +6870,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -6506,6 +6993,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper4D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -6538,6 +7036,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -6660,6 +7159,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper4D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -6692,6 +7202,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -6814,6 +7325,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper4D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -6846,6 +7368,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -6968,6 +7491,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                               :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_L_DataSizeInBytes
+
+
     function DimensionsWrapper4D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -7000,6 +7534,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
 
@@ -7122,6 +7657,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper4D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -7154,6 +7700,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -7276,6 +7823,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper4D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper4D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1))*size(this%value)
+    end function DimensionsWrapper4D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper4D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -7308,6 +7866,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
 
@@ -7439,6 +7998,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper5D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -7471,6 +8042,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
         if (present(iostat)) iostat = iostatd
@@ -7596,6 +8168,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper5D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -7628,6 +8211,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -7752,6 +8336,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper5D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -7784,6 +8379,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -7907,6 +8503,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper5D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -7939,6 +8546,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -8062,6 +8670,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper5D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -8094,6 +8713,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -8218,6 +8838,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                               :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_L_DataSizeInBytes
+
+
     function DimensionsWrapper5D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -8250,6 +8881,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -8374,6 +9006,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper5D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -8406,6 +9049,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -8530,6 +9174,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper5D_r8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper5D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper5D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -8562,6 +9217,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -8694,6 +9350,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper6D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -8726,6 +9394,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
         if (present(iostat)) iostat = iostatd
@@ -8852,6 +9521,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper6D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -8884,6 +9564,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -9010,6 +9691,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper6D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -9042,6 +9734,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -9168,6 +9861,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper6D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -9200,6 +9904,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -9326,6 +10031,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper6D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -9358,6 +10074,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -9484,6 +10201,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                               :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_L_DataSizeInBytes
+
+
     function DimensionsWrapper6D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -9516,6 +10244,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -9642,6 +10371,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper6D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -9674,6 +10414,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -9800,6 +10541,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper6D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper6D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper6D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper6D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -9832,6 +10584,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -9965,6 +10718,18 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_DLCA_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_DLCA_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = 0
+        if(allocated(this%value)) DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_DLCA_DataSizeInBytes
+
+
     function DimensionsWrapper7D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -9997,6 +10762,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
         if (present(iostat)) iostat = iostatd
@@ -10124,6 +10890,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_I1P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I1P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                 :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_I1P_DataSizeInBytes
+
+
     function DimensionsWrapper7D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -10156,6 +10933,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -10283,6 +11061,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_I2P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I2P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_I2P_DataSizeInBytes
+
+
     function DimensionsWrapper7D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -10315,6 +11104,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -10442,6 +11232,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_I4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_I4P_DataSizeInBytes
+
+
     function DimensionsWrapper7D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -10474,6 +11275,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -10601,6 +11403,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_I8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_I8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_I8P_DataSizeInBytes
+
+
     function DimensionsWrapper7D_I8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -10633,6 +11446,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -10760,6 +11574,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_L_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_L_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                               :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size_logical(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_L_DataSizeInBytes
+
+
     function DimensionsWrapper7D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -10792,6 +11617,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -10919,6 +11745,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_R4P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_R4P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_R4P_DataSizeInBytes
+
+
     function DimensionsWrapper7D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -10951,6 +11788,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
@@ -11077,6 +11915,17 @@ contains
     end subroutine
 
 
+    function DimensionsWrapper7D_R8P_DataSizeInBytes(this) result(DataSizeInBytes)
+    !-----------------------------------------------------------------
+    !< Return the size of the data stored in bytes
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_R8P_t), intent(IN) :: this            !< Dimensions wrapper 0D
+        integer(I4P)                                  :: DataSizeInBytes !< Data size in bytes
+    !-----------------------------------------------------------------
+        DataSizeInBytes = byte_size(this%value(1,1,1,1,1,1,1))*size(this%value)
+    end function DimensionsWrapper7D_R8P_DataSizeInBytes
+
+
     function DimensionsWrapper7D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
@@ -11109,6 +11958,7 @@ contains
         prefd = '' ; if (present(prefix)) prefd = prefix
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
+                        ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
         write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
         if (present(iostat)) iostat = iostatd
