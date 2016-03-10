@@ -94,8 +94,9 @@ contains
                 if(all(this%GetShape() == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=this%GetShape())//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
