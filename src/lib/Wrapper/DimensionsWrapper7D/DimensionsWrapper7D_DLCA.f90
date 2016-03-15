@@ -100,14 +100,16 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_DLCA_t), intent(IN)  :: this
         class(*),                          intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                      :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
                     call msg%Warn(txt='Getting value: Wrong shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//'/='//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
                                   str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
@@ -118,16 +120,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_DLCA_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper7D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_DLCA_GetPointer(this) result(Value) 

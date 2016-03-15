@@ -59,12 +59,12 @@ private
             integer(I4P)                           :: DataSizeInBytes
         end function
 
-        function DimensionsWrapper_GetShape(this) result(ValueShape)
+        subroutine DimensionsWrapper_GetShape(this, ValueShape)
             import DimensionsWrapper_t
             import I4P
-            class(DimensionsWrapper_t), intent(IN) :: this
-            integer(I4P), allocatable              :: ValueShape(:)
-        end function
+            class(DimensionsWrapper_t), intent(IN)    :: this
+            integer(I4P), allocatable,  intent(INOUT) :: ValueShape(:)
+        end subroutine
     end interface
 
 public :: DimensionsWrapper_t

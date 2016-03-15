@@ -97,16 +97,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_I4P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_I4P_GetPointer(this) result(Value) 

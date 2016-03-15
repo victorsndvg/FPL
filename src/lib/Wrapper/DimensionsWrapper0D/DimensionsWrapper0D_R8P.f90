@@ -97,16 +97,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_R8P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_R8P_GetPointer(this) result(Value) 
@@ -161,7 +162,6 @@ contains
     function DimensionsWrapper0D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
-    !-----------------------------------------------------------------
         class(DimensionsWrapper0D_R8P_t), intent(IN) :: this          !< Dimensions wrapper 0D
         class(*),                         intent(IN) :: Mold          !< Mold for data type comparison
         logical                                      :: isOfDataType  !< Boolean flag to check if Value is of the same data type as Mold

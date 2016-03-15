@@ -87,16 +87,18 @@ contains
     !-----------------------------------------------------------------
     !< Get R4P Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_R4P_t), intent(IN)    :: this
+        class(DimensionsWrapper2D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
                     call msg%Warn(txt='Getting value: Wrong shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//'/='//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
                                   str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
@@ -107,16 +109,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper2D_R4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper2D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_R4P_GetPointer(this) result(Value) 

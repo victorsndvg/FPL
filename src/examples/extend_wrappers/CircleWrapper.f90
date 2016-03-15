@@ -65,16 +65,17 @@ contains
         end select
     end subroutine
 
-    function CircleWrapper_GetShape(this)  result(ValueShape)
+    subroutine CircleWrapper_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(CircleWrapper_t), intent(IN)  :: this
-        integer(I4P), allocatable           :: ValueShape(:)
+        class(CircleWrapper_t),    intent(IN)    :: this
+        integer(I4P), allocatable, intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(1))
         ValueShape = 0
-    end function
+    end subroutine
 
 
     function CircleWrapper_GetPointer(this) result(Value) 

@@ -13,6 +13,7 @@ real(R4P),        allocatable :: R4PArray(:,:,:,:,:,:,:)
 real(R8P),        allocatable :: R8PArray(:,:,:,:,:,:,:)
 logical,          allocatable :: LArray(:,:,:,:,:,:,:)
 character(len=:), allocatable :: DLCAarray(:,:,:,:,:,:,:)
+integer(I4P),     allocatable :: Shape(:)
 
 
 if(allocated(I1Parray))  deallocate(I1Parray);  allocate(I1Parray(2,1,1,1,1,1,2));  I1Parray  = 1
@@ -68,14 +69,22 @@ write(unit=OUTPUT_UNIT, fmt=*) 'DLCA isOfDataType:', Parameters%isOfDataType(Key
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Checking shapes ...'
 
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I1P Shape:',  Parameters%GetShape(Key='I1P')
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I2P Shape:',  Parameters%GetShape(Key='I2P')
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I4P Shape:',  Parameters%GetShape(Key='I4P')
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I8P Shape:',  Parameters%GetShape(Key='I8P')
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'R4P Shape:',  Parameters%GetShape(Key='R4P')
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'R8P Shape:',  Parameters%GetShape(Key='R8P')
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'L Shape:',    Parameters%GetShape(Key='L')
-write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'DLCA Shape:', Parameters%GetShape(Key='DLCA')
+if(Parameters%GetShape(Key='I1P',  shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I1P Shape:',  shape
+if(Parameters%GetShape(Key='I2P',  shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I2P Shape:',  shape
+if(Parameters%GetShape(Key='I4P',  shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I4P Shape:',  shape
+if(Parameters%GetShape(Key='I8P',  shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'I8P Shape:',  shape
+if(Parameters%GetShape(Key='R4P',  shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'R4P Shape:',  shape
+if(Parameters%GetShape(Key='R8P',  shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'r8P Shape:',  shape
+if(Parameters%GetShape(Key='L',    shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'L Shape:',  shape
+if(Parameters%GetShape(Key='DLCA', shape=shape) /= 0) stop -1
+write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'DLCA Shape:',  shape
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Getting Values ...'
