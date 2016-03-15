@@ -1149,12 +1149,12 @@ private
             logical                                :: isOfDataType
         end function
 
-        function DimensionsWrapper_GetShape(this) result(ValueShape)
+        subroutine DimensionsWrapper_GetShape(this, ValueShape)
             import DimensionsWrapper_t
             import I4P
-            class(DimensionsWrapper_t), intent(IN) :: this
-            integer(I4P), allocatable              :: ValueShape(:)
-        end function
+            class(DimensionsWrapper_t), intent(IN)    :: this
+            integer(I4P), allocatable,  intent(INOUT) :: ValueShape(:)
+        end subroutine
 
         subroutine DimensionsWrapper0D_Set(this, Value)
             import DimensionsWrapper0D_t
@@ -1523,16 +1523,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_DLCA_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper0D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_DLCA_GetPointer(this) result(Value) 
@@ -1673,16 +1674,17 @@ contains
         end select
     end subroutine
 
-    function DimensionsWrapper0D_I1P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_I1P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_I1P_GetPointer(this) result(Value) 
@@ -1822,16 +1824,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_I2P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_I2P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_I2P_GetPointer(this) result(Value) 
@@ -1971,16 +1974,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_I4P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_I4P_GetPointer(this) result(Value) 
@@ -2118,16 +2122,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_I8P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_I8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_I8P_GetPointer(this) result(Value) 
@@ -2267,16 +2272,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_L_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_L_t), intent(IN)  :: this
-        integer(I4P), allocatable                   :: ValueShape(:)
+        class(DimensionsWrapper0D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-1		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_L_GetPointer(this) result(Value) 
@@ -2416,16 +2422,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_R4P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_R4P_GetPointer(this) result(Value) 
@@ -2565,16 +2572,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper0D_R8P_GetShape(this)  result(ValueShape)
+    subroutine DimensionsWrapper0D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Return the shape of the Wrapper Value
     !-----------------------------------------------------------------
-        class(DimensionsWrapper0D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper0D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper0D_R8P_GetPointer(this) result(Value) 
@@ -2710,14 +2718,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_DLCA_t), intent(IN)    :: this
         class(*),                          intent(OUT) :: Value(:)
+        integer(I4P), allocatable                      :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -2727,16 +2738,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper1D_DLCA_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_DLCA_t), intent(IN) :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper1D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value, kind=I4P)
-    end function
+    end subroutine
 
 
     function DimensionsWrapper1D_DLCA_GetPointer(this) result(Value) 
@@ -2870,14 +2882,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I1P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I1P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -2887,17 +2902,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper1D_I1P_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_I1P_t), intent(IN) :: this
-        integer(I4P), allocatable                    :: ValueShape(:)
+        class(DimensionsWrapper1D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
-
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
     function DimensionsWrapper1D_I1P_GetPointer(this) result(Value) 
     !-----------------------------------------------------------------
@@ -3025,34 +3040,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I2P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
                 call msg%Warn(txt='Getting value: Expected data type (I2P)',&
                               file=__FILE__, line=__LINE__ )
-
         end select
     end subroutine
 
 
-    function DimensionsWrapper1D_I2P_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_I2P_t), intent(IN) :: this
-        integer(I4P), allocatable                    :: ValueShape(:)
+        class(DimensionsWrapper1D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper1D_I2P_GetPointer(this) result(Value) 
@@ -3182,14 +3200,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -3199,16 +3220,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper1D_I4P_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_I4P_t), intent(IN) :: this
-        integer(I4P), allocatable                    :: ValueShape(:)
+        class(DimensionsWrapper1D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper1D_I4P_GetPointer(this) result(Value) 
@@ -3338,14 +3360,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_I8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -3355,16 +3380,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper1D_I8P_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_I8P_t), intent(IN) :: this
-        integer(I4P), allocatable                    :: ValueShape(:)
+        class(DimensionsWrapper1D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper1D_I8P_GetPointer(this) result(Value) 
@@ -3493,33 +3519,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_L_t), intent(IN)  :: this
         class(*),                       intent(OUT) :: Value(:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (logical)',&
+                call msg%Warn(txt='Getting value: Expected data type (L)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper1D_L_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_L_t), intent(IN) :: this
-        integer(I4P), allocatable                  :: ValueShape(:)
+        class(DimensionsWrapper1D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper1D_L_GetPointer(this) result(Value) 
@@ -3649,14 +3679,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -3666,16 +3699,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper1D_R4P_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_R4P_t), intent(IN) :: this
-        integer(I4P), allocatable                    :: ValueShape(:)
+        class(DimensionsWrapper1D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper1D_R4P_GetPointer(this) result(Value) 
@@ -3804,33 +3838,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_R8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//&
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (R8P)',&
+                call msg%Warn(txt='Getting value: Expected data type (r8P)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper1D_R8P_GetShape(this) result(ValueShape)
+    subroutine DimensionsWrapper1D_r8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_R8P_t), intent(IN) :: this
-        integer(I4P), allocatable                    :: ValueShape(:)
+        class(DimensionsWrapper1D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
+        if(allocated(ValueShape)) deallocate(ValueShape)
 		allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper1D_R8P_GetPointer(this) result(Value) 
@@ -3968,14 +4006,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_DLCA_t), intent(IN)  :: this
         class(*),                          intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                      :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('// &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -3985,16 +4026,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper2D_DLCA_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper2D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_DLCA_GetPointer(this) result(Value) 
@@ -4131,14 +4173,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_I1P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I1P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -4148,16 +4193,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper2D_I1P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_I1P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper2D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_I1P_GetPointer(this) result(Value) 
@@ -4293,14 +4339,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_I2P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -4310,16 +4359,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper2D_I2P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_I2P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper2D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_I2P_GetPointer(this) result(Value) 
@@ -4455,14 +4505,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -4472,16 +4525,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper2D_I4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper2D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_I4P_GetPointer(this) result(Value) 
@@ -4616,14 +4670,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_I8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -4633,16 +4690,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper2D_I8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_I8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper2D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_I8P_GetPointer(this) result(Value) 
@@ -4778,33 +4836,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_L_t), intent(IN)  :: this
         class(*),                       intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (logical)',&
+                call msg%Warn(txt='Getting value: Expected data type (L)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper2D_L_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_L_t), intent(IN)  :: this
-        integer(I4P), allocatable                   :: ValueShape(:)
+        class(DimensionsWrapper2D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_L_GetPointer(this) result(Value) 
@@ -4939,33 +5001,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (R8P)',&
+                call msg%Warn(txt='Getting value: Expected data type (r4P)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper2D_R4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper2D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_R4P_GetPointer(this) result(Value) 
@@ -5101,14 +5167,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_R8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -5118,16 +5187,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper2D_R8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper2D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper2D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper2D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper2D_R8P_GetPointer(this) result(Value) 
@@ -5270,14 +5340,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_DLCA_t), intent(IN)  :: this
         class(*),                          intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -5287,16 +5360,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper3D_DLCA_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper3D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_DLCA_GetPointer(this) result(Value) 
@@ -5435,14 +5509,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_I1P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I1P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -5452,16 +5529,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper3D_I1P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_I1P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper3D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_I1P_GetPointer(this) result(Value) 
@@ -5600,14 +5678,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_I2P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -5617,16 +5698,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper3D_I2P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_I2P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper3D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_I2P_GetPointer(this) result(Value) 
@@ -5764,14 +5846,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -5781,16 +5866,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper3D_I4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper3D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_I4P_GetPointer(this) result(Value) 
@@ -5928,14 +6014,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_I8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -5945,16 +6034,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper3D_I8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_I8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper3D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_I8P_GetPointer(this) result(Value) 
@@ -6092,33 +6182,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_L_t), intent(IN)  :: this
         class(*),                       intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                   :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (logical)',&
+                call msg%Warn(txt='Getting value: Expected data type (L)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper3D_L_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_L_t), intent(IN)  :: this
-        integer(I4P), allocatable                   :: ValueShape(:)
+        class(DimensionsWrapper3D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_L_GetPointer(this) result(Value) 
@@ -6255,14 +6349,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -6272,16 +6369,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper3D_r4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper3D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_R4P_GetPointer(this) result(Value) 
@@ -6418,33 +6516,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_R8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (R4P)',&
+                call msg%Warn(txt='Getting value: Expected data type (R8P)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper3D_R8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper3D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper3D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper3D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper3D_R8P_GetPointer(this) result(Value) 
@@ -6589,14 +6691,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_DLCA_t), intent(IN)  :: this
         class(*),                          intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -6606,16 +6711,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper4D_DLCA_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper4D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_DLCA_GetPointer(this) result(Value) 
@@ -6756,14 +6862,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_I1P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I1P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -6773,16 +6882,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper4D_I1P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_I1P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper4D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_I1P_GetPointer(this) result(Value) 
@@ -6922,14 +7032,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_I2P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -6939,16 +7052,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper4D_I2P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_I2P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper4D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_I2P_GetPointer(this) result(Value) 
@@ -7088,14 +7202,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -7105,16 +7222,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper4D_I4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper4D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_I4P_GetPointer(this) result(Value) 
@@ -7253,14 +7371,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_I8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -7270,16 +7391,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper4D_I8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_I8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper4D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_I8P_GetPointer(this) result(Value) 
@@ -7420,33 +7542,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_L_t), intent(IN)   :: this
         class(*),                       intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (logical)',&
+                call msg%Warn(txt='Getting value: Expected data type (L)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper4D_L_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_L_t), intent(IN)  :: this
-        integer(I4P), allocatable                   :: ValueShape(:)
+        class(DimensionsWrapper4D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_L_GetPointer(this) result(Value) 
@@ -7586,14 +7712,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -7603,16 +7732,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper4D_R4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper4D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_R4P_GetPointer(this) result(Value) 
@@ -7752,14 +7882,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_R8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -7769,16 +7902,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper4D_R8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper4D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper4D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper4D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper4D_R8P_GetPointer(this) result(Value) 
@@ -7926,14 +8060,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_DLCA_t), intent(IN)  :: this
         class(*),                          intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -7943,16 +8080,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper5D_DLCA_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper5D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_DLCA_GetPointer(this) result(Value) 
@@ -8095,14 +8233,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_I1P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I1P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -8112,16 +8253,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper5D_I1P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_I1P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper5D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_I1P_GetPointer(this) result(Value) 
@@ -8264,14 +8406,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_I2P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -8281,16 +8426,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper5D_I2P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_I2P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper5D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_I2P_GetPointer(this) result(Value) 
@@ -8431,14 +8577,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -8448,16 +8597,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper5D_I4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper5D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_I4P_GetPointer(this) result(Value) 
@@ -8599,14 +8749,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_I8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -8616,16 +8769,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper5D_I8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_I8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper5D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_I8P_GetPointer(this) result(Value) 
@@ -8766,33 +8920,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_L_t), intent(IN)  :: this
         class(*),                       intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (logical)',&
+                call msg%Warn(txt='Getting value: Expected data type (L)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper5D_L_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_L_t), intent(IN)  :: this
-        integer(I4P), allocatable                   :: ValueShape(:)
+        class(DimensionsWrapper5D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_L_GetPointer(this) result(Value) 
@@ -8934,14 +9092,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -8951,16 +9112,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper5D_R4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper5D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_R4P_GetPointer(this) result(Value) 
@@ -9102,14 +9264,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_R8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -9119,16 +9284,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper5D_R8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper5D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper5D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper5D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper5D_R8P_GetPointer(this) result(Value) 
@@ -9277,14 +9443,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_DLCA_t), intent(IN)  :: this
         class(*),                          intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -9294,16 +9463,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper6D_DLCA_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper6D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_DLCA_GetPointer(this) result(Value) 
@@ -9448,14 +9618,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_I1P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I1P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -9465,16 +9638,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper6D_I1P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_I1P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper6D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_I1P_GetPointer(this) result(Value) 
@@ -9618,14 +9792,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_I2P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -9635,16 +9812,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper6D_I2P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_I2P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper6D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_I2P_GetPointer(this) result(Value) 
@@ -9788,14 +9966,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -9805,16 +9986,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper6D_I4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper6D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_I4P_GetPointer(this) result(Value) 
@@ -9958,14 +10140,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_I8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -9975,16 +10160,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper6D_I8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_I8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper6D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_I8P_GetPointer(this) result(Value) 
@@ -10128,33 +10314,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_L_t), intent(IN)  :: this
         class(*),                       intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (logical)',&
+                call msg%Warn(txt='Getting value: Expected data type (L)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper6D_L_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_L_t), intent(IN)  :: this
-        integer(I4P), allocatable                   :: ValueShape(:)
+        class(DimensionsWrapper6D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_L_GetPointer(this) result(Value) 
@@ -10298,14 +10488,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -10315,16 +10508,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper6D_R4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper6D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_R4P_GetPointer(this) result(Value) 
@@ -10468,14 +10662,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper6D_R8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -10485,16 +10682,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper6D_R8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper6D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper6D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper6D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper6D_R8P_GetPointer(this) result(Value) 
@@ -10644,14 +10842,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_DLCA_t), intent(IN)  :: this
         class(*),                          intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -10661,16 +10862,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_DLCA_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_DLCA_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_DLCA_t), intent(IN)  :: this
-        integer(I4P), allocatable                      :: ValueShape(:)
+        class(DimensionsWrapper7D_DLCA_t), intent(IN)    :: this
+        integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_DLCA_GetPointer(this) result(Value) 
@@ -10816,14 +11018,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_I1P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I1P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -10833,16 +11038,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_I1P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_I1P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_I1P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper7D_I1P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_I1P_GetPointer(this) result(Value) 
@@ -10987,14 +11193,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_I2P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I2P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -11004,16 +11213,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_I2P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_I2P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_I2P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper7D_I2P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_I2P_GetPointer(this) result(Value) 
@@ -11158,14 +11368,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_I4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -11175,16 +11388,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_I4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_I4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_I4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper7D_I4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_I4P_GetPointer(this) result(Value) 
@@ -11329,14 +11543,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_I8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (integer(I8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -11346,16 +11563,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_I8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_I8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_I8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper7D_I8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_I8P_GetPointer(this) result(Value) 
@@ -11500,33 +11718,37 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_L_t), intent(IN)  :: this
         class(*),                       intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (logical)
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
-                call msg%Warn(txt='Getting value: Expected data type (logical)',&
+                call msg%Warn(txt='Getting value: Expected data type (L)',&
                               file=__FILE__, line=__LINE__ )
         end select
     end subroutine
 
 
-    function DimensionsWrapper7D_L_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_L_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_L_t), intent(IN)  :: this
-        integer(I4P), allocatable                   :: ValueShape(:)
+        class(DimensionsWrapper7D_L_t), intent(IN)    :: this
+        integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_L_GetPointer(this) result(Value) 
@@ -11671,14 +11893,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_R4P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R4P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -11688,16 +11913,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_R4P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_R4P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_R4P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper7D_R4P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_R4P_GetPointer(this) result(Value) 
@@ -11841,14 +12067,17 @@ contains
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_R8P_t), intent(IN)  :: this
         class(*),                         intent(OUT) :: Value(:,:,:,:,:,:,:)
+        integer(I4P), allocatable                     :: ValueShape(:)
     !-----------------------------------------------------------------
         select type (Value)
             type is (real(R8P))
-                if(all(this%GetShape() == shape(Value))) then
+                call this%GetShape(ValueShape)
+                if(all(ValueShape == shape(Value))) then
                     Value = this%Value
                 else
-                    call msg%Warn(txt='Getting value: Expected shape ('//    &
-                                  str(no_sign=.true.,n=this%GetShape())//')',&
+                    call msg%Warn(txt='Getting value: Wrong shape ('//&
+                                  str(no_sign=.true.,n=ValueShape)//'/='//&
+                                  str(no_sign=.true.,n=shape(Value))//')',&
                                   file=__FILE__, line=__LINE__ )
                 endif
             class Default
@@ -11858,16 +12087,17 @@ contains
     end subroutine
 
 
-    function DimensionsWrapper7D_R8P_GetShape(this) result(ValueShape) 
+    subroutine DimensionsWrapper7D_R8P_GetShape(this, ValueShape)
     !-----------------------------------------------------------------
     !< Get Wrapper Value Shape
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_R8P_t), intent(IN)  :: this
-        integer(I4P), allocatable                     :: ValueShape(:)
+        class(DimensionsWrapper7D_R8P_t), intent(IN)    :: this
+        integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
-        allocate(ValueShape(this%GetDimensions()))
-        ValueShape = shape(this%Value)
-    end function
+        if(allocated(ValueShape)) deallocate(ValueShape)
+		allocate(ValueShape(this%GetDimensions()))
+        ValueShape = shape(this%Value, kind=I4P)
+    end subroutine
 
 
     function DimensionsWrapper7D_R8P_GetPointer(this) result(Value) 

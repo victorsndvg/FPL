@@ -112,9 +112,10 @@ has_same_type = My_List%isOfDataType(Key='Tolerance', Mold=Tolerance)
 
 ```fortran
 logical :: has_same_type
-integer, allocatable :: Shape
+integer, allocatable :: Shape(:)
 
-Shape = My_List%Shape(Key='Tolerance')
+FPLError = My_List%GetShape(Key='Tolerance', Shape=Shape)
+```
 
 ###Working with parameter sublists
 

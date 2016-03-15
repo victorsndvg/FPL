@@ -137,23 +137,32 @@ contains
     end subroutine ParameterList_Init
 
 
-    function ParameterList_GetShape(this,Key) result(ValueShape)
+    function ParameterList_GetShape(this,Key, Shape) result(FPLError)
     !-----------------------------------------------------------------
     !< Return a scalar Value given the Key
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN)    :: this           !< Parameter List
         character(len=*),                     intent(IN)    :: Key            !< String Key
+        integer(I4P), allocatable,            intent(INOUT) :: Shape(:)       !< Shape of the stored value
         class(*),                    pointer                :: Wrapper        !< Wrapper
-        integer(I4P), allocatable                           :: ValueShape(:)  !< Shape of the stored value
+        integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
         nullify(Wrapper)
         call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    allocate(ValueShape(Wrapper%GetDimensions()))
-                    ValueShape = Wrapper%GetShape()
+                    call Wrapper%GetShape(Shape)
+                class Default
+                    FPLerror = FPLWrapperError
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Unknown Wrapper. Shape was not modified.', &
+                           file=__FILE__, line=__LINE__ )
             end select
+        else
+            FPLerror = FPLWrapperFactoryError
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Shape was not modified.', &
+                           file=__FILE__, line=__LINE__ )
         endif
     end function ParameterList_GetShape
 
