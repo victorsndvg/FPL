@@ -33,28 +33,28 @@ private
         class(WrapperFactoryList_t), public, pointer  :: Next   => null()
     contains
     private
-        procedure, public :: HasNext           => WrapperFactoryList_HasNext
-        procedure, public :: SetNext           => WrapperFactoryList_SetNext
-        procedure, public :: GetNext           => WrapperFactoryList_GetNext
-        procedure, public :: NullifyNext       => WrapperFactoryList_NullifyNext
-        procedure, public :: HasKey            => WrapperFactoryList_HasKey
-        procedure, public :: SetKey            => WrapperFactoryList_SetKey
-        procedure, public :: GetKey            => WrapperFactoryList_GetKey
-        procedure, public :: DeallocateKey     => WrapperFactoryList_DeallocateKey
-        procedure, public :: HasValue          => WrapperFactoryList_HasValue
-        procedure, public :: SetValue          => WrapperFactoryList_SetValue
-        procedure, public :: GetValue          => WrapperFactoryList_GetValue
-        procedure, public :: Free              => WrapperFactoryList_Free
-        procedure, public :: AddWrapperFactory => WrapperFactoryList_AddWrapperFactory
-        procedure, public :: Print             => WrapperFactoryList_Print
-        procedure         ::                      WrapperFactoryList_GetFactory0D
-        procedure         ::                      WrapperFactoryList_GetFactory1D
-        procedure         ::                      WrapperFactoryList_GetFactory2D
-        procedure         ::                      WrapperFactoryList_GetFactory3D
-        procedure         ::                      WrapperFactoryList_GetFactory4D
-        procedure         ::                      WrapperFactoryList_GetFactory5D
-        procedure         ::                      WrapperFactoryList_GetFactory6D
-        procedure         ::                      WrapperFactoryList_GetFactory7D
+        procedure, non_overridable, public :: HasNext           => WrapperFactoryList_HasNext
+        procedure, non_overridable, public :: SetNext           => WrapperFactoryList_SetNext
+        procedure, non_overridable, public :: GetNext           => WrapperFactoryList_GetNext
+        procedure, non_overridable, public :: NullifyNext       => WrapperFactoryList_NullifyNext
+        procedure, non_overridable, public :: HasKey            => WrapperFactoryList_HasKey
+        procedure, non_overridable, public :: SetKey            => WrapperFactoryList_SetKey
+        procedure, non_overridable, public :: GetKey            => WrapperFactoryList_GetKey
+        procedure, non_overridable, public :: DeallocateKey     => WrapperFactoryList_DeallocateKey
+        procedure, non_overridable, public :: HasValue          => WrapperFactoryList_HasValue
+        procedure, non_overridable, public :: SetValue          => WrapperFactoryList_SetValue
+        procedure, non_overridable, public :: GetValue          => WrapperFactoryList_GetValue
+        procedure, non_overridable, public :: Free              => WrapperFactoryList_Free
+        procedure, non_overridable, public :: AddWrapperFactory => WrapperFactoryList_AddWrapperFactory
+        procedure, non_overridable, public :: Print             => WrapperFactoryList_Print
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory0D
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory1D
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory2D
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory3D
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory4D
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory5D
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory6D
+        procedure, non_overridable         ::                      WrapperFactoryList_GetFactory7D
         generic,   public :: GetFactory        => WrapperFactoryList_GetFactory0D, &
                                                   WrapperFactoryList_GetFactory1D, &
                                                   WrapperFactoryList_GetFactory2D, &

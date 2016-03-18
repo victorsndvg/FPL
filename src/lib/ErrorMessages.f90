@@ -35,9 +35,9 @@ private
     private
         character(len=5) :: prefix = '[FPL]'
     contains
-        procedure :: Print => MessageHandler_Print
-        procedure :: Warn  => MessageHandler_Warn
-        procedure :: Error => MessageHandler_Error
+        procedure, non_overridable :: Print => MessageHandler_Print
+        procedure, non_overridable :: Warn  => MessageHandler_Warn
+        procedure, non_overridable :: Error => MessageHandler_Error
     end type
 
     type(MessageHandler_t) :: msg

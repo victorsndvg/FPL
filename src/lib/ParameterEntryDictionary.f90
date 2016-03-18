@@ -47,17 +47,17 @@ private
         integer(I4P)                            :: Size = 0_I4P
     contains
     private
-        procedure         :: Hash       => ParameterEntryDictionary_Hash
-        procedure, public :: Init       => ParameterEntryDictionary_Init
-        procedure, public :: Set        => ParameterEntryDictionary_Set
-        procedure, public :: Get        => ParameterEntryDictionary_Get
-        procedure, public :: GetPointer => ParameterEntryDictionary_GetPointer
-        procedure, public :: Del        => ParameterEntryDictionary_Delete
-        procedure, public :: IsPresent  => ParameterEntryDictionary_IsPresent
-        procedure, public :: Length     => ParameterEntryDictionary_Length
-        procedure, public :: Print      => ParameterEntryDictionary_Print
-        procedure, public :: Free       => ParameterEntryDictionary_Free
-        final             ::               ParameterEntryDictionary_Finalize
+        procedure, non_overridable         :: Hash       => ParameterEntryDictionary_Hash
+        procedure, non_overridable, public :: Init       => ParameterEntryDictionary_Init
+        procedure, non_overridable, public :: Set        => ParameterEntryDictionary_Set
+        procedure, non_overridable, public :: Get        => ParameterEntryDictionary_Get
+        procedure, non_overridable, public :: GetPointer => ParameterEntryDictionary_GetPointer
+        procedure, non_overridable, public :: Del        => ParameterEntryDictionary_Delete
+        procedure, non_overridable, public :: IsPresent  => ParameterEntryDictionary_IsPresent
+        procedure, non_overridable, public :: Length     => ParameterEntryDictionary_Length
+        procedure, non_overridable, public :: Print      => ParameterEntryDictionary_Print
+        procedure, non_overridable, public :: Free       => ParameterEntryDictionary_Free
+        final                              ::               ParameterEntryDictionary_Finalize
     end type
 
 public :: ParameterEntryDictionary_t

@@ -31,21 +31,21 @@ private
         class(ParameterEntry_t), pointer :: Root => null()
     contains
     private
-        procedure         :: Init             => ParameterRootEntry_Init
-        procedure         :: HasRoot          => ParameterRootEntry_HasRoot
-        procedure         :: SetRoot          => ParameterRootEntry_SetRoot
-        procedure         :: GetRoot          => ParameterRootEntry_GetRoot
-        procedure         :: NullifyRoot      => ParameterRootEntry_NullifyRoot
-        procedure         :: DeallocateRoot   => ParameterRootEntry_DeallocateRoot
-        procedure, public :: GetEntry         => ParameterRootEntry_GetEntry
-        procedure, public :: GetPreviousEntry => ParameterRootEntry_GetPreviousEntry
-        procedure, public :: Print            => ParameterRootEntry_Print
-        procedure, public :: isPresent        => ParameterRootEntry_isPresent
-        procedure, public :: Length           => ParameterRootEntry_Length
-        procedure, public :: RemoveEntry      => ParameterRootEntry_RemoveEntry
-        procedure, public :: AddEntry         => ParameterRootEntry_AddEntry
-        procedure, public :: Free             => ParameterRootEntry_Free
-        final             ::                     ParameterRootEntry_Finalize 
+        procedure, non_overridable         :: Init             => ParameterRootEntry_Init
+        procedure, non_overridable         :: HasRoot          => ParameterRootEntry_HasRoot
+        procedure, non_overridable         :: SetRoot          => ParameterRootEntry_SetRoot
+        procedure, non_overridable         :: GetRoot          => ParameterRootEntry_GetRoot
+        procedure, non_overridable         :: NullifyRoot      => ParameterRootEntry_NullifyRoot
+        procedure, non_overridable         :: DeallocateRoot   => ParameterRootEntry_DeallocateRoot
+        procedure, non_overridable, public :: GetEntry         => ParameterRootEntry_GetEntry
+        procedure, non_overridable, public :: GetPreviousEntry => ParameterRootEntry_GetPreviousEntry
+        procedure, non_overridable, public :: Print            => ParameterRootEntry_Print
+        procedure, non_overridable, public :: isPresent        => ParameterRootEntry_isPresent
+        procedure, non_overridable, public :: Length           => ParameterRootEntry_Length
+        procedure, non_overridable, public :: RemoveEntry      => ParameterRootEntry_RemoveEntry
+        procedure, non_overridable, public :: AddEntry         => ParameterRootEntry_AddEntry
+        procedure, non_overridable, public :: Free             => ParameterRootEntry_Free
+        final                              ::                     ParameterRootEntry_Finalize 
     end type
 
 

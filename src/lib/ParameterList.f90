@@ -46,38 +46,38 @@ save
         type(ParameterEntryDictionary_t) :: Dictionary
     contains
     private
-        procedure         ::                   ParameterList_Set0D
-        procedure         ::                   ParameterList_Set1D
-        procedure         ::                   ParameterList_Set2D
-        procedure         ::                   ParameterList_Set3D
-        procedure         ::                   ParameterList_Set4D
-        procedure         ::                   ParameterList_Set5D
-        procedure         ::                   ParameterList_Set6D
-        procedure         ::                   ParameterList_Set7D
-        procedure         ::                   ParameterList_Get0D
-        procedure         ::                   ParameterList_Get1D
-        procedure         ::                   ParameterList_Get2D
-        procedure         ::                   ParameterList_Get3D
-        procedure         ::                   ParameterList_Get4D
-        procedure         ::                   ParameterList_Get5D
-        procedure         ::                   ParameterList_Get6D
-        procedure         ::                   ParameterList_Get7D
-        procedure         ::                   ParameterList_GetPointer0D
-        procedure         ::                   ParameterList_GetPointer1D
-        procedure         ::                   ParameterList_GetPointer2D
-        procedure         ::                   ParameterList_GetPointer3D
-        procedure         ::                   ParameterList_GetPointer4D
-        procedure         ::                   ParameterList_GetPointer5D
-        procedure         ::                   ParameterList_GetPointer6D
-        procedure         ::                   ParameterList_GetPointer7D
-        procedure         ::                   ParameterList_IsOfDataType0D
-        procedure         ::                   ParameterList_IsOfDataType1D
-        procedure         ::                   ParameterList_IsOfDataType2D
-        procedure         ::                   ParameterList_IsOfDataType3D
-        procedure         ::                   ParameterList_IsOfDataType4D
-        procedure         ::                   ParameterList_IsOfDataType5D
-        procedure         ::                   ParameterList_IsOfDataType6D
-        procedure         ::                   ParameterList_IsOfDataType7D
+        procedure, non_overridable         ::                   ParameterList_Set0D
+        procedure, non_overridable         ::                   ParameterList_Set1D
+        procedure, non_overridable         ::                   ParameterList_Set2D
+        procedure, non_overridable         ::                   ParameterList_Set3D
+        procedure, non_overridable         ::                   ParameterList_Set4D
+        procedure, non_overridable         ::                   ParameterList_Set5D
+        procedure, non_overridable         ::                   ParameterList_Set6D
+        procedure, non_overridable         ::                   ParameterList_Set7D
+        procedure, non_overridable         ::                   ParameterList_Get0D
+        procedure, non_overridable         ::                   ParameterList_Get1D
+        procedure, non_overridable         ::                   ParameterList_Get2D
+        procedure, non_overridable         ::                   ParameterList_Get3D
+        procedure, non_overridable         ::                   ParameterList_Get4D
+        procedure, non_overridable         ::                   ParameterList_Get5D
+        procedure, non_overridable         ::                   ParameterList_Get6D
+        procedure, non_overridable         ::                   ParameterList_Get7D
+        procedure, non_overridable         ::                   ParameterList_GetPointer0D
+        procedure, non_overridable         ::                   ParameterList_GetPointer1D
+        procedure, non_overridable         ::                   ParameterList_GetPointer2D
+        procedure, non_overridable         ::                   ParameterList_GetPointer3D
+        procedure, non_overridable         ::                   ParameterList_GetPointer4D
+        procedure, non_overridable         ::                   ParameterList_GetPointer5D
+        procedure, non_overridable         ::                   ParameterList_GetPointer6D
+        procedure, non_overridable         ::                   ParameterList_GetPointer7D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType0D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType1D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType2D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType3D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType4D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType5D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType6D
+        procedure, non_overridable         ::                   ParameterList_IsOfDataType7D
         generic,   public :: Set            => ParameterList_Set0D, &
                                                ParameterList_Set1D, &
                                                ParameterList_Set2D, &
@@ -110,17 +110,17 @@ save
                                                ParameterList_IsOfDataType5D, &
                                                ParameterList_IsOfDataType6D, &
                                                ParameterList_IsOfDataType7D
-        procedure, public :: DataSizeInBytes=> ParameterList_DataSizeInBytes
-        procedure, public :: Del            => ParameterList_RemoveEntry
-        procedure, public :: Init           => ParameterList_Init
-        procedure, public :: GetShape       => ParameterList_GetShape
-        procedure, public :: NewSubList     => ParameterList_NewSubList
-        procedure, public :: GetSubList     => ParameterList_GetSubList
-        procedure, public :: isPresent      => ParameterList_isPresent
-        procedure, public :: isSubList      => ParameterList_isSubList
-        procedure, public :: Free           => ParameterList_Free
-        procedure, public :: Print          => ParameterList_Print
-        procedure, public :: Length         => ParameterList_Length
+        procedure, non_overridable, public :: DataSizeInBytes=> ParameterList_DataSizeInBytes
+        procedure, non_overridable, public :: Del            => ParameterList_RemoveEntry
+        procedure, non_overridable, public :: Init           => ParameterList_Init
+        procedure, non_overridable, public :: GetShape       => ParameterList_GetShape
+        procedure, non_overridable, public :: NewSubList     => ParameterList_NewSubList
+        procedure, non_overridable, public :: GetSubList     => ParameterList_GetSubList
+        procedure, non_overridable, public :: isPresent      => ParameterList_isPresent
+        procedure, non_overridable, public :: isSubList      => ParameterList_isSubList
+        procedure, non_overridable, public :: Free           => ParameterList_Free
+        procedure, non_overridable, public :: Print          => ParameterList_Print
+        procedure, non_overridable, public :: Length         => ParameterList_Length
         final             ::                   ParameterList_Finalize
     end type ParameterList_t
 
