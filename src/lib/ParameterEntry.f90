@@ -33,22 +33,22 @@ private
         class(ParameterEntry_t),     pointer  :: Next   => null()
     contains
     private
-        procedure, public :: Free             => ParameterEntry_Free
-        procedure, public :: Print            => ParameterEntry_Print
-        procedure, public :: HasNext          => ParameterEntry_HasNext
-        procedure, public :: SetNext          => ParameterEntry_SetNext
-        procedure, public :: GetNext          => ParameterEntry_GetNext
-        procedure, public :: NullifyNext      => ParameterEntry_NullifyNext
-        procedure, public :: HasKey           => ParameterEntry_HasKey
-        procedure, public :: SetKey           => ParameterEntry_SetKey
-        procedure, public :: GetKey           => ParameterEntry_GetKey
-        procedure, public :: DeallocateKey    => ParameterEntry_DeallocateKey
-        procedure, public :: HasValue         => ParameterEntry_HasValue
-        procedure, public :: SetValue         => ParameterEntry_SetValue
-        procedure, public :: GetValue         => ParameterEntry_GetValue
-        procedure, public :: DeallocateValue  => ParameterEntry_DeallocateValue
-        procedure, public :: PointToValue     => ParameterEntry_PointToValue
-        final             ::                     ParameterEntry_Finalize 
+        procedure, non_overridable, public :: Free             => ParameterEntry_Free
+        procedure, non_overridable, public :: Print            => ParameterEntry_Print
+        procedure, non_overridable, public :: HasNext          => ParameterEntry_HasNext
+        procedure, non_overridable, public :: SetNext          => ParameterEntry_SetNext
+        procedure, non_overridable, public :: GetNext          => ParameterEntry_GetNext
+        procedure, non_overridable, public :: NullifyNext      => ParameterEntry_NullifyNext
+        procedure, non_overridable, public :: HasKey           => ParameterEntry_HasKey
+        procedure, non_overridable, public :: SetKey           => ParameterEntry_SetKey
+        procedure, non_overridable, public :: GetKey           => ParameterEntry_GetKey
+        procedure, non_overridable, public :: DeallocateKey    => ParameterEntry_DeallocateKey
+        procedure, non_overridable, public :: HasValue         => ParameterEntry_HasValue
+        procedure, non_overridable, public :: SetValue         => ParameterEntry_SetValue
+        procedure, non_overridable, public :: GetValue         => ParameterEntry_GetValue
+        procedure, non_overridable, public :: DeallocateValue  => ParameterEntry_DeallocateValue
+        procedure, non_overridable, public :: PointToValue     => ParameterEntry_PointToValue
+        final                              ::                     ParameterEntry_Finalize 
     end type ParameterEntry_t
 
 public :: ParameterEntry_t
