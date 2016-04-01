@@ -5,6 +5,9 @@ USE IR_Precision, only: I4P, R4P, str
 USE FPL
 
 type(ParameterList_t) :: Parameters
+type(ParameterList_t), pointer :: Sublist1
+type(ParameterList_t), pointer :: Sublist2
+type(ParameterList_t), pointer :: SubSublist1
 integer(I4P),allocatable :: array(:)
 integer :: iter, numiters, loop
 
@@ -12,7 +15,7 @@ numiters = 7
 
 call FPL_Init()
 
-call Parameters%Init(Size=3)
+call Parameters%Init(Size=13)
 
 do loop = 1, numiters
 do iter = 1, numiters

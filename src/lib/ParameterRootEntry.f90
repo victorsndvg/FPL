@@ -32,9 +32,9 @@ private
     contains
     private
         procedure, non_overridable         :: Init             => ParameterRootEntry_Init
-        procedure, non_overridable         :: HasRoot          => ParameterRootEntry_HasRoot
+        procedure, non_overridable, public :: HasRoot          => ParameterRootEntry_HasRoot
         procedure, non_overridable         :: SetRoot          => ParameterRootEntry_SetRoot
-        procedure, non_overridable         :: GetRoot          => ParameterRootEntry_GetRoot
+        procedure, non_overridable, public :: GetRoot          => ParameterRootEntry_GetRoot
         procedure, non_overridable         :: NullifyRoot      => ParameterRootEntry_NullifyRoot
         procedure, non_overridable         :: DeallocateRoot   => ParameterRootEntry_DeallocateRoot
         procedure, non_overridable, public :: GetEntry         => ParameterRootEntry_GetEntry

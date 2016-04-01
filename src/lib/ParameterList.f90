@@ -25,6 +25,7 @@ USE ErrorMessages
 USE IR_Precision
 USE ParameterEntryDictionary
 USE ParameterEntry
+USE ParametersIterator
 USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper
@@ -1243,12 +1244,27 @@ contains
         integer(I4P)                                      :: unitd   !< Logic unit.
         integer(I4P)                                      :: iostatd !< IO error.
         character(500)                                    :: iomsgd  !< Temporary variable for IO error message.
+        type(ParametersIterator_t),    pointer            :: Iterator!< Dictionary Iterator
+        type(ParameterEntry_t),        pointer            :: Entry   !< Parameter Entry
+        class(*), pointer                                 :: Value
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
         unitd = OUTPUT_UNIT; if(present(unit)) unitd = unit
-        write(*,fmt='(A)') prefd//' PARAMETER LIST CONTENT:'
-        write(*,fmt='(A)') prefd//' -----------------------'
-        call this%Dictionary%Print(unit=unitd, prefix=prefd, iostat=iostatd, iomsg=iomsgd)
+        Iterator => this%Dictionary%GetIterator()
+        do while(.not. Iterator%HasFinished())
+            Entry => Iterator%GetCurrentEntry()
+!            call Entry%Print(unit=unitd, prefix=prefd//' ['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] ', iostat=iostatd, iomsg=iomsgd)
+            Value => Entry%PointToValue()
+            select type(Value)
+                class is (DimensionsWrapper_t) 
+                    call Value%Print(unit=unitd, prefix=prefd//'['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] Key = '//Entry%GetKey()//',', iostat=iostatd, iomsg=iomsgd)
+                type is (ParameterList_t) 
+                    write(unit=unitd, fmt='(A)') prefd//'['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] Key = '//Entry%GetKey()//', Data Type = ParameterList'
+                    call Value%Print(unit=unitd, prefix=prefd//'['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] ', iostat=iostatd, iomsg=iomsgd)
+                class DEFAULT
+            end select
+            call Iterator%Next()
+        enddo
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine ParameterList_Print

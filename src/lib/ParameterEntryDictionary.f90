@@ -34,6 +34,7 @@ module ParameterEntryDictionary
 
 USE ParameterEntry
 USE ParameterRootEntry
+USE ParametersIterator
 USE IR_Precision, only: I4P, str
 
 implicit None
@@ -52,6 +53,7 @@ private
         procedure, non_overridable, public :: Set        => ParameterEntryDictionary_Set
         procedure, non_overridable, public :: Get        => ParameterEntryDictionary_Get
         procedure, non_overridable, public :: GetPointer => ParameterEntryDictionary_GetPointer
+        procedure, non_overridable, public :: GetIterator=> ParameterEntryDictionary_GetIterator
         procedure, non_overridable, public :: Del        => ParameterEntryDictionary_Delete
         procedure, non_overridable, public :: IsPresent  => ParameterEntryDictionary_IsPresent
         procedure, non_overridable, public :: Length     => ParameterEntryDictionary_Length
@@ -150,6 +152,19 @@ contains
         Entry => this%DataBase(this%Hash(Key=Key))%GetEntry(Key=Key)
         if(associated(Entry)) Value => Entry%PointToValue()
     end subroutine ParameterEntryDictionary_GetPointer
+
+
+    function ParameterEntryDictionary_GetIterator(this) result(Iterator)
+    !-----------------------------------------------------------------
+    !< Return a pointer to a Dictionary Iterator 
+    !-----------------------------------------------------------------
+        class(ParameterEntryDictionary_t),  intent(IN) :: this        !< Parameter Entry Dictionary
+        type(ParametersIterator_t), pointer            :: Iterator    !< Dictionary Iterator
+    !-----------------------------------------------------------------
+        nullify(Iterator)
+        allocate(Iterator)
+        call Iterator%Init(DataBase=this%DataBase)
+    end function ParameterEntryDictionary_GetIterator
 
 
     subroutine ParameterEntryDictionary_Delete(this, Key)
