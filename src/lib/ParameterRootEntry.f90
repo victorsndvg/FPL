@@ -21,6 +21,7 @@
 module ParameterRootEntry
 
 USE ParameterEntry
+USE ListIterator
 USE IR_Precision, only: I4P, str
 
 implicit none
@@ -28,7 +29,7 @@ private
 
     type :: ParameterRootEntry_t
     private
-        class(ParameterEntry_t), pointer :: Root => null()
+        type(ParameterEntry_t),    pointer :: Root => null()
     contains
     private
         procedure, non_overridable         :: Init             => ParameterRootEntry_Init
@@ -44,6 +45,7 @@ private
         procedure, non_overridable, public :: Length           => ParameterRootEntry_Length
         procedure, non_overridable, public :: RemoveEntry      => ParameterRootEntry_RemoveEntry
         procedure, non_overridable, public :: AddEntry         => ParameterRootEntry_AddEntry
+        procedure, non_overridable, public :: GetIterator      => ParameterRootEntry_GetIterator
         procedure, non_overridable, public :: Free             => ParameterRootEntry_Free
         final                              ::                     ParameterRootEntry_Finalize 
     end type
@@ -281,7 +283,6 @@ contains
     end function ParameterRootEntry_Length
 
 
-
     subroutine ParameterRootEntry_Free(this)
     !-----------------------------------------------------------------
     !< Free the list
@@ -298,6 +299,18 @@ contains
         enddo
     end subroutine ParameterRootEntry_Free
 
+
+    function ParameterRootEntry_GetIterator(this) result(Iterator)
+    !-----------------------------------------------------------------
+    !< Free the list
+    !-----------------------------------------------------------------
+        class(ParameterRootEntry_t),  intent(INOUT) :: this           !< Parameter Root Entry
+        class(ListIterator_t), pointer              :: Iterator       !< List iterator
+    !-----------------------------------------------------------------
+        nullify(Iterator)
+        allocate(Iterator)
+        call Iterator%Init(Root=this%Root)    
+    end function ParameterRootEntry_GetIterator
 
 
     subroutine ParameterRootEntry_Print(this, unit, prefix, iostat, iomsg)

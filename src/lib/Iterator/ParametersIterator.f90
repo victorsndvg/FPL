@@ -22,6 +22,7 @@ module ParametersIterator
 
 USE ParameterEntry
 USE ParameterRootEntry
+USE ListIterator
 USE IR_Precision, only: I4P, str
 
 implicit none
@@ -29,13 +30,13 @@ private
 
     type :: ParametersIterator_t
     private
-        type(ParameterRootEntry_t), pointer :: DataBase(:) => NULL()
-        type(ParameterEntry_t),     pointer :: Entry       => NULL()
+        type(ParameterRootEntry_t), pointer :: DataBase(:)  => NULL()
+        type(ListIterator_t),       pointer :: ListIterator => NULL()
         integer(I4P)                        :: Index       = 0
         integer(I4P)                        :: UpperBound  = 0
     contains
     private
-        procedure,         non_overridable :: SearchNextAssociatedListRoot => ParametersIterator_SearchNextAssociatedListRoot
+        procedure,         non_overridable :: NextNotEmptyListIterator => ParametersIterator_NextNotEmptyListIterator
         procedure, public, non_overridable :: Init => ParametersIterator_Init
         procedure, public, non_overridable :: Next => ParametersIterator_Next
         procedure, public, non_overridable :: HasFinished => ParametersIterator_HasFinished
@@ -58,7 +59,8 @@ contains
         this%Index      = 0
         this%UpperBound = 0
         nullify(this%DataBase)
-        nullify(this%Entry)
+        if(associated(this%ListIterator)) deallocate(this%ListIterator)
+        nullify(this%ListIterator)
     end subroutine ParametersIterator_Free
 
 
@@ -82,26 +84,31 @@ contains
     !-----------------------------------------------------------------
         call this%Free()
         this%DataBase(0:) => DataBase(:)
-        this%Index = -1
+        this%Index = 0
         this%UpperBound = size(this%DataBase)
         call this%Next()
     end subroutine ParametersIterator_Init
 
 
-    subroutine ParametersIterator_SearchNextAssociatedListRoot(this)
+    subroutine ParametersIterator_NextNotEmptyListIterator(this)
     !-----------------------------------------------------------------
     !< The iterator points to the next associated entry
     !-----------------------------------------------------------------
         class(ParametersIterator_t),     intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
-        nullify(this%Entry)
-        this%Index = this%Index + 1
-        do while(this%Index<this%UpperBound)
-            if(this%DataBase(this%Index)%HasRoot()) exit
+        if(associated(this%ListIterator)) then
+            call this%ListIterator%Free()
+            deallocate(this%ListIterator)
+            this%Index = this%Index + 1
+        endif
+        do while(this%Index < this%UpperBound)
+            if(this%DataBase(this%Index)%HasRoot()) then 
+                this%ListIterator => this%Database(this%Index)%GetIterator()
+                exit
+            endif
             this%Index = this%Index + 1
         enddo
-        if(this%Index<this%UpperBound) this%Entry => this%DataBase(this%Index)%GetRoot() 
-    end subroutine ParametersIterator_SearchNextAssociatedListRoot
+    end subroutine ParametersIterator_NextNotEmptyListIterator
 
 
     subroutine ParametersIterator_Next(this)
@@ -111,14 +118,14 @@ contains
         class(ParametersIterator_t),     intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
         if(.not. this%HasFinished()) then
-            if(associated(this%Entry)) then
-                if(this%Entry%HasNext()) then
-                    this%Entry => this%Entry%GetNext()
+            if(associated(this%ListIterator)) then
+                if(.not. this%ListIterator%HasFinished()) then
+                    call this%ListIterator%Next()
                 else
-                    call this%SearchNextAssociatedListRoot()
+                    call this%NextNotEmptyListIterator()
                 endif
             else ! First Entry
-                call this%SearchNextAssociatedListRoot()
+                call this%NextNotEmptyListIterator()
             endif 
         endif
     end subroutine ParametersIterator_Next
@@ -131,7 +138,7 @@ contains
         class(ParametersIterator_t), intent(INOUT) :: this            ! Dictionary iterator
         type(ParameterEntry_t),  pointer           :: CurrentEntry    ! Current entry
     !-----------------------------------------------------------------
-        CurrentEntry => this%Entry
+        CurrentEntry => this%ListIterator%GetCurrentEntry()
     end function ParametersIterator_GetCurrentEntry
 
 

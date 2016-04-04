@@ -1231,7 +1231,7 @@ contains
     end function ParameterList_Length
 
 
-    subroutine ParameterList_Print(this, unit, prefix, iostat, iomsg)
+    recursive subroutine ParameterList_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print the content of the DataBase
     !-----------------------------------------------------------------
@@ -1250,21 +1250,40 @@ contains
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
         unitd = OUTPUT_UNIT; if(present(unit)) unitd = unit
+        Nullify(Iterator)
         Iterator => this%Dictionary%GetIterator()
-        do while(.not. Iterator%HasFinished())
-            Entry => Iterator%GetCurrentEntry()
-!            call Entry%Print(unit=unitd, prefix=prefd//' ['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] ', iostat=iostatd, iomsg=iomsgd)
-            Value => Entry%PointToValue()
-            select type(Value)
-                class is (DimensionsWrapper_t) 
-                    call Value%Print(unit=unitd, prefix=prefd//'['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] Key = '//Entry%GetKey()//',', iostat=iostatd, iomsg=iomsgd)
-                type is (ParameterList_t) 
-                    write(unit=unitd, fmt='(A)') prefd//'['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] Key = '//Entry%GetKey()//', Data Type = ParameterList'
-                    call Value%Print(unit=unitd, prefix=prefd//'['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] ', iostat=iostatd, iomsg=iomsgd)
-                class DEFAULT
-            end select
-            call Iterator%Next()
-        enddo
+        if(associated(Iterator)) then
+            do while(.not. Iterator%HasFinished())
+                Nullify(Entry); Nullify(Value)
+                Entry => Iterator%GetCurrentEntry()
+                if(associated(Entry)) then
+                    Value => Entry%PointToValue()
+                    if(associated(Value)) then 
+                        select type(Value)
+                            class is (DimensionsWrapper_t) 
+                                call Value%Print(unit=unitd,                                                         &
+                                                 prefix=prefd//                                                      &
+                                                 '['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//']'// &
+                                                 ' Key = '//Entry%GetKey()//',',                                     &
+                                                  iostat=iostatd,                                                    &
+                                                  iomsg=iomsgd)
+                            type is (ParameterList_t) 
+                                write(unit=unitd, fmt='(A)') prefd//                                                             &
+                                                             '['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//']'// &
+                                                             ' Key = '//Entry%GetKey()//', Data Type = ParameterList'
+                                call Value%Print(unit=unitd, prefix=prefd//'['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//'] ', iostat=iostatd, iomsg=iomsgd)
+                            class DEFAULT
+                                write(unit=unitd, fmt='(A)') prefd//                                                             &
+                                                             '['//trim(str(no_sign=.true., n=Iterator%GetCurrentIndex()))//']'// &
+                                                             ' Key = '//Entry%GetKey()//', Data Type = Unknown Data Type!'
+                        end select
+                    endif
+                endif
+                call Iterator%Next()
+            enddo
+            call Iterator%Free()
+            deallocate(Iterator)
+        endif
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine ParameterList_Print
