@@ -29,8 +29,8 @@ private
     type :: ParameterEntry_t
     private
         character(len=:), allocatable         :: Key
-        class(*),                    pointer  :: Value
-        class(ParameterEntry_t),     pointer  :: Next   => null()
+        class(*),                    pointer  :: Value  => NULL()
+        class(ParameterEntry_t),     pointer  :: Next   => NULL()
     contains
     private
         procedure, non_overridable, public :: Free             => ParameterEntry_Free
