@@ -34,7 +34,6 @@ module ParameterEntryDictionary
 
 USE ParameterEntry
 USE ParameterRootEntry
-USE ParametersIterator
 USE IR_Precision, only: I4P, str
 
 implicit None
@@ -53,7 +52,7 @@ private
         procedure, non_overridable, public :: Set        => ParameterEntryDictionary_Set
         procedure, non_overridable, public :: Get        => ParameterEntryDictionary_Get
         procedure, non_overridable, public :: GetPointer => ParameterEntryDictionary_GetPointer
-        procedure, non_overridable, public :: GetIterator=> ParameterEntryDictionary_GetIterator
+        procedure, non_overridable, public :: GetDatabase=> ParameterEntryDictionary_GetDataBase
         procedure, non_overridable, public :: Del        => ParameterEntryDictionary_Delete
         procedure, non_overridable, public :: IsPresent  => ParameterEntryDictionary_IsPresent
         procedure, non_overridable, public :: Length     => ParameterEntryDictionary_Length
@@ -154,17 +153,15 @@ contains
     end subroutine ParameterEntryDictionary_GetPointer
 
 
-    function ParameterEntryDictionary_GetIterator(this) result(Iterator)
+    function ParameterEntryDictionary_GetDataBase(this) result(Database)
     !-----------------------------------------------------------------
-    !< Return a pointer to a Dictionary Iterator 
+    !< Return a pointer to a Dictionary Database
     !-----------------------------------------------------------------
-        class(ParameterEntryDictionary_t),  intent(IN) :: this        !< Parameter Entry Dictionary
-        type(ParametersIterator_t), pointer            :: Iterator    !< Dictionary Iterator
+        class(ParameterEntryDictionary_t), target, intent(IN) :: this        !< Parameter Entry Dictionary
+        type(ParameterRootEntry_t),        pointer            :: Database(:) !< Dictionary Database
     !-----------------------------------------------------------------
-        nullify(Iterator)
-        allocate(Iterator)
-        call Iterator%Init(DataBase=this%DataBase)
-    end function ParameterEntryDictionary_GetIterator
+        DataBase => this%Database
+    end function ParameterEntryDictionary_GetDataBase
 
 
     subroutine ParameterEntryDictionary_Delete(this, Key)

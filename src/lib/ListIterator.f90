@@ -35,7 +35,9 @@ private
         procedure, public, non_overridable :: Init            => ListIterator_Init
         procedure, public, non_overridable :: Next            => ListIterator_Next
         procedure, public, non_overridable :: HasFinished     => ListIterator_HasFinished
-        procedure, public, non_overridable :: GetCurrentEntry => ListIterator_GetCurrentEntry
+        procedure, public, non_overridable :: GetEntry        => ListIterator_GetEntry
+        procedure, public, non_overridable :: GetKey          => ListIterator_GetKey
+        procedure, public, non_overridable :: PointToValue    => ListIterator_PointToValue
         procedure, public, non_overridable :: Free            => ListIterator_Free
         final                              ::                    ListIterator_Final
     end type
@@ -88,7 +90,7 @@ contains
     end subroutine ListIterator_Next
 
 
-    function ListIterator_GetCurrentEntry(this) result(CurrentEntry)
+    function ListIterator_GetEntry(this) result(CurrentEntry)
     !-----------------------------------------------------------------
     !< Return the current Entry
     !-----------------------------------------------------------------
@@ -97,7 +99,36 @@ contains
     !-----------------------------------------------------------------
         nullify(CurrentEntry)
         CurrentEntry => this%CurrentEntry
-    end function ListIterator_GetCurrentEntry
+    end function ListIterator_GetEntry
+
+
+    function ListIterator_GetKey(this) result(Key)
+    !-----------------------------------------------------------------
+    !< Return the current Key
+    !-----------------------------------------------------------------
+        class(ListIterator_t),       intent(INOUT) :: this            ! List iterator
+        type(ParameterEntry_t),  pointer           :: CurrentEntry    ! Current entry
+        character(len=:), allocatable              :: Key
+    !-----------------------------------------------------------------
+        if(associated(this%CurrentEntry)) then
+            if(this%CurrentEntry%HasKey()) Key = this%CurrentEntry%GetKey()
+        endif
+    end function ListIterator_GetKey
+
+
+    function ListIterator_PointToValue(this) result(Value)
+    !-----------------------------------------------------------------
+    !< Return the current Value
+    !-----------------------------------------------------------------
+        class(ListIterator_t),       intent(INOUT) :: this            ! List iterator
+        type(ParameterEntry_t),  pointer           :: CurrentEntry    ! Current entry
+        class(*), pointer                          :: Value
+    !-----------------------------------------------------------------
+        nullify(Value)
+        if(associated(this%CurrentEntry)) then
+            if(this%CurrentEntry%HasValue()) Value => this%CurrentEntry%PointToValue()
+        endif
+    end function ListIterator_PointToValue
 
 
     function ListIterator_HasFinished(this) result(HasFinished)

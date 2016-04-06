@@ -24,7 +24,7 @@ USE IR_Precision, only: I4P
 USE ParameterList
 USE WrapperFactoryListSingleton
 
-public :: ParameterList_t
+public :: ParameterList_t, ParameterListIterator_t
 
 contains
 
