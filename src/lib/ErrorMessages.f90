@@ -26,10 +26,11 @@ USE IR_Precision,    only: I4P, str
 implicit none
 private
 
-    integer(I4P), public, parameter :: FPLSuccess             = 0
-    integer(I4P), public, parameter :: FPLWrapperFactoryError = -1
-    integer(I4P), public, parameter :: FPLWrapperError        = -2
-    integer(I4P), public, parameter :: FPLSublistError        = -3
+    integer(I4P), public, parameter :: FPLSuccess                 = 0
+    integer(I4P), public, parameter :: FPLWrapperFactoryError     = -1
+    integer(I4P), public, parameter :: FPLWrapperError            = -2
+    integer(I4P), public, parameter :: FPLSublistError            = -3
+    integer(I4P), public, parameter :: FPLParametersIteratorError = -5
 
     type :: MessageHandler_t
     private

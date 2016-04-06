@@ -32,12 +32,12 @@ private
         type(ParameterEntry_t),     pointer :: CurrentEntry => NULL()
     contains
     private
-        procedure, public, non_overridable :: Init => ListIterator_Init
-        procedure, public, non_overridable :: Next => ListIterator_Next
-        procedure, public, non_overridable :: HasFinished => ListIterator_HasFinished
+        procedure, public, non_overridable :: Init            => ListIterator_Init
+        procedure, public, non_overridable :: Next            => ListIterator_Next
+        procedure, public, non_overridable :: HasFinished     => ListIterator_HasFinished
         procedure, public, non_overridable :: GetCurrentEntry => ListIterator_GetCurrentEntry
-        procedure, public, non_overridable :: Free => ListIterator_Free
-        final                              :: ListIterator_Final
+        procedure, public, non_overridable :: Free            => ListIterator_Free
+        final                              ::                    ListIterator_Final
     end type
 
 public :: ListIterator_t

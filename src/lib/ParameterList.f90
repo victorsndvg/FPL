@@ -122,6 +122,7 @@ save
         procedure, non_overridable, public :: Free           => ParameterList_Free
         procedure, non_overridable, public :: Print          => ParameterList_Print
         procedure, non_overridable, public :: Length         => ParameterList_Length
+        procedure, non_overridable, public :: GetIterator    => ParameterList_GetIterator
         final             ::                   ParameterList_Finalize
     end type ParameterList_t
 
@@ -148,7 +149,7 @@ contains
 
     function ParameterList_GetShape(this,Key, Shape) result(FPLError)
     !-----------------------------------------------------------------
-    !< Return a scalar Value given the Key
+    !< Return an allocatable array with the shape of the contained value
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN)    :: this           !< Parameter List
         character(len=*),                     intent(IN)    :: Key            !< String Key
@@ -1229,6 +1230,17 @@ contains
     !-----------------------------------------------------------------
         Length = this%Dictionary%Length()
     end function ParameterList_Length
+
+
+    function ParameterList_GetIterator(this) result(Iterator)
+    !-----------------------------------------------------------------
+    !< Return a pointer to a Parameters Iterator 
+    !-----------------------------------------------------------------
+        class(ParameterList_t),     intent(IN) :: this                !< Parameter List Entry Container Type
+        type(ParametersIterator_t), pointer    :: Iterator            !< Dictionary Iterator
+    !-----------------------------------------------------------------
+        Iterator => this%Dictionary%GetIterator()
+    end function ParameterList_GetIterator
 
 
     recursive subroutine ParameterList_Print(this, unit, prefix, iostat, iomsg)
