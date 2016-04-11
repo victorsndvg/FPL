@@ -116,6 +116,7 @@ save
         procedure, non_overridable, public :: Del            => ParameterList_RemoveEntry
         procedure, non_overridable, public :: Init           => ParameterList_Init
         procedure, non_overridable, public :: GetShape       => ParameterList_GetShape
+        procedure, non_overridable, public :: GetDimensions  => ParameterList_GetDimensions
         procedure, non_overridable, public :: NewSubList     => ParameterList_NewSubList
         procedure, non_overridable, public :: GetSubList     => ParameterList_GetSubList
         procedure, non_overridable, public :: isPresent      => ParameterList_isPresent
@@ -124,7 +125,7 @@ save
         procedure, non_overridable, public :: Print          => ParameterList_Print
         procedure, non_overridable, public :: Length         => ParameterList_Length
         procedure, non_overridable, public :: GetIterator    => ParameterList_GetIterator
-        final             ::                   ParameterList_Finalize
+        final                              ::                   ParameterList_Finalize
     end type ParameterList_t
 
 
@@ -154,13 +155,16 @@ save
         procedure,         non_overridable ::                             ParameterListIterator_isOfDataType7D
         procedure,         non_overridable :: GetEntry                 => ParameterListIterator_GetEntry
         procedure,         non_overridable :: GetIndex                 => ParameterListIterator_GetIndex
-        procedure,         non_overridable :: GetKey                   => ParameterListIterator_GetKey
         procedure,         non_overridable :: PointToValue             => ParameterListIterator_PointToValue
         procedure,         non_overridable :: NextNotEmptyListIterator => ParameterListIterator_NextNotEmptyListIterator
+        procedure, public, non_overridable :: GetKey                   => ParameterListIterator_GetKey
         procedure, public, non_overridable :: Init                     => ParameterListIterator_Init
+        procedure, public, non_overridable :: Begin                    => ParameterListIterator_Begin
+        procedure, public, non_overridable :: End                      => ParameterListIterator_End
         procedure, public, non_overridable :: Next                     => ParameterListIterator_Next
         procedure, public, non_overridable :: HasFinished              => ParameterListIterator_HasFinished
         procedure, public, non_overridable :: GetShape                 => ParameterListIterator_GetShape
+        procedure, public, non_overridable :: GetDimensions            => ParameterListIterator_GetDimensions
         procedure, public, non_overridable :: DataSizeInBytes          => ParameterListIterator_DataSizeInBytes
         procedure, public, non_overridable :: GetSubList               => ParameterListIterator_GetSubList
         procedure, public, non_overridable :: isSubList                => ParameterListIterator_isSubList
@@ -238,6 +242,37 @@ contains
                            file=__FILE__, line=__LINE__ )
         endif
     end function ParameterList_GetShape
+
+
+    function ParameterList_GetDimensions(this,Key) result(Dimensions)
+    !-----------------------------------------------------------------
+    !< Return an integer with the dimensions of the contained value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN)    :: this           !< Parameter List
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        integer(I4P)                                        :: Dimensions     !< Dimensions of the stored value
+        class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
+    !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
+        Dimensions = 0
+        nullify(Wrapper)
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper_t)
+                    Dimensions = Wrapper%GetDimensions()
+                class Default
+                    FPLerror = FPLWrapperError
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Unknown Wrapper. Shape was not modified.', &
+                           file=__FILE__, line=__LINE__ )
+            end select
+        else
+            FPLerror = FPLWrapperFactoryError
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Shape was not modified.', &
+                           file=__FILE__, line=__LINE__ )
+        endif
+    end function ParameterList_GetDimensions
 
 
     subroutine ParameterList_Free(this)
@@ -1410,6 +1445,32 @@ contains
     end subroutine ParameterListIterator_Init
 
 
+    subroutine ParameterListIterator_Begin(this)
+    !-----------------------------------------------------------------
+    !< Rewind the iterator to the first dictionary position
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t),     intent(INOUT) :: this        ! Dictionary iterator
+        type(ParameterRootEntry_t), pointer               :: DataBase(:) ! Entries database
+    !-----------------------------------------------------------------
+        DataBase => this%DataBase
+        call this%Init(DataBase)
+    end subroutine ParameterListIterator_Begin
+
+
+    subroutine ParameterListIterator_End(this)
+    !-----------------------------------------------------------------
+    !< Fast forward to the last dictionary position (HasFinished = .true.)
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t),     intent(INOUT) :: this        ! Dictionary iterator
+    !-----------------------------------------------------------------
+        this%Index = this%UpperBound
+        if(associated(this%ListIterator)) then
+            call this%ListIterator%Free()
+            deallocate(this%ListIterator)
+        endif
+    end subroutine ParameterListIterator_End
+
+
     subroutine ParameterListIterator_NextNotEmptyListIterator(this)
     !-----------------------------------------------------------------
     !< The iterator points to the next associated entry
@@ -1537,6 +1598,36 @@ contains
                            file=__FILE__, line=__LINE__ )
         endif         
     end function ParameterListIterator_GetShape
+
+
+    function ParameterListIterator_GetDimensions(this) result(Dimensions)
+    !-----------------------------------------------------------------
+    !< Return an allocatable array with the shape of the contained value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t),       intent(IN)    :: this       !< Parameter List Iterator
+        integer(I4P)                                        :: Dimensions !< Dimensions of the stored value
+        class(*),                    pointer                :: Wrapper    !< Wrapper
+        integer(I4P)                                        :: FPLerror   !< Error flag
+    !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
+        Dimensions = 0
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper_t)
+                    Dimensions = Wrapper%GetDimensions()
+                class Default
+                    FPLerror = FPLWrapperError
+                    call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Shape was not modified.', &
+                                   file=__FILE__, line=__LINE__ )
+            end select
+        else
+            FPLerror = FPLWrapperFactoryError
+            call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Not present. Shape was not modified.', &
+                           file=__FILE__, line=__LINE__ )
+        endif         
+    end function ParameterListIterator_GetDimensions
 
 
     function ParameterListIterator_Get0D(this,Value) result(FPLerror)
@@ -1780,7 +1871,7 @@ contains
     !< Return a Unlimited polymorphic pointer to a Value given the Key
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),  intent(IN)    :: this          !< Parameter List
-        class(ParameterList_t), pointer, intent(INOUT) :: Sublist       !< Wrapper
+        type(ParameterList_t), pointer,  intent(INOUT) :: Sublist       !< Wrapper
         class(*),               pointer                :: Value         !< Returned pointer to value
         integer(I4P)                                   :: FPLerror      !< Error flag
     !-----------------------------------------------------------------
