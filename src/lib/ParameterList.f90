@@ -132,11 +132,12 @@ save
     type :: ParameterListIterator_t
     private
         type(ParameterRootEntry_t), pointer :: DataBase(:)  => NULL()
-        type(ListIterator_t),       pointer :: ListIterator => NULL()
+        type(ListIterator_t)                :: ListIterator
         integer(I4P)                        :: Index       = 0
         integer(I4P)                        :: UpperBound  = 0
     contains
     private
+        procedure,         non_overridable ::                             ParameterListIterator_Assignment
         procedure,         non_overridable ::                             ParameterListIterator_Get0D
         procedure,         non_overridable ::                             ParameterListIterator_Get1D
         procedure,         non_overridable ::                             ParameterListIterator_Get2D
@@ -186,6 +187,7 @@ save
                                                                           ParameterListIterator_IsOfDataType5D, &
                                                                           ParameterListIterator_IsOfDataType6D, &
                                                                           ParameterListIterator_IsOfDataType7D
+        generic,   public                  :: Assignment(=)            => ParameterListIterator_Assignment
         final                              ::                             ParameterListIterator_Final
     end type
 
@@ -1339,10 +1341,8 @@ contains
     !< Return a pointer to a Parameters Iterator 
     !-----------------------------------------------------------------
         class(ParameterList_t),     intent(IN) :: this                !< Parameter List Entry Container Type
-        type(ParameterListIterator_t), pointer :: Iterator            !< Parameter List iterator
+        type(ParameterListIterator_t)          :: Iterator            !< Parameter List iterator
     !-----------------------------------------------------------------
-        nullify(iterator)
-        allocate(Iterator)
         call Iterator%Init(DataBase=this%Dictionary%GetDataBase())
     end function ParameterList_GetIterator
 
@@ -1360,42 +1360,37 @@ contains
         integer(I4P)                                      :: unitd   !< Logic unit.
         integer(I4P)                                      :: iostatd !< IO error.
         character(500)                                    :: iomsgd  !< Temporary variable for IO error message.
-        type(ParameterListIterator_t), pointer            :: Iterator!< Dictionary Iterator
+        type(ParameterListIterator_t)                     :: Iterator!< Dictionary Iterator
         class(*), pointer                                 :: Value
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
         unitd = OUTPUT_UNIT; if(present(unit)) unitd = unit
-        Nullify(Iterator)
-        Iterator => this%GetIterator()
-        if(associated(Iterator)) then
-            do while(.not. Iterator%HasFinished())
-                Nullify(Value)
-                Value => Iterator%PointToValue()
-                if(associated(Value)) then 
-                    select type(Value)
-                        class is (DimensionsWrapper_t) 
-                            call Value%Print(unit=unitd,                                                  &
-                                             prefix=prefd//                                               &
-                                             '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
-                                             ' Key = '//Iterator%GetKey()//',',                           &
-                                             iostat=iostatd,                                              &
-                                             iomsg=iomsgd)
-                        type is (ParameterList_t) 
-                            write(unit=unitd, fmt='(A)') prefd//                                                      &
-                                                         '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
-                                                         ' Key = '//Iterator%GetKey()//', Data Type = ParameterList'
-                            call Value%Print(unit=unitd, prefix=prefd//'['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//'] ', iostat=iostatd, iomsg=iomsgd)
-                        class DEFAULT
-                            write(unit=unitd, fmt='(A)') prefd//                                                      &
-                                                         '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
-                                                         ' Key = '//Iterator%GetKey()//', Data Type = Unknown Data Type!'
-                    end select
-                endif
-                call Iterator%Next()
-            enddo
-            call Iterator%Free()
-            deallocate(Iterator)
-        endif
+        Iterator = this%GetIterator()
+        do while(.not. Iterator%HasFinished())
+            Nullify(Value)
+            Value => Iterator%PointToValue()
+            if(associated(Value)) then 
+                select type(Value)
+                    class is (DimensionsWrapper_t) 
+                        call Value%Print(unit=unitd,                                                  &
+                                         prefix=prefd//                                               &
+                                         '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
+                                         ' Key = '//Iterator%GetKey()//',',                           &
+                                         iostat=iostatd,                                              &
+                                         iomsg=iomsgd)
+                    type is (ParameterList_t) 
+                        write(unit=unitd, fmt='(A)') prefd//                                                      &
+                                                     '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
+                                                     ' Key = '//Iterator%GetKey()//', Data Type = ParameterList'
+                        call Value%Print(unit=unitd, prefix=prefd//'['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//'] ', iostat=iostatd, iomsg=iomsgd)
+                    class DEFAULT
+                        write(unit=unitd, fmt='(A)') prefd//                                                      &
+                                                     '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
+                                                     ' Key = '//Iterator%GetKey()//', Data Type = Unknown Data Type!'
+                end select
+            endif
+            call Iterator%Next()
+        enddo
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine ParameterList_Print
@@ -1404,6 +1399,20 @@ contains
 !---------------------------------------------------------------------
 !< Parameter List Iterator Procedures
 !---------------------------------------------------------------------
+
+    subroutine ParameterListIterator_Assignment(this, ParameterListIterator)
+    !-----------------------------------------------------------------
+    !< Dictionary iterator Assignment
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(INOUT) :: this                  ! Output Dictionary iterator
+        type(ParameterListIterator_t),  intent(IN)    :: ParameterListIterator ! Input Dictionary iterator
+    !-----------------------------------------------------------------
+        this%DataBase(0:) => ParameterListIterator%DataBase
+        this%ListIterator =  ParameterListIterator%ListIterator
+        this%Index        =  ParameterListIterator%Index
+        this%UpperBound   =  ParameterListIterator%UpperBound
+    end subroutine ParameterListIterator_Assignment
+
 
     subroutine ParameterListIterator_Free(this)
     !-----------------------------------------------------------------
@@ -1414,8 +1423,7 @@ contains
         this%Index      = 0
         this%UpperBound = 0
         nullify(this%DataBase)
-        if(associated(this%ListIterator)) deallocate(this%ListIterator)
-        nullify(this%ListIterator)
+        call this%ListIterator%Free()
     end subroutine ParameterListIterator_Free
 
 
@@ -1439,7 +1447,7 @@ contains
     !-----------------------------------------------------------------
         call this%Free()
         this%DataBase(0:) => DataBase(:)
-        this%Index = 0
+        this%Index = -1
         this%UpperBound = size(this%DataBase)
         call this%Next()
     end subroutine ParameterListIterator_Init
@@ -1464,10 +1472,7 @@ contains
         class(ParameterListIterator_t),     intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
         this%Index = this%UpperBound
-        if(associated(this%ListIterator)) then
-            call this%ListIterator%Free()
-            deallocate(this%ListIterator)
-        endif
+        call this%ListIterator%Free()
     end subroutine ParameterListIterator_End
 
 
@@ -1477,14 +1482,11 @@ contains
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),  intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
-        if(associated(this%ListIterator)) then
-            call this%ListIterator%Free()
-            deallocate(this%ListIterator)
-            this%Index = this%Index + 1
-        endif
+        call this%ListIterator%Free()
+        this%Index = this%Index + 1
         do while(this%Index < this%UpperBound)
             if(this%DataBase(this%Index)%HasRoot()) then 
-                this%ListIterator => this%Database(this%Index)%GetIterator()
+                this%ListIterator = this%Database(this%Index)%GetIterator()
                 exit
             endif
             this%Index = this%Index + 1
@@ -1499,15 +1501,11 @@ contains
         class(ParameterListIterator_t),  intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
         if(.not. this%HasFinished()) then
-            if(associated(this%ListIterator)) then
-                if(.not. this%ListIterator%HasFinished()) then
-                    call this%ListIterator%Next()
-                else
-                    call this%NextNotEmptyListIterator()
-                endif
-            else ! First Entry
+            if(.not. this%ListIterator%HasFinished()) then
+                call this%ListIterator%Next()
+            else
                 call this%NextNotEmptyListIterator()
-            endif 
+            endif
         endif
     end subroutine ParameterListIterator_Next
 
@@ -1518,12 +1516,11 @@ contains
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this            ! Dictionary iterator
         type(ParameterEntry_t),  pointer           :: CurrentEntry    ! Current entry
-        integer(I4P)                                        :: FPLerror       !< Error flag
+        integer(I4P)                               :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
         nullify(CurrentEntry)
-        if(associated(this%ListIterator)) then
-            CurrentEntry => this%ListIterator%GetEntry()
-        else
+        CurrentEntry => this%ListIterator%GetEntry()
+        if(.not. associated(CurrentEntry)) then
             FPLerror = FPLParameterListIteratorError
             call msg%Error(txt='Current entry not associated. Shape was not modified.', &
                            file=__FILE__, line=__LINE__ )   

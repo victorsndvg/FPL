@@ -305,10 +305,8 @@ contains
     !< Free the list
     !-----------------------------------------------------------------
         class(ParameterRootEntry_t),  intent(INOUT) :: this           !< Parameter Root Entry
-        class(ListIterator_t), pointer              :: Iterator       !< List iterator
+        type(ListIterator_t)                        :: Iterator       !< List iterator
     !-----------------------------------------------------------------
-        nullify(Iterator)
-        allocate(Iterator)
         call Iterator%Init(Root=this%Root)    
     end function ParameterRootEntry_GetIterator
 

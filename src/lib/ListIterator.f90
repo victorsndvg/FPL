@@ -32,6 +32,7 @@ private
         type(ParameterEntry_t),     pointer :: CurrentEntry => NULL()
     contains
     private
+        procedure,         non_overridable ::                    ListIterator_Assignment
         procedure, public, non_overridable :: Init            => ListIterator_Init
         procedure, public, non_overridable :: Next            => ListIterator_Next
         procedure, public, non_overridable :: HasFinished     => ListIterator_HasFinished
@@ -39,12 +40,25 @@ private
         procedure, public, non_overridable :: GetKey          => ListIterator_GetKey
         procedure, public, non_overridable :: PointToValue    => ListIterator_PointToValue
         procedure, public, non_overridable :: Free            => ListIterator_Free
+        generic,   public                  :: Assignment(=)   => ListIterator_Assignment
         final                              ::                    ListIterator_Final
     end type
 
 public :: ListIterator_t
 
 contains
+
+    subroutine ListIterator_Assignment(this, ListIterator)
+    !-----------------------------------------------------------------
+    !< Assignment operator
+    !-----------------------------------------------------------------
+        class(ListIterator_t), intent(INOUT) :: this                  ! Output List iterator
+        type(ListIterator_t),  intent(IN)    :: ListIterator          ! Input List iterator
+    !-----------------------------------------------------------------
+        this%Root => ListIterator%Root
+        this%CurrentEntry => ListIterator%CurrentEntry
+    end subroutine ListIterator_Assignment
+
 
     subroutine ListIterator_Free(this)
     !-----------------------------------------------------------------
@@ -94,8 +108,8 @@ contains
     !-----------------------------------------------------------------
     !< Return the current Entry
     !-----------------------------------------------------------------
-        class(ListIterator_t),       intent(INOUT) :: this            ! List iterator
-        type(ParameterEntry_t),  pointer           :: CurrentEntry    ! Current entry
+        class(ListIterator_t),       intent(IN) :: this               ! List iterator
+        type(ParameterEntry_t),  pointer        :: CurrentEntry       ! Current entry
     !-----------------------------------------------------------------
         nullify(CurrentEntry)
         CurrentEntry => this%CurrentEntry
@@ -106,9 +120,9 @@ contains
     !-----------------------------------------------------------------
     !< Return the current Key
     !-----------------------------------------------------------------
-        class(ListIterator_t),       intent(INOUT) :: this            ! List iterator
-        type(ParameterEntry_t),  pointer           :: CurrentEntry    ! Current entry
-        character(len=:), allocatable              :: Key
+        class(ListIterator_t),       intent(IN) :: this               ! List iterator
+        type(ParameterEntry_t),  pointer        :: CurrentEntry       ! Current entry
+        character(len=:), allocatable           :: Key                ! Entry Key
     !-----------------------------------------------------------------
         if(associated(this%CurrentEntry)) then
             if(this%CurrentEntry%HasKey()) Key = this%CurrentEntry%GetKey()
@@ -120,9 +134,9 @@ contains
     !-----------------------------------------------------------------
     !< Return the current Value
     !-----------------------------------------------------------------
-        class(ListIterator_t),       intent(INOUT) :: this            ! List iterator
-        type(ParameterEntry_t),  pointer           :: CurrentEntry    ! Current entry
-        class(*), pointer                          :: Value
+        class(ListIterator_t),       intent(IN) :: this               ! List iterator
+        type(ParameterEntry_t),  pointer        :: CurrentEntry       ! Current entry
+        class(*), pointer                       :: Value              ! Entry Value
     !-----------------------------------------------------------------
         nullify(Value)
         if(associated(this%CurrentEntry)) then
@@ -135,8 +149,8 @@ contains
     !-----------------------------------------------------------------
     !< Check if Iterator has reached the end of the dictionary
     !-----------------------------------------------------------------
-        class(ListIterator_t),        intent(INOUT) :: this           ! List iterator
-        logical                                     :: HasFinished
+        class(ListIterator_t),        intent(IN) :: this              ! List iterator
+        logical                                  :: HasFinished       ! Check if has reached the end of the list 
     !-----------------------------------------------------------------
         HasFinished = .false.
         if(.not. associated(this%CurrentEntry)) then

@@ -9,9 +9,9 @@ USE IR_Precision
 USE iso_fortran_env, only: REAL64, OUTPUT_UNIT
 
 type(ParameterList_t)                  :: My_List
-type(ParameterListIterator_t), pointer :: My_List_Iterator
+type(ParameterListIterator_t)          :: My_List_Iterator
 type(ParameterList_t), pointer         :: Prec_List
-type(ParameterListIterator_t), pointer :: Prec_List_Iterator
+type(ParameterListIterator_t)          :: Prec_List_Iterator
 integer                                :: FPLError
 logical                                :: solver_defined
 logical                                :: prec_defined
@@ -62,12 +62,12 @@ write(unit=OUTPUT_UNIT, fmt='(A)') ' -------------'
 write(unit=OUTPUT_UNIT, fmt='(A)') ' | Iterators |'
 write(unit=OUTPUT_UNIT, fmt='(A)') ' -------------'
 nullify(Prec_List)
-My_List_Iterator => My_List%GetIterator()
+My_List_Iterator = My_List%GetIterator()
 do while (.not. My_List_Iterator%HasFinished())
     write(unit=OUTPUT_UNIT, fmt='(A)') 'Iterating over: "'//My_List_Iterator%GetKey()//'" ... '
     if(My_List_Iterator%isSubList()) then
         FPLError = My_List_Iterator%GetSubList(Prec_List)
-        Prec_List_Iterator => Prec_List%GetIterator()
+        Prec_List_Iterator = Prec_List%GetIterator()
         do while (.not. Prec_List_Iterator%HasFinished())
             write(unit=OUTPUT_UNIT, fmt='(A)') '   Iterating over: "'//Prec_List_Iterator%GetKey()//'" ... '
             if(.not. Prec_List_Iterator%isSubList()) then
@@ -82,8 +82,8 @@ do while (.not. My_List_Iterator%HasFinished())
 enddo
 
 call My_List%Free()
-call My_List_Iterator%Free(); deallocate(My_List_Iterator)
-call Prec_List_Iterator%Free(); deallocate(Prec_List_Iterator)
+call My_List_Iterator%Free()
+call Prec_List_Iterator%Free()
 
 call FPL_Finalize()
 

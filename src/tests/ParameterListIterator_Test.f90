@@ -4,8 +4,8 @@ USE iso_fortran_env, only: OUTPUT_UNIT
 USE IR_Precision, only: I4P, R4P, str
 USE FPL
 
-type(ParameterList_t) :: Parameters
-type(ParameterListIterator_t), pointer :: Iterator
+type(ParameterList_t)         :: Parameters
+type(ParameterListIterator_t) :: Iterator
 integer(I4P),allocatable :: array(:)
 integer(I4P),allocatable :: shape(:)
 integer :: iter, numiters, loop
@@ -35,7 +35,7 @@ call Parameters%Print(unit=OUTPUT_UNIT)
 write(unit=OUTPUT_UNIT, fmt='(A,I4)') ' Parameter List Length: ',Parameters%Length()
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 
-Iterator => Parameters%GetIterator()
+Iterator = Parameters%GetIterator()
 do while (.not. Iterator%HasFinished())
     if(Iterator%GetDimensions() /= 1) stop -1
     if(Iterator%GetShape(Shape=shape) /= 0) stop -1
@@ -75,7 +75,6 @@ enddo
 
 call Parameters%Free()
 call Iterator%Free()
-deallocate(Iterator)
 
 call FPL_Finalize()
 
