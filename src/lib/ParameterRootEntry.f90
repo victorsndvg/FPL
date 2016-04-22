@@ -21,7 +21,6 @@
 module ParameterRootEntry
 
 USE ParameterEntry
-USE ListIterator
 USE IR_Precision, only: I4P, str
 
 implicit none
@@ -305,9 +304,9 @@ contains
     !< Free the list
     !-----------------------------------------------------------------
         class(ParameterRootEntry_t),  intent(INOUT) :: this           !< Parameter Root Entry
-        type(ListIterator_t)                        :: Iterator       !< List iterator
+        type(EntryListIterator_t)                   :: Iterator       !< List iterator
     !-----------------------------------------------------------------
-        call Iterator%Init(Root=this%Root)    
+        call Iterator%Init(Entry=this%Root)    
     end function ParameterRootEntry_GetIterator
 
 

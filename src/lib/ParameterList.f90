@@ -37,7 +37,6 @@ USE DimensionsWrapper4D
 USE DimensionsWrapper5D
 USE DimensionsWrapper6D
 USE DimensionsWrapper7D
-USE ListIterator
 
 implicit none
 private
@@ -132,7 +131,7 @@ save
     type :: ParameterListIterator_t
     private
         type(ParameterRootEntry_t), pointer :: DataBase(:)  => NULL()
-        type(ListIterator_t)                :: ListIterator
+        type(EntryListIterator_t)           :: EntryListIterator
         integer(I4P)                        :: Index       = 0
         integer(I4P)                        :: UpperBound  = 0
     contains
@@ -1407,10 +1406,10 @@ contains
         class(ParameterListIterator_t), intent(INOUT) :: this                  ! Output Dictionary iterator
         type(ParameterListIterator_t),  intent(IN)    :: ParameterListIterator ! Input Dictionary iterator
     !-----------------------------------------------------------------
-        this%DataBase(0:) => ParameterListIterator%DataBase
-        this%ListIterator =  ParameterListIterator%ListIterator
-        this%Index        =  ParameterListIterator%Index
-        this%UpperBound   =  ParameterListIterator%UpperBound
+        this%DataBase(0:)      => ParameterListIterator%DataBase
+        this%EntryListIterator =  ParameterListIterator%EntryListIterator
+        this%Index             =  ParameterListIterator%Index
+        this%UpperBound        =  ParameterListIterator%UpperBound
     end subroutine ParameterListIterator_Assignment
 
 
@@ -1423,7 +1422,7 @@ contains
         this%Index      = 0
         this%UpperBound = 0
         nullify(this%DataBase)
-        call this%ListIterator%Free()
+        call this%EntryListIterator%Free()
     end subroutine ParameterListIterator_Free
 
 
@@ -1472,7 +1471,7 @@ contains
         class(ParameterListIterator_t),     intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
         this%Index = this%UpperBound
-        call this%ListIterator%Free()
+        call this%EntryListIterator%Free()
     end subroutine ParameterListIterator_End
 
 
@@ -1482,11 +1481,11 @@ contains
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),  intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
-        call this%ListIterator%Free()
+        call this%EntryListIterator%Free()
         this%Index = this%Index + 1
         do while(this%Index < this%UpperBound)
             if(this%DataBase(this%Index)%HasRoot()) then 
-                this%ListIterator = this%Database(this%Index)%GetIterator()
+                this%EntryListIterator = this%Database(this%Index)%GetIterator()
                 exit
             endif
             this%Index = this%Index + 1
@@ -1501,8 +1500,8 @@ contains
         class(ParameterListIterator_t),  intent(INOUT) :: this        ! Dictionary iterator
     !-----------------------------------------------------------------
         if(.not. this%HasFinished()) then
-            if(.not. this%ListIterator%HasFinished()) then
-                call this%ListIterator%Next()
+            if(.not. this%EntryListIterator%HasFinished()) then
+                call this%EntryListIterator%Next()
             else
                 call this%NextNotEmptyListIterator()
             endif
@@ -1519,7 +1518,7 @@ contains
         integer(I4P)                               :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
         nullify(CurrentEntry)
-        CurrentEntry => this%ListIterator%GetEntry()
+        CurrentEntry => this%EntryListIterator%GetEntry()
         if(.not. associated(CurrentEntry)) then
             FPLerror = FPLParameterListIteratorError
             call msg%Error(txt='Current entry not associated. Shape was not modified.', &
