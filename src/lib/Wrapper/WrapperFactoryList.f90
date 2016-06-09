@@ -395,7 +395,7 @@ contains
         nullify(WrapperFactory)
         if (this%HasKey() .and. this%HasValue()) then
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1,1))) then
-                allocate(WrapperFactory, source=this%Value)
+                WrapperFactory => this%Value
             elseif(this%HasNext()) then
                 select type (Next => this%Next)
                     type is (WrapperFactoryList_T)
