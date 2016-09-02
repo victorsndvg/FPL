@@ -37,6 +37,7 @@ private
         procedure(DimensionsWrapper_DataSizeInBytes), public, deferred :: DataSizeInBytes
         procedure(DimensionsWrapper_Free),            public, deferred :: Free
         procedure(DimensionsWrapper_GetShape),        public, deferred :: GetShape
+        procedure(DimensionsWrapper_toString),        public, deferred :: toString
     end type
 
     abstract interface
@@ -65,6 +66,13 @@ private
             class(DimensionsWrapper_t), intent(IN)    :: this
             integer(I4P), allocatable,  intent(INOUT) :: ValueShape(:)
         end subroutine
+
+        function DimensionsWrapper_toString(this) result(String)
+            import DimensionsWrapper_t
+            import I4P
+            class(DimensionsWrapper_t), intent(IN)    :: this
+            character(len=:), allocatable             :: String
+        end function
     end interface
 
 public :: DimensionsWrapper_t

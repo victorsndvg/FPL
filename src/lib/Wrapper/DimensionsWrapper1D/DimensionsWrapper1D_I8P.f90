@@ -38,6 +38,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper1D_I8P_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper1D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper1D_I8P_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper1D_I8P_toString
         procedure, public :: Print          => DimensionsWrapper1D_I8P_Print
         procedure, public :: Free           => DimensionsWrapper1D_I8P_Free
         final             ::                   DimensionsWrapper1D_I8P_Final
@@ -184,6 +185,18 @@ contains
     end function DimensionsWrapper1D_I8P_isOfDataType
 
 
+    function DimensionsWrapper1D_I8P_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper1D_I8P_t), intent(IN)  :: this
+        character(len=:), allocatable                 :: String
+    !-----------------------------------------------------------------
+        String = ''
+        if(allocated(this%Value)) String = trim(str(n=this%Value))
+    end function
+
+
     subroutine DimensionsWrapper1D_I8P_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -201,7 +214,7 @@ contains
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I8P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                             ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
-                            ', Value = '//trim(str(no_sign=.true., n=this%Value))
+                            ', Value = '//this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper1D_I8P_Print

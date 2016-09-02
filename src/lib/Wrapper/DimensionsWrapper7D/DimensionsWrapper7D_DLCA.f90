@@ -38,6 +38,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper7D_DLCA_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper7D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper7D_DLCA_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper7D_DLCA_toString
         procedure, public :: Print          => DimensionsWrapper7D_DLCA_Print
         procedure, public :: Free           => DimensionsWrapper7D_DLCA_Free
         final             ::                   DimensionsWrapper7D_DLCA_Final
@@ -206,6 +207,36 @@ contains
     end function DimensionsWrapper7D_DLCA_isOfDataType
 
 
+    function DimensionsWrapper7D_DLCA_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper7D_DLCA_t), intent(IN)  :: this
+        character(len=:), allocatable                  :: String
+        integer(I4P)                                   :: idx1,idx2,idx3,idx4,idx5,idx6,idx7
+    !-----------------------------------------------------------------
+        String = ''
+        if(allocated(this%Value)) then
+            do idx7=1, size(this%Value,7)
+                do idx6=1, size(this%Value,6)
+                    do idx5=1, size(this%Value,5)
+                        do idx4=1, size(this%Value,4)
+                            do idx3=1, size(this%Value,3)
+                                do idx2=1, size(this%Value,2)
+                                    do idx1=1, size(this%Value,1)
+                                        String = String // trim(this%Value(idx1,idx2,idx3,idx4,idx5,idx6,idx7)) // '|'
+                                    enddo
+                                enddo
+                            enddo
+                        enddo
+                    enddo
+                enddo
+            enddo
+            String = String(:len(String)-1)
+        endif
+    end function
+
+
     subroutine DimensionsWrapper7D_DLCA_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -224,7 +255,7 @@ contains
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
-        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper7D_DLCA_Print

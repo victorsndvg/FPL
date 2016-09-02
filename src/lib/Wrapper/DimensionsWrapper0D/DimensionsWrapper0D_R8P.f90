@@ -38,6 +38,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_R8P_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_R8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_R8P_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper0D_R8P_toString
         procedure, public :: Free           => DimensionsWrapper0D_R8P_Free
         procedure, public :: Print          => DimensionsWrapper0D_R8P_Print
         final             ::                   DimensionsWrapper0D_R8P_Final
@@ -162,6 +163,7 @@ contains
     function DimensionsWrapper0D_R8P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
+    !-----------------------------------------------------------------
         class(DimensionsWrapper0D_R8P_t), intent(IN) :: this          !< Dimensions wrapper 0D
         class(*),                         intent(IN) :: Mold          !< Mold for data type comparison
         logical                                      :: isOfDataType  !< Boolean flag to check if Value is of the same data type as Mold
@@ -172,6 +174,17 @@ contains
                 isOfDataType = .true.
         end select
     end function DimensionsWrapper0D_R8P_isOfDataType
+
+
+    function DimensionsWrapper0D_R8P_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_R8P_t), intent(IN)  :: this
+        character(len=:), allocatable                 :: String
+    !-----------------------------------------------------------------
+        String = trim(str(n=this%Value))
+    end function
 
 
     subroutine DimensionsWrapper0D_R8P_Print(this, unit, prefix, iostat, iomsg)
@@ -191,7 +204,7 @@ contains
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R8P'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                             ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
-                            ', Value = '//str(no_sign=.true., n=this%Value)
+                            ', Value = '//this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper0D_R8P_Print

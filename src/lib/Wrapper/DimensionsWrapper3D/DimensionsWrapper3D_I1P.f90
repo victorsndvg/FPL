@@ -39,6 +39,7 @@ private
         procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_I1P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_I1P_isOfDataType
         procedure, public :: Free           => DimensionsWrapper3D_I1P_Free
+        procedure, public :: toString       => DimensionsWrapper3D_I1P_toString
         procedure, public :: Print          => DimensionsWrapper3D_I1P_Print
         final             ::                   DimensionsWrapper3D_I1P_Final
     end type           
@@ -192,6 +193,25 @@ contains
     end function DimensionsWrapper3D_I1P_isOfDataType
 
 
+    function DimensionsWrapper3D_I1P_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_I1P_t), intent(IN)  :: this
+        character(len=:), allocatable                 :: String
+        integer(I4P)                                  :: idx2,idx3
+    !-----------------------------------------------------------------
+        String = ''
+        if(allocated(this%Value)) then
+            do idx3=1, size(this%Value,3)
+                do idx2=1, size(this%Value,2)
+                    String = String // trim(str(n=this%Value(:,idx2,idx3))) // ','
+                enddo
+            enddo
+            String = trim(adjustl(String(:len(String)-1)))
+        endif
+    end function
+
     subroutine DimensionsWrapper3D_I1P_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -210,7 +230,7 @@ contains
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
-        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%toString()
 
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd

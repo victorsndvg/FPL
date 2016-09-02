@@ -39,6 +39,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_L_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_L_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper0D_L_toString
         procedure, public :: Free           => DimensionsWrapper0D_L_Free
         procedure, public :: Print          => DimensionsWrapper0D_L_Print
         final             ::                   DimensionsWrapper0D_L_Final
@@ -176,6 +177,17 @@ contains
     end function DimensionsWrapper0D_L_isOfDataType
 
 
+    function DimensionsWrapper0D_L_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_L_t), intent(IN)  :: this
+        character(len=:), allocatable               :: String
+    !-----------------------------------------------------------------
+        String = trim(str(n=this%Value))
+    end function
+
+
     subroutine DimensionsWrapper0D_L_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -193,7 +205,7 @@ contains
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                             ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
-                            ', Value = '//str(n=this%Value)
+                            ', Value = '//this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper0D_L_Print

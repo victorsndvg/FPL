@@ -39,6 +39,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper2D_L_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper2D_L_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper2D_L_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper2D_L_toString
         procedure, public :: Free           => DimensionsWrapper2D_L_Free
         procedure, public :: Print          => DimensionsWrapper2D_L_Print
         final             ::                   DimensionsWrapper2D_L_Final
@@ -190,6 +191,26 @@ contains
     end function DimensionsWrapper2D_L_isOfDataType
 
 
+    function DimensionsWrapper2D_L_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper2D_L_t), intent(IN)  :: this
+        character(len=:), allocatable               :: String
+        integer(I4P)                                :: idx1,idx2
+    !-----------------------------------------------------------------
+        String = ''
+        if(allocated(this%Value)) then
+            do idx2=1, size(this%Value,2)
+                do idx1=1, size(this%Value,1)
+                    String = String // trim(str(n=this%Value(idx1,idx2))) // ','
+                enddo
+            enddo
+            String = trim(adjustl(String(:len(String)-1)))
+        endif
+    end function
+
+
     subroutine DimensionsWrapper2D_L_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -208,7 +229,7 @@ contains
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
-        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(n=this%Value)
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper2D_L_Print

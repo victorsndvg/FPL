@@ -38,6 +38,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper5D_I8P_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper5D_I8P_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper5D_I8P_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper5D_I8P_toString
         procedure, public :: Print          => DimensionsWrapper5D_I8P_Print
         procedure, public :: Free           => DimensionsWrapper5D_I8P_Free
         final             ::                   DimensionsWrapper5D_I8P_Final
@@ -195,6 +196,30 @@ contains
     end function DimensionsWrapper5D_I8P_isOfDataType
 
 
+    function DimensionsWrapper5D_I8P_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper5D_I8P_t), intent(IN)  :: this
+        character(len=:), allocatable                 :: String
+        integer(I4P)                                  :: idx2,idx3,idx4,idx5
+    !-----------------------------------------------------------------
+        String = ''
+        if(allocated(this%Value)) then
+            do idx5=1, size(this%Value,5)
+                do idx4=1, size(this%Value,4)
+                    do idx3=1, size(this%Value,3)
+                        do idx2=1, size(this%Value,2)
+                            String = String // trim(str(n=this%Value(:,idx2,idx3,idx4,idx5))) // ','
+                        enddo
+                    enddo
+                enddo
+            enddo
+            String = trim(adjustl(String(:len(String)-1)))
+        endif
+    end function
+
+
     subroutine DimensionsWrapper5D_I8P_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -213,7 +238,7 @@ contains
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
-        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) str(no_sign=.true., n=this%Value)
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper5D_I8P_Print

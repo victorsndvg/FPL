@@ -38,6 +38,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper0D_DLCA_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper0D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper0D_DLCA_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper0D_DLCA_toString
         procedure, public :: Free           => DimensionsWrapper0D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper0D_DLCA_Print
         final             ::                   DimensionsWrapper0D_DLCA_Final
@@ -161,7 +162,7 @@ contains
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                             ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                             ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
-                            ', Value = '//trim(this%Value)
+                            ', Value = '//this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper0D_DLCA_Print
@@ -176,6 +177,17 @@ contains
     !-----------------------------------------------------------------
         DataSizeInBytes = byte_size(this%Value)
     end function DimensionsWrapper0D_DLCA_DataSizeInBytes
+
+
+    function DimensionsWrapper0D_DLCA_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper0D_DLCA_t), intent(IN)  :: this
+        character(len=:), allocatable                  :: String
+    !-----------------------------------------------------------------
+        String = trim(this%Value)
+    end function
 
 
     function DimensionsWrapper0D_DLCA_isOfDataType(this, Mold) result(isOfDataType)

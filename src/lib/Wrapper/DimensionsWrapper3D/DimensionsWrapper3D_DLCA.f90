@@ -38,6 +38,7 @@ private
         procedure, public :: GetPolymorphic => DimensionsWrapper3D_DLCA_GetPolymorphic
         procedure, public :: DataSizeInBytes=> DimensionsWrapper3D_DLCA_DataSizeInBytes
         procedure, public :: isOfDataType   => DimensionsWrapper3D_DLCA_isOfDataType
+        procedure, public :: toString       => DimensionsWrapper3D_DLCA_toString
         procedure, public :: Free           => DimensionsWrapper3D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper3D_DLCA_Print
         final             ::                   DimensionsWrapper3D_DLCA_Final
@@ -198,6 +199,31 @@ contains
     end function DimensionsWrapper3D_DLCA_isOfDataType
 
 
+    function DimensionsWrapper3D_DLCA_toString(this) result(String) 
+    !-----------------------------------------------------------------
+    !< Return the wrapper value as a string
+    !-----------------------------------------------------------------
+        class(DimensionsWrapper3D_DLCA_t), intent(IN)  :: this
+        character(len=:), allocatable                  :: String
+        integer(I4P)                                   :: idx1, idx2, idx3
+    !-----------------------------------------------------------------
+        String = ''
+        if(allocated(this%Value)) then
+            do idx3=1, size(this%Value,3)
+                do idx2=1, size(this%Value,2)
+                    do idx1=1, size(this%Value,1)
+                        String = String // trim(this%Value(idx1,idx2,idx3)) 
+                        if(idx1 /= size(this%Value,1) .and. &
+                           idx2 /= size(this%Value,2) .and. &
+                           idx3 /= size(this%Value,3)) String = String // '|'
+                    enddo
+                enddo
+            enddo
+            String = trim(adjustl(String(:len(String)-1)))
+        endif
+    end function
+
+
     subroutine DimensionsWrapper3D_DLCA_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -216,7 +242,7 @@ contains
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
-        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%Value
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%toString()
 
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
