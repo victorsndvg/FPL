@@ -17,6 +17,7 @@ logical                                :: solver_defined
 logical                                :: prec_defined
 logical                                :: has_same_type
 real(REAL64)                           :: Tolerance
+character(len=:), allocatable          :: String
 
 call FPL_Init()
 
@@ -72,14 +73,22 @@ do while (.not. My_List_Iterator%HasFinished())
             write(unit=OUTPUT_UNIT, fmt='(A)') '   Iterating over: "'//Prec_List_Iterator%GetKey()//'" ... '
             if(.not. Prec_List_Iterator%isSubList()) then
                 call Prec_List_Iterator%Print(prefix='     ')
+                 String = String // Prec_List_Iterator%GetKey() // '=' // Prec_List_Iterator%toString() // '; '
             endif
             call Prec_List_Iterator%Next()
         enddo
     else
+        String = String // My_List_Iterator%GetKey() // '=' // My_List_Iterator%toString() // '; '
         call My_List_Iterator%Print(prefix='  ')
     endif
     call My_List_Iterator%Next()
 enddo
+
+write(unit=OUTPUT_UNIT, fmt='(A)') ' '
+write(unit=OUTPUT_UNIT, fmt='(A)') ' -----------------'
+write(unit=OUTPUT_UNIT, fmt='(A)') ' | All in a line |'
+write(unit=OUTPUT_UNIT, fmt='(A)') ' -----------------'
+print*, String
 
 call My_List%Free()
 call My_List_Iterator%Free()

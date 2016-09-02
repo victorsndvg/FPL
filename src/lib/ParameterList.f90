@@ -120,6 +120,7 @@ save
         procedure, non_overridable, public :: GetSubList     => ParameterList_GetSubList
         procedure, non_overridable, public :: isPresent      => ParameterList_isPresent
         procedure, non_overridable, public :: isSubList      => ParameterList_isSubList
+        procedure, non_overridable, public :: GetAsString    => ParameterList_GetAsString
         procedure, non_overridable, public :: Free           => ParameterList_Free
         procedure, non_overridable, public :: Print          => ParameterList_Print
         procedure, non_overridable, public :: Length         => ParameterList_Length
@@ -168,6 +169,7 @@ save
         procedure, public, non_overridable :: DataSizeInBytes          => ParameterListIterator_DataSizeInBytes
         procedure, public, non_overridable :: GetSubList               => ParameterListIterator_GetSubList
         procedure, public, non_overridable :: isSubList                => ParameterListIterator_isSubList
+        procedure, public, non_overridable :: toString                 => ParameterListIterator_toString
         procedure, public, non_overridable :: Print                    => ParameterListIterator_Print
         procedure, public, non_overridable :: Free                     => ParameterListIterator_Free
         generic,   public                  :: Get                      => ParameterListIterator_Get0D, &
@@ -1346,6 +1348,36 @@ contains
     end function ParameterList_GetIterator
 
 
+    function ParameterList_GetAsString(this,Key,String) result(FPLerror)
+    !-----------------------------------------------------------------
+    !< Return a scalar Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN)    :: this           !< Parameter List
+        character(len=*),                     intent(IN)    :: Key            !< String Key
+        character(len=:), allocatable,        intent(INOUT) :: String         !< Returned value as string
+        class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
+    !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
+        nullify(Wrapper)
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper_t)
+                    String = Wrapper%toString()
+                class Default
+                    FPLerror = FPLWrapperError
+                    call msg%Error(txt='Getting [Key="'//Key//'"]: Unknown Wrapper. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
+            end select
+        else
+            FPLerror = FPLWrapperFactoryError
+            call msg%Error(txt='Getting [Key="'//Key//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
+        endif
+    end function ParameterList_GetAsString
+
+
     recursive subroutine ParameterList_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print the content of the DataBase
@@ -2099,6 +2131,36 @@ contains
             end select
         endif
     end function ParameterListIterator_isOfDataType7D
+
+
+    function ParameterListIterator_toString(this) result(String)
+    !-----------------------------------------------------------------
+    !< Return a scalar Value given the Key
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
+        character(len=:), allocatable                       :: String         !< Returned value as string
+        class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
+    !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper_t)
+                    String = Wrapper%toString()
+                class Default
+                    FPLerror = FPLWrapperError
+                    call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Value was not modified.', &
+                                   file=__FILE__, line=__LINE__ )
+            end select
+        else
+            FPLerror = FPLWrapperFactoryError
+            call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
+        endif
+    end function ParameterListIterator_toString
+
 
 
     recursive subroutine ParameterListIterator_Print(this, unit, prefix, iostat, iomsg)

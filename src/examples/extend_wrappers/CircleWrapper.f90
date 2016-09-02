@@ -18,6 +18,7 @@ private
         procedure, public :: GetPointer     => CircleWrapper_GetPointer     !< Return an unlimited polymorphic pointer to the Value
         procedure, public :: DataSizeInBytes=> CircleWrapper_DataSizeInBytes!< Return the size of the stored data in bytes
         procedure, public :: isOfDataType   => CircleWrapper_isOfDataType   !< Check if the data type of a input Mold is Circle_t
+        procedure, public :: toString       => CircleWrapper_toString       !< Return the value as a string
         procedure, public :: Free           => CircleWrapper_Free           !< Free the Wrapper
         procedure, public :: Print          => CircleWrapper_Print          !< Print the Wrapper content
     end type           
@@ -132,6 +133,22 @@ contains
     end function CircleWrapper_isOfDataType
 
 
+    function CircleWrapper_toString(this) result(String)
+    !-----------------------------------------------------------------
+    !< Check if Mold and Value are of the same datatype 
+    !-----------------------------------------------------------------
+        class(CircleWrapper_t),           intent(IN) :: this          !< Circle wrapper 0D
+        character(len=:), allocatable                :: String        !< Return the Value as a string
+        real                                         :: Radius       !< Circle radius
+    !-----------------------------------------------------------------
+        String = ''
+        if(allocated(this%Value)) then
+            call this%Value%GetRadius(Radius=Radius)
+            String = 'Radius = '//str(no_sign=.true., n=Radius)
+        endif
+    end function CircleWrapper_toString
+
+
     subroutine CircleWrapper_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
     !< Print Wrapper
@@ -147,9 +164,8 @@ contains
         real                                          :: Radius       !< Circle radius
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        call this%Value%GetRadius(Radius=Radius)
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = Circle'//&
-                            ', Radius = '//str(no_sign=.true., n=Radius)
+                            ', '//this%toString()
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine CircleWrapper_Print

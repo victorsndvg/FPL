@@ -9,6 +9,7 @@ type(Circle_t)                 :: MyCircle
 type(ParameterList_t)          :: MyList
 type(ParameterList_t), pointer :: CircleList
 integer                        :: FPLError
+character(len=:), allocatable  :: String
 
 !< Initialize FPL with the default WrapperFactories
 call FPL_Init()
@@ -21,6 +22,8 @@ call myList%Init()
 
 !< Add parameters to the list
 FPLError   =  MyList%Set(Key='NumberOfCircles',Value=5)
+FPLError   =  MyList%GetAsString(Key='NumberOfCircles',String=String)
+print*, 'NumberOfCircles = '//String
 
 !< Add a SubList to the list
 CircleList => MyList%NewSubList(Key='Circles')
