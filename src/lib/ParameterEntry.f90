@@ -1,5 +1,5 @@
 !-----------------------------------------------------------------
-! FPL (Fortran Parameter List)
+! FPL (Fortran Parameter Entry)
 ! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
@@ -26,11 +26,29 @@ USE DimensionsWrapper
 implicit none
 private
 
+    type :: EntryListIterator_t
+    private
+        type(ParameterEntry_t),     pointer :: CurrentEntry => NULL()
+    contains
+    private
+        procedure,         non_overridable ::                    EntryListIterator_Assignment
+        procedure, public, non_overridable :: Init            => EntryListIterator_Init
+        procedure, public, non_overridable :: Next            => EntryListIterator_Next
+        procedure, public, non_overridable :: HasFinished     => EntryListIterator_HasFinished
+        procedure, public, non_overridable :: GetEntry        => EntryListIterator_GetEntry
+        procedure, public, non_overridable :: GetKey          => EntryListIterator_GetKey
+        procedure, public, non_overridable :: PointToValue    => EntryListIterator_PointToValue
+        procedure, public, non_overridable :: Free            => EntryListIterator_Free
+        generic,   public                  :: Assignment(=)   => EntryListIterator_Assignment
+        final                              ::                    EntryListIterator_Final
+    end type
+
+
     type :: ParameterEntry_t
     private
         character(len=:), allocatable         :: Key
-        class(*),                    pointer  :: Value
-        class(ParameterEntry_t),     pointer  :: Next   => null()
+        class(*),                    pointer  :: Value  => NULL()
+        class(ParameterEntry_t),     pointer  :: Next   => NULL()
     contains
     private
         procedure, non_overridable, public :: Free             => ParameterEntry_Free
@@ -48,10 +66,12 @@ private
         procedure, non_overridable, public :: GetValue         => ParameterEntry_GetValue
         procedure, non_overridable, public :: DeallocateValue  => ParameterEntry_DeallocateValue
         procedure, non_overridable, public :: PointToValue     => ParameterEntry_PointToValue
+        procedure, non_overridable, public :: GetIterator      => ParameterEntry_GetIterator
         final                              ::                     ParameterEntry_Finalize 
     end type ParameterEntry_t
 
 public :: ParameterEntry_t
+public :: EntryListIterator_t
 
 contains
 
@@ -60,7 +80,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(IN) :: this               !< Parameter List 
+        class(ParameterEntry_t), intent(IN) :: this               !< Parameter Entry 
         logical                             :: hasNext            !< Check if Next is associated
     !-----------------------------------------------------------------
         hasNext = associated(this%Next)
@@ -71,7 +91,7 @@ contains
     !-----------------------------------------------------------------
     !< Set the pointer to the Next node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),          intent(INOUT) :: this        !< Parameter List 
+        class(ParameterEntry_t),          intent(INOUT) :: this        !< Parameter Entry 
         class(ParameterEntry_t), pointer, intent(IN)    :: Next        !< Pointer to Next 
     !-----------------------------------------------------------------
         this%Next => Next
@@ -82,7 +102,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to the Next node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter List 
+        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter Entry 
         class(ParameterEntry_t), pointer    :: Next                   !< Pointer to Next
     !-----------------------------------------------------------------
         nullify(Next)
@@ -94,7 +114,7 @@ contains
     !-----------------------------------------------------------------
     !< Nullify Next
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter List 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
     !-----------------------------------------------------------------
         nullify(this%Next)
     end subroutine ParameterEntry_NullifyNext
@@ -104,7 +124,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Key is allocated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),     intent(IN) :: this               !< Parameter List 
+        class(ParameterEntry_t),     intent(IN) :: this               !< Parameter Entry 
         logical                                 :: hasKey             !< Check if Key is associated
     !-----------------------------------------------------------------
         hasKey = allocated(this%Key)
@@ -115,7 +135,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),               intent(INOUT) :: this  !< Parameter List 
+        class(ParameterEntry_t),               intent(INOUT) :: this  !< Parameter Entry 
         character(len=*),                      intent(IN)    :: Key   !< Key
     !-----------------------------------------------------------------
         this%Key = Key
@@ -126,7 +146,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),     intent(IN) :: this               !< Parameter List 
+        class(ParameterEntry_t),     intent(IN) :: this               !< Parameter Entry 
         character(len=:), allocatable           :: Key                !< Key
     !-----------------------------------------------------------------
         Key = this%Key
@@ -137,7 +157,7 @@ contains
     !-----------------------------------------------------------------
     !< Deallocate Key if allocated
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter List 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
     !-----------------------------------------------------------------
         if(this%HasKey()) deallocate(this%Key)
     end subroutine ParameterEntry_DeallocateKey
@@ -147,7 +167,7 @@ contains
     !-----------------------------------------------------------------
     !< Free the Entry
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter List 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
     !-----------------------------------------------------------------
         call this%DeallocateKey()
         call this%DeallocateValue()
@@ -159,7 +179,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Value is allocated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter List 
+        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter Entry 
         logical                             :: hasValue               !< Check if Value is allocated
     !-----------------------------------------------------------------
         hasValue = associated(this%Value)
@@ -170,7 +190,7 @@ contains
     !-----------------------------------------------------------------
     !< Set a concrete Wrapper
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT)  :: this               !< Parameter List
+        class(ParameterEntry_t), intent(INOUT)  :: this               !< Parameter Entry
         class(*), pointer,       intent(IN)     :: Value              !< Concrete Wrapper
     !-----------------------------------------------------------------
         if(this%HasValue()) deallocate(this%Value)
@@ -182,7 +202,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a concrete WrapperFactory
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),             intent(IN)  :: this      !< Parameter List
+        class(ParameterEntry_t),             intent(IN)  :: this      !< Parameter Entry
         class(*), allocatable,               intent(OUT) :: Value     !< Concrete Wrapper
     !-----------------------------------------------------------------
         if(this%HasValue()) allocate(Value, source=this%Value)
@@ -193,7 +213,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to a concrete WrapperFactory
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),         intent(IN)  :: this          !< Parameter List
+        class(ParameterEntry_t),         intent(IN)  :: this          !< Parameter Entry
         class(*), pointer                            :: Value         !< Concrete Wrapper
     !-----------------------------------------------------------------
         Value => this%Value
@@ -204,7 +224,7 @@ contains
     !-----------------------------------------------------------------
     !< Deallocate Key if allocated
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter List 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
     !-----------------------------------------------------------------
         if(this%HasValue()) deallocate(this%Value)
     end subroutine ParameterEntry_DeallocateValue
@@ -214,17 +234,28 @@ contains
     !-----------------------------------------------------------------
     !< Finalize procedure
     !-----------------------------------------------------------------
-        type(ParameterEntry_t), intent(INOUT):: this                  !< Parameter List 
+        type(ParameterEntry_t), intent(INOUT):: this                  !< Parameter Entry 
     !-----------------------------------------------------------------
         call this%Free()
     end subroutine ParameterEntry_Finalize
 
 
+    function ParameterEntry_GetIterator(this) result(Iterator)
+    !-----------------------------------------------------------------
+    !< Free the list
+    !-----------------------------------------------------------------
+        class(ParameterEntry_t),  target, intent(INOUT) :: this       !< Parameter Entry
+        type(EntryListIterator_t)                       :: Iterator   !< List iterator
+    !-----------------------------------------------------------------
+        call Iterator%Init(Entry=this)    
+    end function ParameterEntry_GetIterator
+
+
     subroutine ParameterEntry_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
-    !< Print the keys/value pair contained in the parameter list
+    !< Print the keys/value pair contained in the Parameter Entry
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),          intent(IN)  :: this         !< Parameter list
+        class(ParameterEntry_t),          intent(IN)  :: this         !< Parameter Entry
         integer(I4P),                     intent(IN)  :: unit         !< Logic unit.
         character(*), optional,           intent(IN)  :: prefix       !< Prefixing string.
         integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
@@ -247,5 +278,118 @@ contains
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine ParameterEntry_Print
 
+
+!---------------------------------------------------------------------
+!< Entry List Iterator Procedures
+!---------------------------------------------------------------------
+
+    subroutine EntryListIterator_Assignment(this, ListIterator)
+    !-----------------------------------------------------------------
+    !< Assignment operator
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t), intent(INOUT) :: this             ! Output List iterator
+        type(EntryListIterator_t),  intent(IN)    :: ListIterator     ! Input List iterator
+    !-----------------------------------------------------------------
+        this%CurrentEntry => ListIterator%CurrentEntry
+    end subroutine EntryListIterator_Assignment
+
+
+    subroutine EntryListIterator_Free(this)
+    !-----------------------------------------------------------------
+    !< Free the List iterator
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t), intent(INOUT) :: this             ! List iterator
+    !-----------------------------------------------------------------
+        nullify(this%CurrentEntry)
+    end subroutine EntryListIterator_Free
+
+
+    subroutine EntryListIterator_Final(this)
+    !-----------------------------------------------------------------
+    !< Free the List iterator
+    !-----------------------------------------------------------------
+        type(EntryListIterator_t), intent(INOUT) :: this              ! List iterator
+    !-----------------------------------------------------------------
+        call this%Free()
+    end subroutine EntryListIterator_Final
+
+
+    subroutine EntryListIterator_Init(this, Entry)
+    !-----------------------------------------------------------------
+    !< Associate the iterator with an entry
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t),      intent(INOUT) :: this        ! List iterator
+        type(ParameterEntry_t), pointer, intent(IN)    :: Entry       ! List entry
+    !-----------------------------------------------------------------
+        call this%Free()
+        this%CurrentEntry => Entry
+    end subroutine EntryListIterator_Init
+
+
+    subroutine EntryListIterator_Next(this)
+    !-----------------------------------------------------------------
+    !< The iterator points to the next associated entry
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t),     intent(INOUT) :: this         ! List iterator
+    !-----------------------------------------------------------------
+        if(.not. this%HasFinished()) this%CurrentEntry => this%CurrentEntry%GetNext()
+    end subroutine EntryListIterator_Next
+
+
+    function EntryListIterator_GetEntry(this) result(CurrentEntry)
+    !-----------------------------------------------------------------
+    !< Return the current Entry
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t),  intent(IN) :: this               ! List iterator
+        type(ParameterEntry_t),  pointer        :: CurrentEntry       ! Current entry
+    !-----------------------------------------------------------------
+        nullify(CurrentEntry)
+        CurrentEntry => this%CurrentEntry
+    end function EntryListIterator_GetEntry
+
+
+    function EntryListIterator_GetKey(this) result(Key)
+    !-----------------------------------------------------------------
+    !< Return the current Key
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t),  intent(IN) :: this               ! List iterator
+        type(ParameterEntry_t),  pointer        :: CurrentEntry       ! Current entry
+        character(len=:), allocatable           :: Key                ! Entry Key
+    !-----------------------------------------------------------------
+        if(associated(this%CurrentEntry)) then
+            if(this%CurrentEntry%HasKey()) Key = this%CurrentEntry%GetKey()
+        endif
+    end function EntryListIterator_GetKey
+
+
+    function EntryListIterator_PointToValue(this) result(Value)
+    !-----------------------------------------------------------------
+    !< Return the current Value
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t),  intent(IN) :: this               ! List iterator
+        type(ParameterEntry_t),  pointer        :: CurrentEntry       ! Current entry
+        class(*), pointer                       :: Value              ! Entry Value
+    !-----------------------------------------------------------------
+        nullify(Value)
+        if(associated(this%CurrentEntry)) then
+            if(this%CurrentEntry%HasValue()) Value => this%CurrentEntry%PointToValue()
+        endif
+    end function EntryListIterator_PointToValue
+
+
+    function EntryListIterator_HasFinished(this) result(HasFinished)
+    !-----------------------------------------------------------------
+    !< Check if Iterator has reached the end of the dictionary
+    !-----------------------------------------------------------------
+        class(EntryListIterator_t),   intent(IN) :: this              ! List iterator
+        logical                                  :: HasFinished       ! Check if has reached the end of the list 
+    !-----------------------------------------------------------------
+        HasFinished = .false.
+        if(.not. associated(this%CurrentEntry)) then
+            HasFinished = .true.
+        elseif(.not. this%CurrentEntry%HasNext()) then
+            HasFinished = .true.
+        endif
+    end function EntryListIterator_HasFinished
 
 end module ParameterEntry

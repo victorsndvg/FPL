@@ -52,6 +52,7 @@ private
         procedure, non_overridable, public :: Set        => ParameterEntryDictionary_Set
         procedure, non_overridable, public :: Get        => ParameterEntryDictionary_Get
         procedure, non_overridable, public :: GetPointer => ParameterEntryDictionary_GetPointer
+        procedure, non_overridable, public :: GetDatabase=> ParameterEntryDictionary_GetDataBase
         procedure, non_overridable, public :: Del        => ParameterEntryDictionary_Delete
         procedure, non_overridable, public :: IsPresent  => ParameterEntryDictionary_IsPresent
         procedure, non_overridable, public :: Length     => ParameterEntryDictionary_Length
@@ -150,6 +151,17 @@ contains
         Entry => this%DataBase(this%Hash(Key=Key))%GetEntry(Key=Key)
         if(associated(Entry)) Value => Entry%PointToValue()
     end subroutine ParameterEntryDictionary_GetPointer
+
+
+    function ParameterEntryDictionary_GetDataBase(this) result(Database)
+    !-----------------------------------------------------------------
+    !< Return a pointer to a Dictionary Database
+    !-----------------------------------------------------------------
+        class(ParameterEntryDictionary_t), target, intent(IN) :: this        !< Parameter Entry Dictionary
+        type(ParameterRootEntry_t),        pointer            :: Database(:) !< Dictionary Database
+    !-----------------------------------------------------------------
+        DataBase => this%Database
+    end function ParameterEntryDictionary_GetDataBase
 
 
     subroutine ParameterEntryDictionary_Delete(this, Key)

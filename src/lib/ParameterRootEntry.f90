@@ -28,13 +28,13 @@ private
 
     type :: ParameterRootEntry_t
     private
-        class(ParameterEntry_t), pointer :: Root => null()
+        type(ParameterEntry_t),    pointer :: Root => null()
     contains
     private
         procedure, non_overridable         :: Init             => ParameterRootEntry_Init
-        procedure, non_overridable         :: HasRoot          => ParameterRootEntry_HasRoot
+        procedure, non_overridable, public :: HasRoot          => ParameterRootEntry_HasRoot
         procedure, non_overridable         :: SetRoot          => ParameterRootEntry_SetRoot
-        procedure, non_overridable         :: GetRoot          => ParameterRootEntry_GetRoot
+        procedure, non_overridable, public :: GetRoot          => ParameterRootEntry_GetRoot
         procedure, non_overridable         :: NullifyRoot      => ParameterRootEntry_NullifyRoot
         procedure, non_overridable         :: DeallocateRoot   => ParameterRootEntry_DeallocateRoot
         procedure, non_overridable, public :: GetEntry         => ParameterRootEntry_GetEntry
@@ -44,6 +44,7 @@ private
         procedure, non_overridable, public :: Length           => ParameterRootEntry_Length
         procedure, non_overridable, public :: RemoveEntry      => ParameterRootEntry_RemoveEntry
         procedure, non_overridable, public :: AddEntry         => ParameterRootEntry_AddEntry
+        procedure, non_overridable, public :: GetIterator      => ParameterRootEntry_GetIterator
         procedure, non_overridable, public :: Free             => ParameterRootEntry_Free
         final                              ::                     ParameterRootEntry_Finalize 
     end type
@@ -281,7 +282,6 @@ contains
     end function ParameterRootEntry_Length
 
 
-
     subroutine ParameterRootEntry_Free(this)
     !-----------------------------------------------------------------
     !< Free the list
@@ -298,6 +298,16 @@ contains
         enddo
     end subroutine ParameterRootEntry_Free
 
+
+    function ParameterRootEntry_GetIterator(this) result(Iterator)
+    !-----------------------------------------------------------------
+    !< Free the list
+    !-----------------------------------------------------------------
+        class(ParameterRootEntry_t),  intent(INOUT) :: this           !< Parameter Root Entry
+        type(EntryListIterator_t)                   :: Iterator       !< List iterator
+    !-----------------------------------------------------------------
+        call Iterator%Init(Entry=this%Root)    
+    end function ParameterRootEntry_GetIterator
 
 
     subroutine ParameterRootEntry_Print(this, unit, prefix, iostat, iomsg)

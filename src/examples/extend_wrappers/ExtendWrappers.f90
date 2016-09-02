@@ -32,11 +32,8 @@ call myCircle%SetRadius(Radius=3.0); FPLError = CircleList%Set(Key='Circle_3',Va
 call myCircle%SetRadius(Radius=4.0); FPLError = CircleList%Set(Key='Circle_4',Value=myCircle)
 call myCircle%SetRadius(Radius=5.0); FPLError = CircleList%Set(Key='Circle_5',Value=myCircle)
 
-!< Print the content of MyList
+!< Print the content of MyList (Recursive)
 call MyList%Print()
-
-!< Print the content of CircleList
-call CircleList%Print()
 
 !< Free MyList
 call MyList%Free()

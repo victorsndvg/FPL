@@ -5,15 +5,18 @@ Program FortranParameterList_Example
 !-----------------------------------------------------------------
 
 USE FPL
+USE IR_Precision
 USE iso_fortran_env, only: REAL64, OUTPUT_UNIT
 
-type(ParameterList_t)          :: My_List
-type(ParameterList_t), pointer :: Prec_List
-integer                        :: FPLError
-logical                        :: solver_defined
-logical                        :: prec_defined
-logical                        :: has_same_type
-real(REAL64)                   :: Tolerance
+type(ParameterList_t)                  :: My_List
+type(ParameterListIterator_t)          :: My_List_Iterator
+type(ParameterList_t), pointer         :: Prec_List
+type(ParameterListIterator_t)          :: Prec_List_Iterator
+integer                                :: FPLError
+logical                                :: solver_defined
+logical                                :: prec_defined
+logical                                :: has_same_type
+real(REAL64)                           :: Tolerance
 
 call FPL_Init()
 
@@ -53,7 +56,34 @@ write(unit=OUTPUT_UNIT, fmt='(A)') ' | Prec_List |'
 write(unit=OUTPUT_UNIT, fmt='(A)') ' -------------'
 call Prec_List%Print(unit=OUTPUT_UNIT)
 
+
+write(unit=OUTPUT_UNIT, fmt='(A)') ' '
+write(unit=OUTPUT_UNIT, fmt='(A)') ' -------------'
+write(unit=OUTPUT_UNIT, fmt='(A)') ' | Iterators |'
+write(unit=OUTPUT_UNIT, fmt='(A)') ' -------------'
+nullify(Prec_List)
+My_List_Iterator = My_List%GetIterator()
+do while (.not. My_List_Iterator%HasFinished())
+    write(unit=OUTPUT_UNIT, fmt='(A)') 'Iterating over: "'//My_List_Iterator%GetKey()//'" ... '
+    if(My_List_Iterator%isSubList()) then
+        FPLError = My_List_Iterator%GetSubList(Prec_List)
+        Prec_List_Iterator = Prec_List%GetIterator()
+        do while (.not. Prec_List_Iterator%HasFinished())
+            write(unit=OUTPUT_UNIT, fmt='(A)') '   Iterating over: "'//Prec_List_Iterator%GetKey()//'" ... '
+            if(.not. Prec_List_Iterator%isSubList()) then
+                call Prec_List_Iterator%Print(prefix='     ')
+            endif
+            call Prec_List_Iterator%Next()
+        enddo
+    else
+        call My_List_Iterator%Print(prefix='  ')
+    endif
+    call My_List_Iterator%Next()
+enddo
+
 call My_List%Free()
+call My_List_Iterator%Free()
+call Prec_List_Iterator%Free()
 
 call FPL_Finalize()
 
