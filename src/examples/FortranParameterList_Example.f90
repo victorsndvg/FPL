@@ -63,6 +63,7 @@ write(unit=OUTPUT_UNIT, fmt='(A)') ' -------------'
 write(unit=OUTPUT_UNIT, fmt='(A)') ' | Iterators |'
 write(unit=OUTPUT_UNIT, fmt='(A)') ' -------------'
 nullify(Prec_List)
+String = ''
 My_List_Iterator = My_List%GetIterator()
 do while (.not. My_List_Iterator%HasFinished())
     write(unit=OUTPUT_UNIT, fmt='(A)') 'Iterating over: "'//My_List_Iterator%GetKey()//'" ... '
