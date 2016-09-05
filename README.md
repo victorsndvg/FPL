@@ -90,7 +90,7 @@ FPLError = My_List%Get(Key='Max Iters', Value=MaxIters)
 ```fortran
 character(len=:), allocatable :: MaxItersString
 
-FPLError = My_List%GetAsString(Key='Max Iters', String=MaxIters)
+FPLError = My_List%GetAsString(Key='Max Iters', String=MaxItersString)
 ```
 
 ###Deleting parameters
@@ -152,7 +152,7 @@ prec_defined = My_List%isSubList(Key='Preconditioner')
 call My_List%Print()
 ```
 
-###Iterate over a ParameterList
+###Iterate on a ParameterList
 
 ParameterList also includes a derived type that works like an iterator to go through all stored parameters without asking for the key.
 
