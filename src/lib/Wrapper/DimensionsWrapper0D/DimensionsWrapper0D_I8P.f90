@@ -183,7 +183,8 @@ contains
         class(DimensionsWrapper0D_I8P_t), intent(IN)  :: this
         character(len=:), allocatable                 :: String
     !-----------------------------------------------------------------
-        String = trim(str(n=this%Value))
+        String = ''
+        if(allocated(this%Value)) String = trim(str(n=this%Value))
     end function
 
 

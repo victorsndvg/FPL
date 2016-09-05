@@ -186,7 +186,8 @@ contains
         class(DimensionsWrapper0D_DLCA_t), intent(IN)  :: this
         character(len=:), allocatable                  :: String
     !-----------------------------------------------------------------
-        String = trim(this%Value)
+        String = ''
+        if(allocated(this%Value)) String = trim(this%Value)
     end function
 
 
