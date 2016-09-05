@@ -1348,13 +1348,14 @@ contains
     end function ParameterList_GetIterator
 
 
-    function ParameterList_GetAsString(this,Key,String) result(FPLerror)
+    function ParameterList_GetAsString(this,Key,String,Separator) result(FPLerror)
     !-----------------------------------------------------------------
     !< Return a scalar Value given the Key
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN)    :: this           !< Parameter List
         character(len=*),                     intent(IN)    :: Key            !< String Key
         character(len=:), allocatable,        intent(INOUT) :: String         !< Returned value as string
+        character(len=1), optional,           intent(IN)    :: Separator      !< Array values separator
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: FPLerror       !< Error flag
     !-----------------------------------------------------------------
@@ -1364,7 +1365,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%toString()
+                    String = Wrapper%toString(Separator=Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Unknown Wrapper. Value was not modified.', &
@@ -2133,11 +2134,12 @@ contains
     end function ParameterListIterator_isOfDataType7D
 
 
-    function ParameterListIterator_toString(this) result(String)
+    function ParameterListIterator_toString(this, Separator) result(String)
     !-----------------------------------------------------------------
     !< Return a scalar Value given the Key
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
+        character(len=1), optional,           intent(IN)    :: Separator      !< Array values separator
         character(len=:), allocatable                       :: String         !< Returned value as string
         class(*),                    pointer                :: Wrapper        !< Wrapper
         integer(I4P)                                        :: FPLerror       !< Error flag
@@ -2148,7 +2150,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%toString()
+                    String = Wrapper%toString(Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Value was not modified.', &

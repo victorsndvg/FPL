@@ -133,13 +133,14 @@ contains
     end function CircleWrapper_isOfDataType
 
 
-    function CircleWrapper_toString(this) result(String)
+    function CircleWrapper_toString(this, Separator) result(String)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
     !-----------------------------------------------------------------
         class(CircleWrapper_t),           intent(IN) :: this          !< Circle wrapper 0D
+        character(len=1), optional,       intent(IN) :: Separator     !< Value separator for multidimensional variables
         character(len=:), allocatable                :: String        !< Return the Value as a string
-        real                                         :: Radius       !< Circle radius
+        real                                         :: Radius        !< Circle radius
     !-----------------------------------------------------------------
         String = ''
         if(allocated(this%Value)) then

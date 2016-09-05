@@ -197,21 +197,25 @@ contains
     end function DimensionsWrapper5D_I2P_isOfDataType
 
 
-    function DimensionsWrapper5D_I2P_toString(this) result(String) 
+    function DimensionsWrapper5D_I2P_toString(this, Separator) result(String) 
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
         class(DimensionsWrapper5D_I2P_t), intent(IN)  :: this
+        character(len=1), optional,       intent(IN)  :: Separator
         character(len=:), allocatable                 :: String
+        character(len=1)                              :: Sep
         integer(I4P)                                  :: idx2,idx3,idx4,idx5
     !-----------------------------------------------------------------
         String = ''
+        Sep = ','
         if(allocated(this%Value)) then
+            if(present(Separator)) Sep = Separator
             do idx5=1, size(this%Value,5)
                 do idx4=1, size(this%Value,4)
                     do idx3=1, size(this%Value,3)
                         do idx2=1, size(this%Value,2)
-                            String = String // trim(str(n=this%Value(:,idx2,idx3,idx4,idx5))) // ','
+                            String = String // trim(str(n=this%Value(:,idx2,idx3,idx4,idx5))) // Sep
                         enddo
                     enddo
                 enddo

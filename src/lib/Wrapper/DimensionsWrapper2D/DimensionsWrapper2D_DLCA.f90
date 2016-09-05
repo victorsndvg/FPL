@@ -197,20 +197,24 @@ contains
     end function DimensionsWrapper2D_DLCA_isOfDataType
 
 
-    function DimensionsWrapper2D_DLCA_toString(this) result(String) 
+    function DimensionsWrapper2D_DLCA_toString(this, Separator) result(String) 
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_DLCA_t), intent(IN)  :: this
+        character(len=1), optional,        intent(IN)  :: Separator
         character(len=:), allocatable                  :: String
+        character(len=1)                               :: Sep
         integer(I4P)                                   :: idx1, idx2
     !-----------------------------------------------------------------
         String = ''
+        Sep = '|'
         if(allocated(this%Value)) then
+            if(present(Separator)) Sep = Separator
             do idx2=1, size(this%Value,2)
                 do idx1=1, size(this%Value,1)
                     String = String // trim(this%Value(idx1,idx2)) 
-                    if(idx1 /= size(this%Value,1) .and. idx2 /= size(this%Value,2)) String = String // '|'
+                    if(idx1 /= size(this%Value,1) .and. idx2 /= size(this%Value,2)) String = String // Sep
                 enddo
             enddo
             String = trim(adjustl(String(:len(String)-1)))

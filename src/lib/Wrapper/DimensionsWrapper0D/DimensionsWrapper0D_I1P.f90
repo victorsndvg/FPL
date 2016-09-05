@@ -177,11 +177,12 @@ contains
     end function DimensionsWrapper0D_I1P_isOfDataType
 
 
-    function DimensionsWrapper0D_I1P_toString(this) result(String) 
+    function DimensionsWrapper0D_I1P_toString(this, Separator) result(String) 
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
         class(DimensionsWrapper0D_I1P_t), intent(IN)  :: this
+        character(len=1), optional,       intent(IN)  :: Separator
         character(len=:), allocatable                 :: String
     !-----------------------------------------------------------------
         String = ''

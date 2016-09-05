@@ -185,15 +185,16 @@ contains
     end function DimensionsWrapper1D_R8P_isOfDataType
 
 
-    function DimensionsWrapper1D_R8P_toString(this) result(String) 
+    function DimensionsWrapper1D_R8P_toString(this, Separator) result(String) 
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_R8P_t), intent(IN)  :: this
+        character(len=1), optional,       intent(IN)  :: Separator
         character(len=:), allocatable                 :: String
     !-----------------------------------------------------------------
         String = ''
-        if(allocated(this%Value)) String = trim(str(n=this%Value))
+        if(allocated(this%Value)) String = trim(str(n=this%Value, separator=Separator))
     end function
 
 

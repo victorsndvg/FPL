@@ -73,12 +73,12 @@ do while (.not. My_List_Iterator%HasFinished())
             write(unit=OUTPUT_UNIT, fmt='(A)') '   Iterating over: "'//Prec_List_Iterator%GetKey()//'" ... '
             if(.not. Prec_List_Iterator%isSubList()) then
                 call Prec_List_Iterator%Print(prefix='     ')
-                 String = String // Prec_List_Iterator%GetKey() // '=' // Prec_List_Iterator%toString() // '; '
+                 String = String // Prec_List_Iterator%GetKey() // '=' // Prec_List_Iterator%toString(Separator=' ') // '; '
             endif
             call Prec_List_Iterator%Next()
         enddo
     else
-        String = String // My_List_Iterator%GetKey() // '=' // My_List_Iterator%toString() // '; '
+        String = String // My_List_Iterator%GetKey() // '=' // My_List_Iterator%toString(Separator=' ') // '; '
         call My_List_Iterator%Print(prefix='  ')
     endif
     call My_List_Iterator%Next()

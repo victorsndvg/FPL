@@ -186,18 +186,22 @@ contains
     end function DimensionsWrapper1D_L_isOfDataType
 
 
-    function DimensionsWrapper1D_L_toString(this) result(String) 
+    function DimensionsWrapper1D_L_toString(this, Separator) result(String) 
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
         class(DimensionsWrapper1D_L_t), intent(IN)  :: this
+        character(len=1), optional,     intent(IN)  :: Separator
         character(len=:), allocatable               :: String
+        character(len=1)                            :: Sep
         integer(I4P)                                :: idx
     !-----------------------------------------------------------------
         String = ''
+        Sep = ','
         if(allocated(this%Value)) then
+            if(present(Separator)) Sep = Separator
             do idx=1, size(this%Value)
-                String = String // trim(str(n=this%Value(idx))) // ' '
+                String = String // trim(str(n=this%Value(idx))) // Sep
             enddo
         endif
     end function
