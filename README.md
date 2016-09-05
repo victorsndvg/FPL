@@ -63,7 +63,7 @@ type(ParameterList_t) :: My_List
 call FPL_Init()
 call My_List%Init()
 
-... [Program boddy]
+... [Program body]
 
 call My_List%Free()
 call FPL_Finalize()
@@ -83,6 +83,14 @@ FPLError = My_List%Set(Key='Solver', Value='GMRES')
 integer :: MaxIters
 
 FPLError = My_List%Get(Key='Max Iters', Value=MaxIters)
+```
+
+###Getting parameters as strings
+
+```fortran
+character(len=:), allocatable :: MaxItersString
+
+FPLError = My_List%GetAsString(Key='Max Iters', String=MaxIters)
 ```
 
 ###Deleting parameters
@@ -133,14 +141,43 @@ call Prec_List%Set(Key='Drop Tolerance', Value=1.e-3)
 ###Checking if is a parameter sublist
 
 ```fortran
-logical :: solver_defined
+logical :: prec_defined
 
 prec_defined = My_List%isSubList(Key='Preconditioner')
 ```
 
-###Print the content of a parameter list
+###Print (recursive) the content of a parameter list
 
 ```fortran
 call My_List%Print()
+```
+
+###Iterate over a ParameterList
+
+ParameterList also includes a derived type that works like an iterator to go through all stored parameters without asking for the key.
+
+ParameterList_Iterator interface is almost the same than ParameterList interface plus some procedures like `HasFinished()` and `Next()` to manage the advance of the iterator.
+
+The example below iterates on a ParameterList containing integer vectors and getting the stored values.
+
+```fortran
+type(ParameterListIterator_t) :: Iterator
+integer,allocatable :: array(:)
+integer,allocatable :: shape(:)
+
+Iterator = Parameters%GetIterator()
+do while (.not. Iterator%HasFinished())
+    if(Iterator%GetDimensions() /= 1) stop -1
+    if(Iterator%GetShape(Shape=shape) /= 0) stop -1
+    if(.not. Iterator%IsOfDataType(Mold=array)) stop -1
+    if(allocated(array)) deallocate(array)
+    allocate(array(shape(1)))
+    if(Iterator%Get(array) /= 0) stop -1
+    print*, '  Key = '//Iterator%GetKey()
+    print*, '  Bytes = ', Iterator%DataSizeInBytes()
+    print*, '  Dimensions = ', Iterator%GetDimensions()
+    print*, '  Value = ', array)
+    call Iterator%Next()
+enddo
 ```
 
