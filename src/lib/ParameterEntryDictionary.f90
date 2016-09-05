@@ -34,7 +34,7 @@ module ParameterEntryDictionary
 
 USE ParameterEntry
 USE ParameterRootEntry
-USE IR_Precision, only: I4P, str
+USE PENF, only: I4P, str
 
 implicit None
 private

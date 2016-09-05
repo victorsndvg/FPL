@@ -1,7 +1,7 @@
 program WrapperFactoryList_I1P_Test
 
 USE iso_fortran_env, only: OUTPUT_UNIT
-USE IR_Precision, only: I1P
+USE PENF, only: I1P
 USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper

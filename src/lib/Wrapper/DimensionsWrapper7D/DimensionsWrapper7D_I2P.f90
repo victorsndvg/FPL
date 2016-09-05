@@ -21,7 +21,7 @@
 module DimensionsWrapper7D_I2P
 
 USE DimensionsWrapper7D
-USE IR_Precision, only: I2P, I4P, str, byte_size
+USE PENF, only: I2P, I4P, str, byte_size
 USE ErrorMessages
 
 implicit none
@@ -226,7 +226,6 @@ contains
             String = trim(adjustl(String(:len(String)-1)))
         endif
     end function
-
 
 
     subroutine DimensionsWrapper7D_I2P_Print(this, unit, prefix, iostat, iomsg)

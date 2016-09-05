@@ -20,7 +20,7 @@
 
 module LWrapperFactory
 
-USE IR_Precision, only: I1P
+USE PENF, only: I1P
 USE WrapperFactory
 USE DimensionsWrapper
 USE DimensionsWrapper0D_L

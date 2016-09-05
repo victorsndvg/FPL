@@ -1,7 +1,7 @@
 program WrapperFactoryList_R4P_Test
 
 USE iso_fortran_env, only: OUTPUT_UNIT
-USE IR_Precision, only: R4P
+USE PENF, only: R4P
 USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper

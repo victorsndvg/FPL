@@ -5,7 +5,6 @@ Program FortranParameterList_Example
 !-----------------------------------------------------------------
 
 USE FPL
-USE IR_Precision
 USE iso_fortran_env, only: REAL64, OUTPUT_UNIT
 
 type(ParameterList_t)                  :: My_List

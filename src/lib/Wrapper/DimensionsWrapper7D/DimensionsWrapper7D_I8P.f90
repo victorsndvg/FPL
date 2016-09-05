@@ -21,7 +21,7 @@
 module DimensionsWrapper7D_I8P
 
 USE DimensionsWrapper7D
-USE IR_Precision, only: I4P, I8P, str, byte_size
+USE PENF, only: I4P, I8P, str, byte_size
 USE ErrorMessages
 
 implicit none
@@ -226,7 +226,6 @@ contains
             String = trim(adjustl(String(:len(String)-1)))
         endif
     end function
-
 
 
     subroutine DimensionsWrapper7D_I8P_Print(this, unit, prefix, iostat, iomsg)

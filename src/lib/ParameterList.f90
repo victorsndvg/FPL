@@ -22,7 +22,7 @@ module ParameterList
 
 USE iso_fortran_env, only: OUTPUT_UNIT
 USE ErrorMessages
-USE IR_Precision
+USE PENF
 USE ParameterEntryDictionary
 USE ParameterRootEntry
 USE ParameterEntry

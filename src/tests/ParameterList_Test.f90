@@ -1,7 +1,7 @@
 Program ParameterListEntryContainer_Test
 
 USE iso_fortran_env, only: OUTPUT_UNIT
-USE IR_Precision, only: I4P, R4P, str
+USE PENF, only: I4P, R4P, str
 USE FPL
 
 type(ParameterList_t) :: Parameters

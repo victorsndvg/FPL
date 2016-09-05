@@ -1,6 +1,6 @@
 module FPL_Utils
 
-USE IR_Precision, only: I1P, I4P
+USE PENF, only: I1P, I4P
 
 contains
 

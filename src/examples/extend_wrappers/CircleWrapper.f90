@@ -3,7 +3,7 @@ module CircleWrapper
 USE Circle                          !< USE the data type to store
 USE DimensionsWrapper0D             !< USE the DimensionsWrapper0D abstract class
 USE ErrorMessages                   !< USE the ErrorMessages for printing error messages
-USE IR_Precision, only: I4P, str    !< USE I4P data type and str for string conversion
+USE PENF, only: I4P, str            !< USE I4P data type and str for string conversion
 
 implicit none
 private

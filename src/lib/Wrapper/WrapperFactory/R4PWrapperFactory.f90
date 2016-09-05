@@ -21,7 +21,7 @@
 module R4PWrapperFactory
 
 USE WrapperFactory
-USE IR_Precision, only: I1P, R4P
+USE PENF, only: I1P, R4P
 USE DimensionsWrapper
 USE DimensionsWrapper0D_R4P
 USE DimensionsWrapper1D_R4P

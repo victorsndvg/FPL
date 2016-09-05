@@ -21,7 +21,7 @@
 module R8PWrapperFactory
 
 USE WrapperFactory
-USE IR_Precision, only: I1P, R8P
+USE PENF, only: I1P, R8P
 USE DimensionsWrapper
 USE DimensionsWrapper0D_R8P
 USE DimensionsWrapper1D_R8P

@@ -22,7 +22,7 @@ module DimensionsWrapper4D_L
 
 USE DimensionsWrapper4D
 USE FPL_Utils
-USE IR_Precision, only: I4P, str, byte_size
+USE PENF, only: I4P, str, byte_size
 USE ErrorMessages
 
 implicit none

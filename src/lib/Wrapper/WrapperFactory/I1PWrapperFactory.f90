@@ -21,7 +21,7 @@
 module I1PWrapperFactory
 
 USE WrapperFactory
-USE IR_Precision, only: I1P
+USE PENF, only: I1P
 USE DimensionsWrapper
 USE DimensionsWrapper0D_I1P
 USE DimensionsWrapper1D_I1P

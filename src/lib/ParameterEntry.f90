@@ -20,7 +20,7 @@
 
 module ParameterEntry
 
-USE IR_Precision 
+USE PENF 
 USE DimensionsWrapper
 
 implicit none

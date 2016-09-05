@@ -21,7 +21,7 @@
 module ParameterRootEntry
 
 USE ParameterEntry
-USE IR_Precision, only: I4P, str
+USE PENF, only: I4P, str
 
 implicit none
 private

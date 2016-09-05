@@ -21,7 +21,7 @@
 module DimensionsWrapper5D_DLCA
 
 USE DimensionsWrapper5D
-USE IR_Precision, only: I4P, str, byte_size
+USE PENF, only: I4P, str, byte_size
 USE ErrorMessages
 
 implicit none

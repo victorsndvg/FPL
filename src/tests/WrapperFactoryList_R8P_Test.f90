@@ -1,7 +1,7 @@
 program WrapperFactoryList_R8P_Test
 
 USE iso_fortran_env, only: OUTPUT_UNIT
-USE IR_Precision, only: R8P
+USE PENF, only: R8P
 USE WrapperFactoryListSingleton
 USE WrapperFactory
 USE DimensionsWrapper

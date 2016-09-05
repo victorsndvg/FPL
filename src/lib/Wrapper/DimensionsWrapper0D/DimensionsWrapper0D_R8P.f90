@@ -21,7 +21,7 @@
 module DimensionsWrapper0D_R8P
 
 USE DimensionsWrapper0D
-USE IR_Precision, only: I4P, R8P, str, byte_size
+USE PENF, only: I4P, R8P, str, byte_size
 USE ErrorMessages
 
 implicit none

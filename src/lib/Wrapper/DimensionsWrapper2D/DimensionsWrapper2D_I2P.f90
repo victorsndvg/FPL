@@ -21,7 +21,7 @@
 module DimensionsWrapper2D_I2P
 
 USE DimensionsWrapper2D
-USE IR_Precision, only: I2P, I4P, str, byte_size
+USE PENF, only: I2P, I4P, str, byte_size
 USE ErrorMessages
 
 implicit none

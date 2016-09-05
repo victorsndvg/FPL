@@ -21,7 +21,7 @@
 module DimensionsWrapper3D_I1P
 
 USE DimensionsWrapper3D
-USE IR_Precision, only: I1P, I4P, str, byte_size
+USE PENF, only: I1P, I4P, str, byte_size
 USE ErrorMessages
 
 implicit none
@@ -211,6 +211,7 @@ contains
             String = trim(adjustl(String(:len(String)-1)))
         endif
     end function
+
 
     subroutine DimensionsWrapper3D_I1P_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------

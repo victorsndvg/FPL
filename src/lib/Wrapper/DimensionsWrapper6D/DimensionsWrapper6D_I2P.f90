@@ -21,7 +21,7 @@
 module DimensionsWrapper6D_I2P
 
 USE DimensionsWrapper6D
-USE IR_Precision, only: I2P, I4P, str, byte_size
+USE PENF, only: I2P, I4P, str, byte_size
 USE ErrorMessages
 
 implicit none

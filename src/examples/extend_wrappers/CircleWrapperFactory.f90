@@ -5,7 +5,7 @@ USE CircleWrapper               !< USE the corresponding Wrapper
 USE DimensionsWrapper           !< USE the DimensionsWrapper abstract class
 USE WrapperFactory              !< USE the WrapperFactory abstract class
 USE ErrorMessages               !< USE the ErrorMessages for printing error messages
-USE IR_Precision, only: I1P     !< USE I1P data type
+USE PENF, only: I1P             !< USE I1P data type
 
 implicit none
 private

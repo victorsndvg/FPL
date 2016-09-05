@@ -20,7 +20,6 @@
 
 module FPL
 
-USE IR_Precision, only: I4P
 USE ParameterList
 USE WrapperFactoryListSingleton
 

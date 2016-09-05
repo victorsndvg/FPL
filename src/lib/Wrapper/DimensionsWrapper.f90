@@ -20,7 +20,7 @@
 
 module DimensionsWrapper
 
-USE IR_Precision, only: I1P, I4P, str
+USE PENF, only: I1P, I4P, str
 
 implicit none
 private
