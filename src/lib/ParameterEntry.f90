@@ -319,7 +319,7 @@ contains
     !< Associate the iterator with an entry
     !-----------------------------------------------------------------
         class(EntryListIterator_t),      intent(INOUT) :: this        ! List iterator
-        type(ParameterEntry_t), pointer, intent(IN)    :: Entry       ! List entry
+        type(ParameterEntry_t), target,  intent(IN)    :: Entry       ! List entry
     !-----------------------------------------------------------------
         call this%Free()
         this%CurrentEntry => Entry
