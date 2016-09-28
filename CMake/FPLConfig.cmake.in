@@ -46,7 +46,7 @@ IF(${TARGET_NAME}_TARGET)
                  PROPERTY IMPORTED_LOCATION_${${TARGET_NAME}_BUILD_TYPE})
 
     SET(${TARGET_NAME}_LIBS 
-                 ${${TARGET_NAME}_LINK_LIBS} ${${TARGET_NAME}_LIB} 
+                 ${${TARGET_NAME}_LIB} ${${TARGET_NAME}_LINK_LIBS}
                  CACHE STRING "${TARGET_NAME} libraries to link")
 
     SET(${TARGET_NAME}_INCLUDES 
