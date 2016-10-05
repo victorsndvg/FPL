@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="A modern Fortran dictionary">
+    
+    <meta name="author" content="Víctor Sande Veiga" >
+    <link rel="icon" href="./favicon.png">
+
+    <title> FPL </title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/pygments.css" rel="stylesheet">
+    <link href="./css/font-awesome.min.css" rel="stylesheet">
+    <link href="./css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="./js/jquery-2.1.3.min.js"></script>
+    <script src="./js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="./index.html">FPL </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="./lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="./lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="./lists/procedures.html">Procedures</a></li>
+				
+								
+            <li><a href="./lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="./lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="./search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <p>A modern Fortran dictionary</p>
+        	 
+	<p> Find us on&hellip;</p>
+        <p>
+        	 
+          <a class="btn btn-lg btn-primary" href="https://github.com/victorsndvg/FPL" role="button">GitHub</a>
+			 
+			 
+			 
+			 
+	         
+			 
+          <a class="btn btn-lg btn-danger" style="float:right" href="https://github.com/victorsndvg/FPL/releases" role="button">Download the Source</a>
+			 
+        </p>
+      </div>
+
+      <div class="row" id='text'>
+		  
+        <div class="col-md-8">
+		  
+          <h1>FPL</h1>
+          <h1 id="fpl"><a class="toclink" href="#fpl">FPL</a></h1>
+<p><strong>F</strong>ortran <strong>P</strong>arameter <strong>L</strong>ist</p>
+<p><a href="https://travis-ci.org/victorsndvg/FPL"><img alt="Build Status" src="https://travis-ci.org/victorsndvg/FPL.svg?branch=master"></a>
+<a href="https://codecov.io/github/victorsndvg/FPL?branch=master"><img alt="codecov.io" src="https://codecov.io/github/victorsndvg/FPL/coverage.svg?branch=master"></a></p>
+<h2 id="license"><a class="toclink" href="#license">License</a></h2>
+<p><a href="http://www.gnu.org/licenses/lgpl-3.0.txt"><img alt="License" src="https://img.shields.io/badge/license-GNU%20LESSER%20GENERAL%20PUBLIC%20LICENSE%20v3%2C%20LGPLv3-red.svg"></a></p>
+<h2 id="what-is-fpl"><a class="toclink" href="#what-is-fpl">What is FPL?</a></h2>
+<p><strong>FPL</strong> is pure fortran 2003 library that can manage the parameters of your program from a single point.</p>
+<p><strong>FPL</strong> is an extendible container (dictionary) of <code>&lt;Key, Value&gt;</code> pairs, where the <em>Key</em> is a character string and the <em>Value</em> can be, by the default, of the following data types:</p>
+<ul>
+<li>Integer (kinds 1, 2, 4, 8)</li>
+<li>Real (kinds 4, 8)</li>
+<li>Logical</li>
+<li>String</li>
+</ul>
+<p>Value can be a scalar or an array of any dimension.</p>
+<p><strong>FPL</strong> stores copies of the passed data by assignment.</p>
+<p><strong>FPL</strong> is based in <a href="https://trilinos.org/docs/dev/packages/teuchos/doc/html/classTeuchos_1_1ParameterList.html">Teuchos::ParameterList</a>  of the <a href="https://trilinos.org/">Trilinos</a> project.</p>
+<h2 id="how-to-get-fpl"><a class="toclink" href="#how-to-get-fpl">How to get FPL</a></h2>
+<p><code>git clone --recursive https://github.com/victorsndvg/FPL.git</code></p>
+<h2 id="compilation"><a class="toclink" href="#compilation">Compilation</a></h2>
+<p><strong>FPL</strong> compile with GNU Fortran compiler 5.1 (and newer versions) and Intel Fortran compiler 15.0.1 (and newer versions).</p>
+<p><strong>Note:</strong> <em>Due to an issue with IBM XLF 14.0.1 Fortran compiler, if you want to use this compiler use the branch XLF_workaround</em></p>
+<p><strong>FPL</strong> uses <a href="https://cmake.org/">CMake</a> as a portable compilation system. </p>
+<p>The easiest way to compile <strong>FPL</strong> under Linux is:</p>
+<div class="codehilite"><pre>$ <span class="nb">cd</span> FPL
+$ mkdir build
+$ <span class="nb">cd</span> build
+$ cmake ../
+$ make
+</pre></div>
+
+
+<p><em>To compile FPL under Windows use de equivalent commands</em></p>
+<h2 id="getting-started-with-fpl"><a class="toclink" href="#getting-started-with-fpl">Getting started with FPL</a></h2>
+<h3 id="using-fpl-in-your-program"><a class="toclink" href="#using-fpl-in-your-program">Using FPL in your program</a></h3>
+<div class="codehilite"><pre><span class="k">USE </span><span class="n">FPL</span>
+
+<span class="k">type</span><span class="p">(</span><span class="n">ParameterList_t</span><span class="p">)</span> <span class="kd">::</span> <span class="n">My_List</span>
+
+<span class="k">call </span><span class="n">FPL_Init</span><span class="p">()</span>
+<span class="k">call </span><span class="n">My_List</span><span class="p">%</span><span class="n">Init</span><span class="p">()</span>
+
+<span class="p">...</span> <span class="p">[</span><span class="k">Program </span><span class="n">body</span><span class="p">]</span>
+
+<span class="k">call </span><span class="n">My_List</span><span class="p">%</span><span class="n">Free</span><span class="p">()</span>
+<span class="k">call </span><span class="n">FPL_Finalize</span><span class="p">()</span>
+</pre></div>
+
+
+<h3 id="setting-parameters"><a class="toclink" href="#setting-parameters">Setting parameters</a></h3>
+<div class="codehilite"><pre><span class="n">FPLError</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">Set</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Max Iters&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="mi">1500</span><span class="p">)</span>
+<span class="n">FPLError</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">Set</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Tolerance&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="mf">1.e-10</span><span class="p">)</span>
+<span class="n">FPLError</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">Set</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Solver&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="s1">&#39;GMRES&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="getting-parameters"><a class="toclink" href="#getting-parameters">Getting parameters</a></h3>
+<div class="codehilite"><pre><span class="kt">integer</span> <span class="kd">::</span> <span class="n">MaxIters</span>
+
+<span class="n">FPLError</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">Get</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Max Iters&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="n">MaxIters</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="getting-parameters-as-strings"><a class="toclink" href="#getting-parameters-as-strings">Getting parameters as strings</a></h3>
+<div class="codehilite"><pre><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="n">MaxItersString</span>
+
+<span class="n">FPLError</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">GetAsString</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Max Iters&#39;</span><span class="p">,</span> <span class="n">String</span><span class="o">=</span><span class="n">MaxItersString</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="deleting-parameters"><a class="toclink" href="#deleting-parameters">Deleting parameters</a></h3>
+<div class="codehilite"><pre><span class="k">call </span><span class="n">My_List</span><span class="p">%</span><span class="n">Del</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Max Iters&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="checking-if-a-parameter-is-present"><a class="toclink" href="#checking-if-a-parameter-is-present">Checking if a parameter is present</a></h3>
+<div class="codehilite"><pre><span class="kt">logical</span> <span class="kd">::</span> <span class="n">solver_defined</span>
+
+<span class="n">solver_defined</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">isPresent</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Solver&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="checking-if-a-parameter-is-of-the-expected-data-type"><a class="toclink" href="#checking-if-a-parameter-is-of-the-expected-data-type">Checking if a parameter is of the expected data type</a></h3>
+<div class="codehilite"><pre><span class="kt">logical</span> <span class="kd">::</span> <span class="n">has_same_type</span>
+<span class="kt">real</span>    <span class="kd">::</span> <span class="n">Tolerance</span>
+
+<span class="n">has_same_type</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">isOfDataType</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Tolerance&#39;</span><span class="p">,</span> <span class="n">Mold</span><span class="o">=</span><span class="n">Tolerance</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="checking-the-shape-of-a-parameter"><a class="toclink" href="#checking-the-shape-of-a-parameter">Checking the shape of a parameter</a></h3>
+<div class="codehilite"><pre><span class="kt">logical</span> <span class="kd">::</span> <span class="n">has_same_type</span>
+<span class="kt">integer</span><span class="p">,</span> <span class="k">allocatable</span> <span class="kd">::</span> <span class="nb">Shape</span><span class="p">(:)</span>
+
+<span class="n">FPLError</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">GetShape</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Tolerance&#39;</span><span class="p">,</span> <span class="nb">Shape</span><span class="o">=</span><span class="nb">Shape</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="working-with-parameter-sublists"><a class="toclink" href="#working-with-parameter-sublists">Working with parameter sublists</a></h3>
+<p>Every parameter list can recursively store other parameter sublists that have the same functionality of the original.</p>
+<div class="codehilite"><pre><span class="k">type</span><span class="p">(</span><span class="n">ParameterList_t</span><span class="p">),</span> <span class="k">pointer</span> <span class="kd">::</span> <span class="n">Prec_List</span>
+
+<span class="n">Prec_List</span> <span class="o">=&gt;</span> <span class="n">My_List</span><span class="p">%</span><span class="n">NewSubList</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Preconditioner&#39;</span><span class="p">)</span>
+
+<span class="k">call </span><span class="n">Prec_List</span><span class="p">%</span><span class="n">Set</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Type&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="s1">&#39;ILU&#39;</span><span class="p">)</span>
+<span class="k">call </span><span class="n">Prec_List</span><span class="p">%</span><span class="n">Set</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Drop Tolerance&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="mf">1.e-3</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="checking-if-is-a-parameter-sublist"><a class="toclink" href="#checking-if-is-a-parameter-sublist">Checking if is a parameter sublist</a></h3>
+<div class="codehilite"><pre><span class="kt">logical</span> <span class="kd">::</span> <span class="n">prec_defined</span>
+
+<span class="n">prec_defined</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">isSubList</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Preconditioner&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<h3 id="print-recursive-the-content-of-a-parameter-list"><a class="toclink" href="#print-recursive-the-content-of-a-parameter-list">Print (recursive) the content of a parameter list</a></h3>
+<div class="codehilite"><pre><span class="k">call </span><span class="n">My_List</span><span class="p">%</span><span class="k">Print</span><span class="p">()</span>
+</pre></div>
+
+
+<h3 id="iterate-on-a-parameterlist"><a class="toclink" href="#iterate-on-a-parameterlist">Iterate on a ParameterList</a></h3>
+<p>ParameterList also includes a derived type that works like an iterator to go through all stored parameters without asking for the key.</p>
+<p>ParameterList_Iterator interface is almost the same than ParameterList interface plus some procedures like <code>HasFinished()</code> and <code>Next()</code> to manage the advance of the iterator.</p>
+<p>The example below iterates on a ParameterList containing integer vectors and getting the stored values.</p>
+<div class="codehilite"><pre><span class="k">type</span><span class="p">(</span><span class="n">ParameterListIterator_t</span><span class="p">)</span> <span class="kd">::</span> <span class="n">Iterator</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">allocatable</span> <span class="kd">::</span> <span class="k">array</span><span class="p">(:)</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">allocatable</span> <span class="kd">::</span> <span class="nb">shape</span><span class="p">(:)</span>
+
+<span class="n">Iterator</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">%</span><span class="n">GetIterator</span><span class="p">()</span>
+<span class="k">do while</span> <span class="p">(.</span><span class="nb">not</span><span class="p">.</span> <span class="n">Iterator</span><span class="p">%</span><span class="n">HasFinished</span><span class="p">())</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">Iterator</span><span class="p">%</span><span class="n">GetDimensions</span><span class="p">()</span> <span class="o">/=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">stop</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">Iterator</span><span class="p">%</span><span class="n">GetShape</span><span class="p">(</span><span class="nb">Shape</span><span class="o">=</span><span class="nb">shape</span><span class="p">)</span> <span class="o">/=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">stop</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span> <span class="n">Iterator</span><span class="p">%</span><span class="n">IsOfDataType</span><span class="p">(</span><span class="n">Mold</span><span class="o">=</span><span class="k">array</span><span class="p">))</span> <span class="k">stop</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">if</span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="k">array</span><span class="p">))</span> <span class="k">deallocate</span><span class="p">(</span><span class="k">array</span><span class="p">)</span>
+    <span class="k">allocate</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="nb">shape</span><span class="p">(</span><span class="mi">1</span><span class="p">)))</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">Iterator</span><span class="p">%</span><span class="n">Get</span><span class="p">(</span><span class="k">array</span><span class="p">)</span> <span class="o">/=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">stop</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">print</span><span class="o">*</span><span class="p">,</span> <span class="s1">&#39;  Key = &#39;</span><span class="o">//</span><span class="n">Iterator</span><span class="p">%</span><span class="n">GetKey</span><span class="p">()</span>
+    <span class="k">print</span><span class="o">*</span><span class="p">,</span> <span class="s1">&#39;  Bytes = &#39;</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">%</span><span class="n">DataSizeInBytes</span><span class="p">()</span>
+    <span class="k">print</span><span class="o">*</span><span class="p">,</span> <span class="s1">&#39;  Dimensions = &#39;</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">%</span><span class="n">GetDimensions</span><span class="p">()</span>
+    <span class="k">print</span><span class="o">*</span><span class="p">,</span> <span class="s1">&#39;  Value = &#39;</span><span class="p">,</span> <span class="k">array</span><span class="p">)</span>
+    <span class="k">call </span><span class="n">Iterator</span><span class="p">%</span><span class="n">Next</span><span class="p">()</span>
+<span class="n">enddo</span>
+</pre></div>
+        </div>
+		  
+        <div class="col-md-4">
+	  <div class="well">
+          <h2>Developer Info</h2>
+          <h4>Víctor Sande Veiga</h4>
+          
+          <p>Scientific software developer</p>
+			   
+            <div class="text-center"><div class="btn-group" role="group">
+              
+              <a class="btn btn-lg btn-primary" href="mailto:victorsv@gmail.com"><i class="fa fa-envelope fa-lg"></i></a>
+              
+              
+             <a class="btn btn-lg btn-primary" href="https://github.com/victorsndvg"><i class="fa fa-globe fa-lg"></i></a>
+              
+              
+              <a class="btn btn-lg btn-primary" href="https://github.com/victorsndvg"><i class="fa fa-github fa-lg"></i></a>
+				  
+				  
+              
+              
+              
+              
+            </div></div>
+            
+       </div>
+       </div>
+       
+      </div>
+      
+      
+      
+      
+		
+      <div class="row">
+        <div class="col-xs-6 col-sm-3">
+              <h3>Source Files</h3>
+              <ul>
+                
+                  
+                    <li><a href='./sourcefile/circle.f90.html'>Circle.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/circlewrapper.f90.html'>CircleWrapper.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/circlewrapperfactory.f90.html'>CircleWrapperFactory.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/compact_real.f90.html'>compact_real.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/dimensionswrapper.f90.html'>DimensionsWrapper.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/dimensionswrapper0d.f90.html'>DimensionsWrapper0D.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/dimensionswrapper0d_dlca.f90.html'>DimensionsWrapper0D_DLCA.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/dimensionswrapper0d_i1p.f90.html'>DimensionsWrapper0D_I1P.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/dimensionswrapper0d_i2p.f90.html'>DimensionsWrapper0D_I2P.f90</a></li>
+                  
+                
+                  
+                    <li><a href='./sourcefile/dimensionswrapper0d_i4p.f90.html'>DimensionsWrapper0D_I4P.f90</a></li>
+                  
+                
+                  
+                    <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+              </ul>
+          </div>
+          
+		  <div class="col-xs-6 col-sm-3">
+              <h3>Modules</h3>
+              <ul>
+                
+                  
+                    <li><a href='./module/circle.html'>Circle</a></li>
+                  
+                
+                  
+                    <li><a href='./module/circlewrapper.html'>CircleWrapper</a></li>
+                  
+                
+                  
+                    <li><a href='./module/circlewrapperfactory.html'>CircleWrapperFactory</a></li>
+                  
+                
+                  
+                    <li><a href='./module/dimensionswrapper.html'>DimensionsWrapper</a></li>
+                  
+                
+                  
+                    <li><a href='./module/dimensionswrapper0d.html'>DimensionsWrapper0D</a></li>
+                  
+                
+                  
+                    <li><a href='./module/dimensionswrapper0d_dlca.html'>DimensionsWrapper0D_DLCA</a></li>
+                  
+                
+                  
+                    <li><a href='./module/dimensionswrapper0d_i1p.html'>DimensionsWrapper0D_I1P</a></li>
+                  
+                
+                  
+                    <li><a href='./module/dimensionswrapper0d_i2p.html'>DimensionsWrapper0D_I2P</a></li>
+                  
+                
+                  
+                    <li><a href='./module/dimensionswrapper0d_i4p.html'>DimensionsWrapper0D_I4P</a></li>
+                  
+                
+                  
+                    <li><a href='./module/dimensionswrapper0d_i8p.html'>DimensionsWrapper0D_I8P</a></li>
+                  
+                
+                  
+                    <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+              </ul>
+          </div>
+          
+          
+		  <div class="col-xs-6 col-sm-3">
+              <h3>Procedures</h3>
+              <ul>
+                
+                  
+                    <li><a href='./interface/bcton.html'>bcton</a></li>
+                  
+                
+                  
+                    <li><a href='./interface/bit_size.html'>bit_size</a></li>
+                  
+                
+                  
+                    <li><a href='./interface/bstr.html'>bstr</a></li>
+                  
+                
+                  
+                    <li><a href='./interface/byte_size.html'>byte_size</a></li>
+                  
+                
+                  
+                    <li><a href='./proc/byte_size_logical.html'>byte_size_logical</a></li>
+                  
+                
+                  
+                    <li><a href='./interface/cton.html'>cton</a></li>
+                  
+                
+                  
+                    <li><a href='./proc/fpl_finalize.html'>FPL_Finalize</a></li>
+                  
+                
+                  
+                    <li><a href='./proc/fpl_init.html'>FPL_Init</a></li>
+                  
+                
+                  
+                    <li><a href='./interface/str.html'>str</a></li>
+                  
+                
+                  
+                    <li><a href='./interface/strz.html'>strz</a></li>
+                  
+                
+                  
+                    <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+                  
+                
+              </ul>
+          </div>
+          
+          
+		  <div class="col-xs-6 col-sm-3">
+              <h3>Derived Types</h3>
+              <ul>
+                
+                  
+                    <li><a href='./type/circle_t.html'>Circle_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/circlewrapper_t.html'>CircleWrapper_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_dlca_t.html'>DimensionsWrapper0D_DLCA_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_i1p_t.html'>DimensionsWrapper0D_I1P_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_i2p_t.html'>DimensionsWrapper0D_I2P_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_i4p_t.html'>DimensionsWrapper0D_I4P_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_i8p_t.html'>DimensionsWrapper0D_I8P_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_l_t.html'>DimensionsWrapper0D_L_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_r4p_t.html'>DimensionsWrapper0D_R4P_t</a></li>
+                  
+                
+                  
+                    <li><a href='./type/dimensionswrapper0d_r8p_t.html'>DimensionsWrapper0D_R8P_t</a></li>
+                  
+                
+                  
+                    <li><a href="./lists/types.html"><em>All derived types&hellip;</em></a></li>
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+                  
+                
+              </ul>
+          </div>
+          
+      </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2016 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2016-10-05T10:45:59.624507 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FPL was developed by Víctor Sande Veiga</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="./js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="./js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="./tipuesearch/tipuesearch_content.js"></script>
+    <link  href="./tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="./tipuesearch/tipuesearch_set.js"></script>
+    <script src="./tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>

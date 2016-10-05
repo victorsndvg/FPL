@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	 
+	 <meta name="description" content="A modern Fortran dictionary">
+    
+    <meta name="author" content="Víctor Sande Veiga" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>compact_real.f90 &ndash; FPL</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">FPL </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+				
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+		 aria-expanded="false">Contents <span class="caret"></span></a>
+	      <ul class="dropdown-menu">
+              
+            <li><a href="../lists/files.html">Source Files</a></li>
+				
+				
+            <li><a href="../lists/modules.html">Modules</a></li>
+				
+            
+                                
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+				
+								
+            <li><a href="../lists/types.html">Derived Types</a></li>
+				
+				
+            <li><a href="../lists/programs.html">Programs</a></li>
+				
+            </ul>
+            </li>
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+
+                             
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/types.html">Derived Types</a></li>
+
+
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+
+          </ul>
+        
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+    
+  
+  <div class="row">
+    <h1>compact_real.f90
+    <small>Source File</small>
+    
+    </h1>
+    
+<div class="row">
+  <div class="col-lg-12">
+<div class="well well-sm">
+  <ul class="list-inline" style="margin-bottom:0px;display:inline">
+     
+     
+     
+     
+    
+    
+     <li><i class="fa fa-list-ol"></i>
+       <a data-toggle="tooltip"
+	  data-placement="bottom" data-html="true"
+	  title=" 0.1% of total for source files.">16 statements</a>
+     </li> 
+     
+     
+    <li><i class="fa fa-code"></i><a href="../src/compact_real.f90"> Source File</a></li>
+     
+  </ul>
+  <ol class="breadcrumb in-well text-right">
+  
+     <li class="active">compact_real.f90</li>
+  </ol>
+</div>
+</div>
+</div>
+<script>
+  $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+  })
+</script>
+
+  </div>
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+    
+<div id="sidebar">
+  
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#progs-0">Programs</a></h3></div>
+  <div id="progs-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../program/compact_real.html">compact_real</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/compact_real.f90.html#src">compact_real.f90</a>
+  </div>
+</div>
+
+
+  <hr>
+  
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allfiles-0">All Source Files</a></h3></div>
+  <div id="allfiles-0" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/circle.f90.html">Circle.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/circlewrapper.f90.html">CircleWrapper.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/circlewrapperfactory.f90.html">CircleWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/compact_real.f90.html">compact_real.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper.f90.html">DimensionsWrapper.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d.f90.html">DimensionsWrapper0D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_dlca.f90.html">DimensionsWrapper0D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i1p.f90.html">DimensionsWrapper0D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i2p.f90.html">DimensionsWrapper0D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i4p.f90.html">DimensionsWrapper0D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i8p.f90.html">DimensionsWrapper0D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_l.f90.html">DimensionsWrapper0D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_r4p.f90.html">DimensionsWrapper0D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_r8p.f90.html">DimensionsWrapper0D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d.f90.html">DimensionsWrapper1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_dlca.f90.html">DimensionsWrapper1D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i1p.f90.html">DimensionsWrapper1D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i2p.f90.html">DimensionsWrapper1D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i4p.f90.html">DimensionsWrapper1D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i8p.f90.html">DimensionsWrapper1D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_l.f90.html">DimensionsWrapper1D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_r4p.f90.html">DimensionsWrapper1D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_r8p.f90.html">DimensionsWrapper1D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d.f90.html">DimensionsWrapper2D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_dlca.f90.html">DimensionsWrapper2D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i1p.f90.html">DimensionsWrapper2D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i2p.f90.html">DimensionsWrapper2D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i4p.f90.html">DimensionsWrapper2D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i8p.f90.html">DimensionsWrapper2D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_l.f90.html">DimensionsWrapper2D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_r4p.f90.html">DimensionsWrapper2D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_r8p.f90.html">DimensionsWrapper2D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d.f90.html">DimensionsWrapper3D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_dlca.f90.html">DimensionsWrapper3D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i1p.f90.html">DimensionsWrapper3D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i2p.f90.html">DimensionsWrapper3D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i4p.f90.html">DimensionsWrapper3D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i8p.f90.html">DimensionsWrapper3D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_l.f90.html">DimensionsWrapper3D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_r4p.f90.html">DimensionsWrapper3D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_r8p.f90.html">DimensionsWrapper3D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d.f90.html">DimensionsWrapper4D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_dlca.f90.html">DimensionsWrapper4D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i1p.f90.html">DimensionsWrapper4D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i2p.f90.html">DimensionsWrapper4D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i4p.f90.html">DimensionsWrapper4D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i8p.f90.html">DimensionsWrapper4D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_l.f90.html">DimensionsWrapper4D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_r4p.f90.html">DimensionsWrapper4D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_r8p.f90.html">DimensionsWrapper4D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d.f90.html">DimensionsWrapper5D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_dlca.f90.html">DimensionsWrapper5D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i1p.f90.html">DimensionsWrapper5D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i2p.f90.html">DimensionsWrapper5D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i4p.f90.html">DimensionsWrapper5D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i8p.f90.html">DimensionsWrapper5D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_l.f90.html">DimensionsWrapper5D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_r4p.f90.html">DimensionsWrapper5D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_r8p.f90.html">DimensionsWrapper5D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d.f90.html">DimensionsWrapper6D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_dlca.f90.html">DimensionsWrapper6D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i1p.f90.html">DimensionsWrapper6D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i2p.f90.html">DimensionsWrapper6D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i4p.f90.html">DimensionsWrapper6D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i8p.f90.html">DimensionsWrapper6D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_l.f90.html">DimensionsWrapper6D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_r4p.f90.html">DimensionsWrapper6D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_r8p.f90.html">DimensionsWrapper6D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d.f90.html">DimensionsWrapper7D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_dlca.f90.html">DimensionsWrapper7D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i1p.f90.html">DimensionsWrapper7D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i2p.f90.html">DimensionsWrapper7D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i4p.f90.html">DimensionsWrapper7D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i8p.f90.html">DimensionsWrapper7D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_l.f90.html">DimensionsWrapper7D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_r4p.f90.html">DimensionsWrapper7D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_r8p.f90.html">DimensionsWrapper7D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dlacwrapperfactory.f90.html">DLACWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/errormessages.f90.html">ErrorMessages.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/extendwrappers.f90.html">ExtendWrappers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/fortranparameterlist_example.f90.html">FortranParameterList_Example.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/fpl.f90.html">FPL.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/fpl_utils.f90.html">FPL_utils.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i1pwrapperfactory.f90.html">I1PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i2pwrapperfactory.f90.html">I2PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i4pwrapperfactory.f90.html">I4PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i8pwrapperfactory.f90.html">I8PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lwrapperfactory.f90.html">LWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterentry.f90.html">ParameterEntry.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterentrydictionary.f90.html">ParameterEntryDictionary.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist.f90.html">ParameterList.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_test.f90.html">ParameterList_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper0d_test.f90.html">ParameterList_Wrapper0D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper1d_test.f90.html">ParameterList_Wrapper1D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper2d_test.f90.html">ParameterList_Wrapper2D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper3d_test.f90.html">ParameterList_Wrapper3D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper4d_test.f90.html">ParameterList_Wrapper4D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper5d_test.f90.html">ParameterList_Wrapper5D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper6d_test.f90.html">ParameterList_Wrapper6D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper7d_test.f90.html">ParameterList_Wrapper7D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlistiterator_test.f90.html">ParameterListIterator_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterrootentry.f90.html">ParameterRootEntry.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/penf_b_size.f90.html">penf_b_size.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/penf_global_parameters_variables.f90.html">penf_global_parameters_variables.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/penf_stringify.f90.html">penf_stringify.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/r4pwrapperfactory.f90.html">R4PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/r8pwrapperfactory.f90.html">R8PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/test_all.f90.html">test_all.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactory.f90.html">WrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist.f90.html">WrapperFactoryList.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_dlca_test.f90.html">WrapperFactoryList_DLCA_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i1p_test.f90.html">WrapperFactoryList_I1P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i2p_test.f90.html">WrapperFactoryList_I2P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i4p_test.f90.html">WrapperFactoryList_I4P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i8p_test.f90.html">WrapperFactoryList_I8P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_l_test.f90.html">WrapperFactoryList_L_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_r4p_test.f90.html">WrapperFactoryList_R4P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_r8p_test.f90.html">WrapperFactoryList_R8P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylistsingleton.f90.html">WrapperFactoryListSingleton.f90</a>
+      
+    </div>
+  </div>
+</div>
+
+
+</div>  
+
+    </div>
+    <div class="col-md-9" id='text'>
+    <p>PENF's testing program.</p>
+    
+      
+      <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+      
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#progs-1">Programs</a></h3></div>
+  <div id="progs-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../program/compact_real.html">compact_real</a>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="panel panel-primary">
+  <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+  <div class="list-group">
+    <a class="list-group-item" href="../sourcefile/compact_real.f90.html#src">compact_real.f90</a>
+  </div>
+</div>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+    <section>
+      <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl"><pre><a name="ln-1"></a><span class="c">!&lt; PENF&#39;s testing program.</span>
+<a name="ln-2"></a><span class="k">program </span><span class="n">compact_real</span>
+<a name="ln-3"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-4"></a><span class="c">!&lt; PENF&#39;s testing program.</span>
+<a name="ln-5"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-6"></a><span class="k">use </span><span class="n">penf</span>
+<a name="ln-7"></a><span class="k">use</span><span class="p">,</span> <span class="k">intrinsic</span> <span class="kd">::</span> <span class="n">ISO_FORTRAN_ENV</span><span class="p">,</span> <span class="n">only</span> <span class="p">:</span> <span class="n">stdout</span><span class="o">=&gt;</span><span class="n">OUTPUT_UNIT</span>
+<a name="ln-8"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-9"></a>
+<a name="ln-10"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-11"></a><span class="k">implicit none</span>
+<a name="ln-12"></a><span class="kt">logical</span> <span class="kd">::</span> <span class="n">test_passed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c">!&lt; List of passed tests.</span>
+<a name="ln-13"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-14"></a>
+<a name="ln-15"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-16"></a><span class="k">call </span><span class="n">penf_init</span>
+<a name="ln-17"></a>
+<a name="ln-18"></a><span class="n">test_passed</span> <span class="o">=</span> <span class="p">.</span><span class="n">false</span><span class="p">.</span>
+<a name="ln-19"></a>
+<a name="ln-20"></a><span class="n">test_passed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">==</span><span class="s1">&#39;+0.1E+1&#39;</span>
+<a name="ln-21"></a><span class="k">print</span> <span class="s2">&quot;(A,L1)&quot;</span><span class="p">,</span> <span class="s1">&#39;Compact 1.0: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R8P</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;, is correct? &#39;</span><span class="p">,</span> <span class="n">test_passed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<a name="ln-22"></a>
+<a name="ln-23"></a><span class="n">test_passed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R4P</span><span class="o">/</span><span class="mf">3._R4P</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">==</span><span class="s1">&#39;+0.333333E+0&#39;</span>
+<a name="ln-24"></a><span class="k">print</span> <span class="s2">&quot;(A,L1)&quot;</span><span class="p">,</span> <span class="s1">&#39;Compact 1.0/3.0: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R4P</span><span class="o">/</span><span class="mf">3._R4P</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;, is correct? &#39;</span><span class="p">,</span> <span class="n">test_passed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a name="ln-25"></a>
+<a name="ln-26"></a><span class="n">test_passed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R16P</span><span class="o">/</span><span class="mf">4._R16P</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">==</span><span class="s1">&#39;+0.25E+0&#39;</span>
+<a name="ln-27"></a><span class="k">print</span> <span class="s2">&quot;(A,L1)&quot;</span><span class="p">,</span> <span class="s1">&#39;Compact 1.0/4.0: &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">str</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mf">1._R16P</span><span class="o">/</span><span class="mf">4._R16P</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.))</span><span class="o">//</span><span class="s1">&#39;, is correct? &#39;</span><span class="p">,</span> <span class="n">test_passed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<a name="ln-28"></a>
+<a name="ln-29"></a><span class="k">write</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="s2">&quot;(A,L1)&quot;</span><span class="p">)</span> <span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;Are all tests passed? &#39;</span><span class="p">,</span> <span class="k">all</span><span class="p">(</span><span class="n">test_passed</span><span class="p">)</span>
+<a name="ln-30"></a><span class="k">stop</span>
+<a name="ln-31"></a><span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<a name="ln-32"></a><span class="n">endprogram</span> <span class="n">compact_real</span>
+</pre></div>
+
+    </section>
+    </div>
+  </div>
+
+  <section class="visible-xs visible-sm hidden-md">
+    <hr>
+    
+
+<div class="panel panel-default">
+  <div class="panel-heading text-left"><h3 class="panel-title"><a data-toggle="collapse" href="#allfiles-1">All Source Files</a></h3></div>
+  <div id="allfiles-1" class="panel-collapse collapse">
+    <div class="list-group">
+      
+      <a class="list-group-item" href="../sourcefile/circle.f90.html">Circle.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/circlewrapper.f90.html">CircleWrapper.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/circlewrapperfactory.f90.html">CircleWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/compact_real.f90.html">compact_real.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper.f90.html">DimensionsWrapper.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d.f90.html">DimensionsWrapper0D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_dlca.f90.html">DimensionsWrapper0D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i1p.f90.html">DimensionsWrapper0D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i2p.f90.html">DimensionsWrapper0D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i4p.f90.html">DimensionsWrapper0D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_i8p.f90.html">DimensionsWrapper0D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_l.f90.html">DimensionsWrapper0D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_r4p.f90.html">DimensionsWrapper0D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper0d_r8p.f90.html">DimensionsWrapper0D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d.f90.html">DimensionsWrapper1D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_dlca.f90.html">DimensionsWrapper1D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i1p.f90.html">DimensionsWrapper1D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i2p.f90.html">DimensionsWrapper1D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i4p.f90.html">DimensionsWrapper1D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_i8p.f90.html">DimensionsWrapper1D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_l.f90.html">DimensionsWrapper1D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_r4p.f90.html">DimensionsWrapper1D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper1d_r8p.f90.html">DimensionsWrapper1D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d.f90.html">DimensionsWrapper2D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_dlca.f90.html">DimensionsWrapper2D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i1p.f90.html">DimensionsWrapper2D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i2p.f90.html">DimensionsWrapper2D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i4p.f90.html">DimensionsWrapper2D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_i8p.f90.html">DimensionsWrapper2D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_l.f90.html">DimensionsWrapper2D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_r4p.f90.html">DimensionsWrapper2D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper2d_r8p.f90.html">DimensionsWrapper2D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d.f90.html">DimensionsWrapper3D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_dlca.f90.html">DimensionsWrapper3D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i1p.f90.html">DimensionsWrapper3D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i2p.f90.html">DimensionsWrapper3D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i4p.f90.html">DimensionsWrapper3D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_i8p.f90.html">DimensionsWrapper3D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_l.f90.html">DimensionsWrapper3D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_r4p.f90.html">DimensionsWrapper3D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper3d_r8p.f90.html">DimensionsWrapper3D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d.f90.html">DimensionsWrapper4D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_dlca.f90.html">DimensionsWrapper4D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i1p.f90.html">DimensionsWrapper4D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i2p.f90.html">DimensionsWrapper4D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i4p.f90.html">DimensionsWrapper4D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_i8p.f90.html">DimensionsWrapper4D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_l.f90.html">DimensionsWrapper4D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_r4p.f90.html">DimensionsWrapper4D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper4d_r8p.f90.html">DimensionsWrapper4D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d.f90.html">DimensionsWrapper5D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_dlca.f90.html">DimensionsWrapper5D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i1p.f90.html">DimensionsWrapper5D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i2p.f90.html">DimensionsWrapper5D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i4p.f90.html">DimensionsWrapper5D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_i8p.f90.html">DimensionsWrapper5D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_l.f90.html">DimensionsWrapper5D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_r4p.f90.html">DimensionsWrapper5D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper5d_r8p.f90.html">DimensionsWrapper5D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d.f90.html">DimensionsWrapper6D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_dlca.f90.html">DimensionsWrapper6D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i1p.f90.html">DimensionsWrapper6D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i2p.f90.html">DimensionsWrapper6D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i4p.f90.html">DimensionsWrapper6D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_i8p.f90.html">DimensionsWrapper6D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_l.f90.html">DimensionsWrapper6D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_r4p.f90.html">DimensionsWrapper6D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper6d_r8p.f90.html">DimensionsWrapper6D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d.f90.html">DimensionsWrapper7D.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_dlca.f90.html">DimensionsWrapper7D_DLCA.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i1p.f90.html">DimensionsWrapper7D_I1P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i2p.f90.html">DimensionsWrapper7D_I2P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i4p.f90.html">DimensionsWrapper7D_I4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_i8p.f90.html">DimensionsWrapper7D_I8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_l.f90.html">DimensionsWrapper7D_L.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_r4p.f90.html">DimensionsWrapper7D_R4P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dimensionswrapper7d_r8p.f90.html">DimensionsWrapper7D_R8P.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/dlacwrapperfactory.f90.html">DLACWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/errormessages.f90.html">ErrorMessages.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/extendwrappers.f90.html">ExtendWrappers.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/fortranparameterlist_example.f90.html">FortranParameterList_Example.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/fpl.f90.html">FPL.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/fpl_utils.f90.html">FPL_utils.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i1pwrapperfactory.f90.html">I1PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i2pwrapperfactory.f90.html">I2PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i4pwrapperfactory.f90.html">I4PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/i8pwrapperfactory.f90.html">I8PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/lwrapperfactory.f90.html">LWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterentry.f90.html">ParameterEntry.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterentrydictionary.f90.html">ParameterEntryDictionary.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist.f90.html">ParameterList.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_test.f90.html">ParameterList_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper0d_test.f90.html">ParameterList_Wrapper0D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper1d_test.f90.html">ParameterList_Wrapper1D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper2d_test.f90.html">ParameterList_Wrapper2D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper3d_test.f90.html">ParameterList_Wrapper3D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper4d_test.f90.html">ParameterList_Wrapper4D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper5d_test.f90.html">ParameterList_Wrapper5D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper6d_test.f90.html">ParameterList_Wrapper6D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlist_wrapper7d_test.f90.html">ParameterList_Wrapper7D_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterlistiterator_test.f90.html">ParameterListIterator_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/parameterrootentry.f90.html">ParameterRootEntry.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/penf_b_size.f90.html">penf_b_size.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/penf_global_parameters_variables.f90.html">penf_global_parameters_variables.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/penf_stringify.f90.html">penf_stringify.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/r4pwrapperfactory.f90.html">R4PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/r8pwrapperfactory.f90.html">R8PWrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/test_all.f90.html">test_all.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactory.f90.html">WrapperFactory.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist.f90.html">WrapperFactoryList.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_dlca_test.f90.html">WrapperFactoryList_DLCA_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i1p_test.f90.html">WrapperFactoryList_I1P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i2p_test.f90.html">WrapperFactoryList_I2P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i4p_test.f90.html">WrapperFactoryList_I4P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_i8p_test.f90.html">WrapperFactoryList_I8P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_l_test.f90.html">WrapperFactoryList_L_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_r4p_test.f90.html">WrapperFactoryList_R4P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylist_r8p_test.f90.html">WrapperFactoryList_R8P_Test.f90</a>
+      
+      <a class="list-group-item" href="../sourcefile/wrapperfactorylistsingleton.f90.html">WrapperFactoryListSingleton.f90</a>
+      
+    </div>
+  </div>
+</div>
+
+
+  </section>
+  
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-4"><p>&copy; 2016 </p></div>
+        <div class="col-xs-6 col-md-4 col-md-push-4">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/cmacmackin/ford">FORD</a>
+             on 2016-10-05T10:45:59.624507 
+          </p>
+        </div>
+        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FPL was developed by Víctor Sande Veiga</p></div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js'],
+        'HTML-CSS': { 
+           styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: '#000000 ! important'} }
+        }
+      });
+    </script>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+    
+  </body>
+</html>
