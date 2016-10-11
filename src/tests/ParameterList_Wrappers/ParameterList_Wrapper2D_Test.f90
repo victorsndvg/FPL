@@ -23,7 +23,7 @@ if(allocated(I8Parray))  deallocate(I8Parray);  allocate(I8Parray(3,1));  I8Parr
 if(allocated(R4Parray))  deallocate(R4Parray);  allocate(R4Parray(1,3));  R4Parray  = 0.4
 if(allocated(R8Parray))  deallocate(R8Parray);  allocate(R8Parray(4,1));  R8Parray  = 0.8
 if(allocated(Larray))    deallocate(Larray);    allocate(Larray(1,4));    Larray    = .true.
-if(allocated(DLCAarray)) deallocate(DLCAarray); allocate(character(len=6):: DLCAarray(5,1)); DLCAarray = 'String'
+if(allocated(DLCAarray)) deallocate(DLCAarray); allocate(character(len=6):: DLCAarray(1,1)); DLCAarray = 'String'
 
 call FPL_Init()
 
