@@ -103,7 +103,14 @@ contains
             type is (character(len=*))
                 call this%GetShape(ValueShape)
                 if(all(ValueShape == shape(Value))) then
-                    Value = this%Value
+                    if(len(Value) >= len(this%Value)) then
+                        Value = this%Value
+                    else
+                        call msg%Warn(txt='Getting value: Not enought length ('//      &
+                                      trim(str(no_sign=.true.,n=len(Value)))//'<'//    &
+                                      trim(str(no_sign=.true.,n=len(this%Value)))//')',&
+                                      file=__FILE__, line=__LINE__ )
+                    endif
                 else
                     call msg%Warn(txt='Getting value: Wrong shape ('//&
                                   str(no_sign=.true.,n=ValueShape)//'/='//&
@@ -216,10 +223,7 @@ contains
             do idx3=1, size(this%Value,3)
                 do idx2=1, size(this%Value,2)
                     do idx1=1, size(this%Value,1)
-                        String = String // trim(this%Value(idx1,idx2,idx3)) 
-                        if(idx1 /= size(this%Value,1) .and. &
-                           idx2 /= size(this%Value,2) .and. &
-                           idx3 /= size(this%Value,3)) String = String // Sep
+                        String = String // trim(this%Value(idx1,idx2,idx3)) // Sep
                     enddo
                 enddo
             enddo

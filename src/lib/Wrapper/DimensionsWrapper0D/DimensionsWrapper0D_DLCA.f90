@@ -86,7 +86,14 @@ contains
     !-----------------------------------------------------------------
         select type (Value)
             type is (character(len=*))
-                Value = this%Value
+                if(len(Value) >= len(this%Value)) then
+                    Value = this%Value
+                else
+                    call msg%Warn(txt='Getting value: Not enought length ('//      &
+                                  trim(str(no_sign=.true.,n=len(Value)))//'<'//    &
+                                  trim(str(no_sign=.true.,n=len(this%Value)))//')',&
+                                  file=__FILE__, line=__LINE__ )
+                endif
             class Default
                 call msg%Warn(txt='Getting value: Expected data type (character(*))',&
                               file=__FILE__, line=__LINE__ )
