@@ -87,6 +87,20 @@ if(Parameters%GetShape(Key='DLCA', shape=shape) /= 0) stop -1
 write(unit=OUTPUT_UNIT, fmt='(A,7I4)') 'DLCA Shape:',  shape
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
+write(unit=OUTPUT_UNIT, fmt='(A)') 'Can be assigned? ...'
+
+if(.not. Parameters%isAssignable(Key='I1P',  Value=I1PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='I2P',  Value=I2PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='I4P',  Value=I4PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='I8P',  Value=I8PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='R4P',  Value=R4PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='R8P',  Value=R8PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='L',    Value=LArray))    stop -1
+#ifndef __GFORTRAN__
+if(.not. Parameters%isAssignable(Key='DLCA', Value=DLCAArray)) stop -1
+#endif
+
+write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Getting Values ...'
 
 if(Parameters%Get(Key='I1P',  Value=I1PArray) /= 0) stop -1

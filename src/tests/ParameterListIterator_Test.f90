@@ -43,11 +43,23 @@ do while (.not. Iterator%HasFinished())
     write(unit=OUTPUT_UNIT, fmt='(A)') 'Iterating over: "'//'I4P_1D'//trim(str(no_sign=.true., n=shape(1)))//'" ... '
     if(allocated(array)) deallocate(array)
     allocate(array(shape(1)))
-    if(Iterator%Get(array) /= 0) stop -1
+    if(Iterator%isAssignable(Value=array)) then
+        FPLError = Iterator%Get(Value=array)
+        if(FPLError == 0) then
+            write(unit=OUTPUT_UNIT, fmt='(A)') ' Ok!'
+        else
+            write(unit=OUTPUT_UNIT, fmt= '(A)') ' FAIL!!!!'
+            stop -1
+        endif
+    else
+        write(unit=OUTPUT_UNIT, fmt= '(A)') ' FAIL!!!!'
+        stop -1
+    endif
     print*, '  Key = '//Iterator%GetKey()
     print*, '  Bytes = '//trim(str(n=Iterator%DataSizeInBytes()))
     print*, '  Dimensions = '//trim(str(n=Iterator%GetDimensions()))
     print*, '  Value = '//trim(str(n=array))
+    print*, '  Shape = '//trim(str(n=shape))
     if(all(array == shape(1))) then
         write(unit=OUTPUT_UNIT, fmt='(A)') 'Ok!'
     else
@@ -60,7 +72,7 @@ enddo
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 
 do iter = numiters, 1, -1
-    if(allocated(array)) deallocate(array); allocate(array(iter)); array = iter
+    if(allocated(array)) deallocate(array)
     if(Parameters%isPresent(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)))) then
         write(unit=OUTPUT_UNIT, fmt='(A,$)') 'Removing: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
         call Parameters%Del(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)))
