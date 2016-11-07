@@ -52,6 +52,8 @@ $ make
 
 ##Getting started with FPL
 
+:warning: **FPL** cannot handle non-allocated variables while calling `Set(Key, Value)` or `Get(Key, Value)` procedures.
+:warning: To succesfull get a stored value into your target variable, **data type** and **shape** of both variables must agree.
 
 ###Using FPL in your program
 
@@ -93,6 +95,18 @@ character(len=:), allocatable :: MaxItersString
 FPLError = My_List%GetAsString(Key='Max Iters', String=MaxItersString)
 ```
 
+###Check if you can assign a parameter to your variable
+
+Check if the target variable has the same type and shape as the stored variable :bangbang:
+
+```fortran
+integer :: MaxIters
+
+if(My_List%isAssignable(Key='Max Iters', Value=MaxIters)) then
+    FPLError = My_List%Get(Key='Max Iters', Value=MaxIters)
+endif
+```
+
 ###Deleting parameters
 
 ```fortran
@@ -127,7 +141,7 @@ FPLError = My_List%GetShape(Key='Tolerance', Shape=Shape)
 
 ###Working with parameter sublists
 
-Every parameter list can recursively store other parameter sublists that have the same functionality of the original.
+Every parameter list can recursively store parameter sublists.
 
 ```fortran
 type(ParameterList_t), pointer :: Prec_List
@@ -138,7 +152,7 @@ call Prec_List%Set(Key='Type', Value='ILU')
 call Prec_List%Set(Key='Drop Tolerance', Value=1.e-3)
 ```
 
-###Checking if is a parameter sublist
+###Checking if it is a parameter sublist
 
 ```fortran
 logical :: prec_defined
