@@ -23,7 +23,7 @@ if(allocated(I8Parray))  deallocate(I8Parray);  allocate(I8Parray(3,1));  I8Parr
 if(allocated(R4Parray))  deallocate(R4Parray);  allocate(R4Parray(1,3));  R4Parray  = 0.4
 if(allocated(R8Parray))  deallocate(R8Parray);  allocate(R8Parray(4,1));  R8Parray  = 0.8
 if(allocated(Larray))    deallocate(Larray);    allocate(Larray(1,4));    Larray    = .true.
-if(allocated(DLCAarray)) deallocate(DLCAarray); allocate(character(len=6):: DLCAarray(5,1)); DLCAarray = 'String'
+if(allocated(DLCAarray)) deallocate(DLCAarray); allocate(character(len=6):: DLCAarray(1,1)); DLCAarray = 'String'
 
 call FPL_Init()
 
@@ -85,6 +85,20 @@ if(Parameters%GetShape(Key='L',    shape=shape) /= 0) stop -1
 write(unit=OUTPUT_UNIT, fmt='(A,2I4)') 'L Shape:',  shape
 if(Parameters%GetShape(Key='DLCA', shape=shape) /= 0) stop -1
 write(unit=OUTPUT_UNIT, fmt='(A,2I4)') 'DLCA Shape:',  shape
+
+write(unit=OUTPUT_UNIT, fmt='(A)') ''
+write(unit=OUTPUT_UNIT, fmt='(A)') 'Can be assigned? ...'
+
+if(.not. Parameters%isAssignable(Key='I1P',  Value=I1PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='I2P',  Value=I2PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='I4P',  Value=I4PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='I8P',  Value=I8PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='R4P',  Value=R4PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='R8P',  Value=R8PArray))  stop -1
+if(.not. Parameters%isAssignable(Key='L',    Value=LArray))    stop -1
+#ifndef __GFORTRAN__
+if(.not. Parameters%isAssignable(Key='DLCA', Value=DLCAArray)) stop -1
+#endif
 
 write(unit=OUTPUT_UNIT, fmt='(A)') ''
 write(unit=OUTPUT_UNIT, fmt='(A)') 'Getting Values ...'

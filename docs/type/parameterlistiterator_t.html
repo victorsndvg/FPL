@@ -123,7 +123,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
 	  data-placement="bottom" data-html="true"
-	  title="<p> 3.5% of total for derived types.</p>Including implementation: 882 statements,  7.7% of total for derived types.">48 statements</a>
+	  title="<p> 4.2% of total for derived types.</p>Including implementation: 1187 statements,  9.8% of total for derived types.">57 statements</a>
      </li> 
      
      
@@ -219,6 +219,8 @@
       <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-get%7E2">Get</a>
       
       <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-isofdatatype%7E2">isOfDataType</a>
+      
+      <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-isassignable%7E2">isAssignable</a>
       
       <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-assignment%28%3D%29">Assignment(=)</a>
       
@@ -486,6 +488,8 @@
       <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-get%7E2">Get</a>
       
       <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-isofdatatype%7E2">isOfDataType</a>
+      
+      <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-isassignable%7E2">isAssignable</a>
       
       <a class="list-group-item" href="../type/parameterlistiterator_t.html#boundprocedure-assignment%28%3D%29">Assignment(=)</a>
       
@@ -3004,6 +3008,658 @@ private function ParameterListIterator_isOfDataType7D(this, Mold) result(isOfDat
     
 	   
 <div class="panel panel-default">
+  <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-isassignable%7E2"></span><h3>generic, public :: <strong>isAssignable</strong>  => ParameterListIterator_isAssignable0D, ParameterListIterator_isAssignable1D, ParameterListIterator_isAssignable2D, ParameterListIterator_isAssignable3D, ParameterListIterator_isAssignable4D, ParameterListIterator_isAssignable5D, ParameterListIterator_isAssignable6D, ParameterListIterator_isAssignable7D 
+    
+  </h3></div>
+  
+  <ul class="list-group">
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable0D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong></td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable1D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong>(1:)</td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable2D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong>(1:,1:)</td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable3D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong>(1:,1:,1:)</td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable4D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong>(1:,1:,1:,1:)</td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable5D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong>(1:,1:,1:,1:,1:)</td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable6D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong>(1:,1:,1:,1:,1:,1:)</td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+      <li class="list-group-item">
+      
+         
+            
+    
+    <h3>
+private function ParameterListIterator_isAssignable7D(this, Value) result(isAssignable)
+    
+    
+	 
+</h3>
+    
+
+
+
+<p>Check if a stored variable is Assignable to Value</p>
+    
+    <h4>Arguments</h4>
+    
+      
+      
+<table class="table table-striped varlist">
+<thead><tr><th>Type</th>
+<th>Intent</th><th>Optional</th>
+<th>Attributes</th><th></th><th>Name</th><th></th></thead>
+
+
+
+<tbody>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(<a href='../type/parameterlistiterator_t.html'>ParameterListIterator_t</a>),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>this</strong></td><td><p>Parameter List Iterator</p></td>
+  
+</tr>
+
+  
+  
+  
+  
+<tr>
+  
+  <td><span class="anchor" ></span>class(*),</td>
+  <td>intent(in)</td>
+  <td></td>
+  
+  <td></td><td>::</td>
+  <td><strong>Value</strong>(1:,1:,1:,1:,1:,1:,1:)</td><td><p>Value</p></td>
+  
+</tr>
+
+</tbody>
+</table>
+
+      
+    
+    
+
+  
+  
+  
+  
+     <h4>Return Value <small>logical
+  </small></h4>
+  <p>Check if is assignable</p>
+    
+
+         
+      
+      </li>
+    
+  </ul>
+</div>
+
+    
+	   
+<div class="panel panel-default">
   <div class="panel-heading codesum"><span class="anchor" id="boundprocedure-assignment%28%3D%29"></span><h3>generic, public :: <strong>Assignment(=)</strong>  => ParameterListIterator_Assignment 
     
   </h3></div>
@@ -3285,7 +3941,7 @@ private subroutine ParameterListIterator_Assignment(this, ParameterListIterator)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2016-10-05T10:45:59.624507 
+             on 2016-11-07T09:58:25.826040 
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FPL was developed by Víctor Sande Veiga</p></div>

@@ -162,6 +162,8 @@ $ make
 
 <p><em>To compile FPL under Windows use de equivalent commands</em></p>
 <h2 id="getting-started-with-fpl"><a class="toclink" href="#getting-started-with-fpl">Getting started with FPL</a></h2>
+<p>:warning: <strong>FPL</strong> cannot handle non-allocated variables while calling <code>Set(Key, Value)</code> or <code>Get(Key, Value)</code> procedures.
+:warning: To succesfull get a stored value into your target variable, <strong>data type</strong> and <strong>shape</strong> of both variables must agree.</p>
 <h3 id="using-fpl-in-your-program"><a class="toclink" href="#using-fpl-in-your-program">Using FPL in your program</a></h3>
 <div class="codehilite"><pre><span class="k">USE </span><span class="n">FPL</span>
 
@@ -198,6 +200,16 @@ $ make
 </pre></div>
 
 
+<h3 id="check-if-you-can-assign-a-parameter-to-your-variable"><a class="toclink" href="#check-if-you-can-assign-a-parameter-to-your-variable">Check if you can assign a parameter to your variable</a></h3>
+<p>Check if the target variable has the same type and shape as the stored variable :bangbang:</p>
+<div class="codehilite"><pre><span class="kt">integer</span> <span class="kd">::</span> <span class="n">MaxIters</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">My_List</span><span class="p">%</span><span class="n">isAssignable</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Max Iters&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="n">MaxIters</span><span class="p">))</span> <span class="k">then</span>
+<span class="k">    </span><span class="n">FPLError</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">Get</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Max Iters&#39;</span><span class="p">,</span> <span class="k">Value</span><span class="o">=</span><span class="n">MaxIters</span><span class="p">)</span>
+<span class="n">endif</span>
+</pre></div>
+
+
 <h3 id="deleting-parameters"><a class="toclink" href="#deleting-parameters">Deleting parameters</a></h3>
 <div class="codehilite"><pre><span class="k">call </span><span class="n">My_List</span><span class="p">%</span><span class="n">Del</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Max Iters&#39;</span><span class="p">)</span>
 </pre></div>
@@ -227,7 +239,7 @@ $ make
 
 
 <h3 id="working-with-parameter-sublists"><a class="toclink" href="#working-with-parameter-sublists">Working with parameter sublists</a></h3>
-<p>Every parameter list can recursively store other parameter sublists that have the same functionality of the original.</p>
+<p>Every parameter list can recursively store parameter sublists.</p>
 <div class="codehilite"><pre><span class="k">type</span><span class="p">(</span><span class="n">ParameterList_t</span><span class="p">),</span> <span class="k">pointer</span> <span class="kd">::</span> <span class="n">Prec_List</span>
 
 <span class="n">Prec_List</span> <span class="o">=&gt;</span> <span class="n">My_List</span><span class="p">%</span><span class="n">NewSubList</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Preconditioner&#39;</span><span class="p">)</span>
@@ -237,7 +249,7 @@ $ make
 </pre></div>
 
 
-<h3 id="checking-if-is-a-parameter-sublist"><a class="toclink" href="#checking-if-is-a-parameter-sublist">Checking if is a parameter sublist</a></h3>
+<h3 id="checking-if-it-is-a-parameter-sublist"><a class="toclink" href="#checking-if-it-is-a-parameter-sublist">Checking if it is a parameter sublist</a></h3>
 <div class="codehilite"><pre><span class="kt">logical</span> <span class="kd">::</span> <span class="n">prec_defined</span>
 
 <span class="n">prec_defined</span> <span class="o">=</span> <span class="n">My_List</span><span class="p">%</span><span class="n">isSubList</span><span class="p">(</span><span class="n">Key</span><span class="o">=</span><span class="s1">&#39;Preconditioner&#39;</span><span class="p">)</span>
@@ -354,14 +366,6 @@ $ make
                 
                   
                     <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
-                  
-                
-                  
-                
-                  
-                
-                  
-                
                   
                 
                   
@@ -789,12 +793,6 @@ $ make
                 
                   
                 
-                  
-                
-                  
-                
-                  
-                
               </ul>
           </div>
           
@@ -804,27 +802,7 @@ $ make
               <ul>
                 
                   
-                    <li><a href='./interface/bcton.html'>bcton</a></li>
-                  
-                
-                  
-                    <li><a href='./interface/bit_size.html'>bit_size</a></li>
-                  
-                
-                  
-                    <li><a href='./interface/bstr.html'>bstr</a></li>
-                  
-                
-                  
-                    <li><a href='./interface/byte_size.html'>byte_size</a></li>
-                  
-                
-                  
                     <li><a href='./proc/byte_size_logical.html'>byte_size_logical</a></li>
-                  
-                
-                  
-                    <li><a href='./interface/cton.html'>cton</a></li>
                   
                 
                   
@@ -836,15 +814,7 @@ $ make
                   
                 
                   
-                    <li><a href='./interface/str.html'>str</a></li>
-                  
-                
-                  
-                    <li><a href='./interface/strz.html'>strz</a></li>
-                  
-                
-                  
-                    <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+                    <li><a href='./proc/thewrapperfactorylist_init.html'>TheWrapperFactoryList_Init</a></li>
                   
                 
               </ul>
@@ -1058,7 +1028,7 @@ $ make
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2016-10-05T10:45:59.624507 
+             on 2016-11-07T09:58:25.826040 
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> FPL was developed by Víctor Sande Veiga</p></div>

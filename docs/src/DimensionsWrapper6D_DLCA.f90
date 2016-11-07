@@ -107,7 +107,14 @@ contains
             type is (character(len=*))
                 call this%GetShape(ValueShape)
                 if(all(ValueShape == shape(Value))) then
-                    Value = this%Value
+                    if(len(Value) >= len(this%Value)) then
+                        Value = this%Value
+                    else
+                        call msg%Warn(txt='Getting value: Not enought length ('//      &
+                                      trim(str(no_sign=.true.,n=len(Value)))//'<'//    &
+                                      trim(str(no_sign=.true.,n=len(this%Value)))//')',&
+                                      file=__FILE__, line=__LINE__ )
+                    endif
                 else
                     call msg%Warn(txt='Getting value: Wrong shape ('//&
                                   str(no_sign=.true.,n=ValueShape)//'/='//&

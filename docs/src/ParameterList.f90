@@ -79,38 +79,54 @@ save
         procedure, non_overridable         ::                   ParameterList_IsOfDataType5D
         procedure, non_overridable         ::                   ParameterList_IsOfDataType6D
         procedure, non_overridable         ::                   ParameterList_IsOfDataType7D
-        generic,   public :: Set            => ParameterList_Set0D, &
-                                               ParameterList_Set1D, &
-                                               ParameterList_Set2D, &
-                                               ParameterList_Set3D, &
-                                               ParameterList_Set4D, &
-                                               ParameterList_Set5D, &
-                                               ParameterList_Set6D, &
-                                               ParameterList_Set7D
-        generic,   public :: Get            => ParameterList_Get0D, &
-                                               ParameterList_Get1D, &
-                                               ParameterList_Get2D, &
-                                               ParameterList_Get3D, &
-                                               ParameterList_Get4D, &
-                                               ParameterList_Get5D, &
-                                               ParameterList_Get6D, &
-                                               ParameterList_Get7D
-        generic,   public :: GetPointer     => ParameterList_GetPointer0D, &
-                                               ParameterList_GetPointer1D, &
-                                               ParameterList_GetPointer2D, &
-                                               ParameterList_GetPointer3D, &
-                                               ParameterList_GetPointer4D, &
-                                               ParameterList_GetPointer5D, &
-                                               ParameterList_GetPointer6D, &
-                                               ParameterList_GetPointer7D
-        generic,   public :: isOfDataType   => ParameterList_IsOfDataType0D, &
-                                               ParameterList_IsOfDataType1D, &
-                                               ParameterList_IsOfDataType2D, &
-                                               ParameterList_IsOfDataType3D, &
-                                               ParameterList_IsOfDataType4D, &
-                                               ParameterList_IsOfDataType5D, &
-                                               ParameterList_IsOfDataType6D, &
-                                               ParameterList_IsOfDataType7D
+        procedure, non_overridable         ::                   ParameterList_isAssignable0D
+        procedure, non_overridable         ::                   ParameterList_isAssignable1D
+        procedure, non_overridable         ::                   ParameterList_isAssignable2D
+        procedure, non_overridable         ::                   ParameterList_isAssignable3D
+        procedure, non_overridable         ::                   ParameterList_isAssignable4D
+        procedure, non_overridable         ::                   ParameterList_isAssignable5D
+        procedure, non_overridable         ::                   ParameterList_isAssignable6D
+        procedure, non_overridable         ::                   ParameterList_isAssignable7D
+        generic,   public :: Set           => ParameterList_Set0D, &
+                                              ParameterList_Set1D, &
+                                              ParameterList_Set2D, &
+                                              ParameterList_Set3D, &
+                                              ParameterList_Set4D, &
+                                              ParameterList_Set5D, &
+                                              ParameterList_Set6D, &
+                                              ParameterList_Set7D
+        generic,   public :: Get           => ParameterList_Get0D, &
+                                              ParameterList_Get1D, &
+                                              ParameterList_Get2D, &
+                                              ParameterList_Get3D, &
+                                              ParameterList_Get4D, &
+                                              ParameterList_Get5D, &
+                                              ParameterList_Get6D, &
+                                              ParameterList_Get7D
+        generic,   public :: GetPointer    => ParameterList_GetPointer0D, &
+                                              ParameterList_GetPointer1D, &
+                                              ParameterList_GetPointer2D, &
+                                              ParameterList_GetPointer3D, &
+                                              ParameterList_GetPointer4D, &
+                                              ParameterList_GetPointer5D, &
+                                              ParameterList_GetPointer6D, &
+                                              ParameterList_GetPointer7D
+        generic,   public :: isOfDataType  => ParameterList_IsOfDataType0D, &
+                                              ParameterList_IsOfDataType1D, &
+                                              ParameterList_IsOfDataType2D, &
+                                              ParameterList_IsOfDataType3D, &
+                                              ParameterList_IsOfDataType4D, &
+                                              ParameterList_IsOfDataType5D, &
+                                              ParameterList_IsOfDataType6D, &
+                                              ParameterList_IsOfDataType7D
+        generic,   public :: isAssignable  => ParameterList_isAssignable0D, &
+                                              ParameterList_isAssignable1D, &
+                                              ParameterList_isAssignable2D, &
+                                              ParameterList_isAssignable3D, &
+                                              ParameterList_isAssignable4D, &
+                                              ParameterList_isAssignable5D, &
+                                              ParameterList_isAssignable6D, &
+                                              ParameterList_isAssignable7D
         procedure, non_overridable, public :: DataSizeInBytes=> ParameterList_DataSizeInBytes
         procedure, non_overridable, public :: Del            => ParameterList_RemoveEntry
         procedure, non_overridable, public :: Init           => ParameterList_Init
@@ -154,6 +170,14 @@ save
         procedure,         non_overridable ::                             ParameterListIterator_isOfDataType5D
         procedure,         non_overridable ::                             ParameterListIterator_isOfDataType6D
         procedure,         non_overridable ::                             ParameterListIterator_isOfDataType7D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable0D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable1D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable2D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable3D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable4D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable5D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable6D
+        procedure,         non_overridable ::                             ParameterListIterator_isAssignable7D
         procedure,         non_overridable :: GetEntry                 => ParameterListIterator_GetEntry
         procedure,         non_overridable :: GetIndex                 => ParameterListIterator_GetIndex
         procedure,         non_overridable :: PointToValue             => ParameterListIterator_PointToValue
@@ -188,6 +212,14 @@ save
                                                                           ParameterListIterator_IsOfDataType5D, &
                                                                           ParameterListIterator_IsOfDataType6D, &
                                                                           ParameterListIterator_IsOfDataType7D
+        generic,   public                  :: isAssignable             => ParameterListIterator_isAssignable0D, &
+                                                                          ParameterListIterator_isAssignable1D, &
+                                                                          ParameterListIterator_isAssignable2D, &
+                                                                          ParameterListIterator_isAssignable3D, &
+                                                                          ParameterListIterator_isAssignable4D, &
+                                                                          ParameterListIterator_isAssignable5D, &
+                                                                          ParameterListIterator_isAssignable6D, &
+                                                                          ParameterListIterator_isAssignable7D
         generic,   public                  :: Assignment(=)            => ParameterListIterator_Assignment
         final                              ::                             ParameterListIterator_Final
     end type
@@ -1315,6 +1347,234 @@ contains
     end function ParameterList_isOfDataType7D
 
 
+    function ParameterList_isAssignable0D(this,Key,Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this         !< Parameter List
+        character(len=*),                     intent(IN) :: Key          !< String Key
+        class(*),                             intent(IN) :: Value        !< Value to compare with the stored variable
+        logical                                          :: Assignable   !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper      !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)!< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper0D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value)) Assignable = .true.
+            end select
+        endif
+    end function ParameterList_isAssignable0D
+
+
+    function ParameterList_isAssignable1D(this,Key,Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this         !< Parameter List
+        character(len=*),                     intent(IN) :: Key          !< String Key
+        class(*),                             intent(IN) :: Value(1:)    !< Value to check against with the stored variable
+        logical                                          :: Assignable   !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper      !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)!< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key,Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper1D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) Assignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterList_isAssignable1D
+
+
+    function ParameterList_isAssignable2D(this,Key,Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this         !< Parameter List
+        character(len=*),                     intent(IN) :: Key          !< String Key
+        class(*),                             intent(IN) :: Value(1:,1:) !< Value to check against with the stored variable
+        logical                                          :: Assignable   !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper      !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)!< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper2D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) Assignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterList_isAssignable2D
+
+
+    function ParameterList_isAssignable3D(this,Key,Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value 
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this            !< Parameter List
+        character(len=*),                     intent(IN) :: Key             !< String Key
+        class(*),                             intent(IN) :: Value(1:,1:,1:) !< Value to check against with the stored variable
+        logical                                          :: Assignable      !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper         !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)   !< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper3D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) Assignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterList_isAssignable3D
+
+
+    function ParameterList_isAssignable4D(this,Key,Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this               !< Parameter List
+        character(len=*),                     intent(IN) :: Key                !< String Key
+        class(*),                             intent(IN) :: Value(1:,1:,1:,1:) !< Value to check against the stored variable
+        logical                                          :: Assignable         !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper            !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)      !< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper4D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) Assignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterList_isAssignable4D
+
+
+    function ParameterList_isAssignable5D(this,Key,Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this                  !< Parameter List
+        character(len=*),                     intent(IN) :: Key                   !< String Key
+        class(*),                             intent(IN) :: Value(1:,1:,1:,1:,1:) !< Value to check against the stored variable
+        logical                                          :: Assignable            !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper               !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)         !< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper5D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) Assignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterList_isAssignable5D
+
+
+    function ParameterList_isAssignable6D(this,Key, Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this                     !< Parameter List
+        character(len=*),                     intent(IN) :: Key                      !< String Key
+        class(*),                             intent(IN) :: Value(1:,1:,1:,1:,1:,1:) !< Value to check against the stored variable
+        logical                                          :: Assignable               !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper                  !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)            !< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper6D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) Assignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterList_isAssignable6D
+
+
+    function ParameterList_isAssignable7D(this,Key,Value) result(Assignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterList_t),               intent(IN) :: this                        !< Parameter List
+        character(len=*),                     intent(IN) :: Key                         !< String Key
+        class(*),                             intent(IN) :: Value(1:,1:,1:,1:,1:,1:,1:) !< Value to check against the stored variable
+        logical                                          :: Assignable                  !< Boolean flag to check compatibility
+        class(*),     pointer                            :: Wrapper                     !< Wrapper
+        integer(I4P), allocatable                        :: ValueShape(:)               !< Shape of the stored value
+    !-----------------------------------------------------------------
+        Assignable = .false.
+        nullify(Wrapper)
+        ! Check if present
+        call this%Dictionary%GetPointer(Key=Key, Value=Wrapper)
+        if(associated(Wrapper)) then
+            select type (Wrapper)
+                class is (DimensionsWrapper7D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) Assignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterList_isAssignable7D
+
+
     subroutine ParameterList_RemoveEntry(this, Key)
     !-----------------------------------------------------------------
     !< Remove an Entry given a Key
@@ -2132,6 +2392,217 @@ contains
             end select
         endif
     end function ParameterListIterator_isOfDataType7D
+
+
+    function ParameterListIterator_isAssignable0D(this,Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this             !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value            !< Value
+        class(*), pointer                          :: Wrapper          !< Wrapper
+        logical                                    :: isAssignable     !< Check if is assignable
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper0D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value)) isAssignable = .true.
+            end select
+        endif
+    end function ParameterListIterator_isAssignable0D
+
+
+    function ParameterListIterator_isAssignable1D(this,Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value(1:)       !< Value
+        class(*), pointer                          :: Wrapper         !< Wrapper
+        logical                                    :: isAssignable    !< Check if is assignable
+        integer(I4P), allocatable                  :: ValueShape(:)   !< Shape of the stored value
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper1D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) isAssignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterListIterator_isAssignable1D
+
+
+    function ParameterListIterator_isAssignable2D(this,Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value(1:,1:)    !< Value
+        class(*), pointer                          :: Wrapper         !< Wrapper
+        logical                                    :: isAssignable    !< Check if is assignable
+        integer(I4P), allocatable                  :: ValueShape(:)   !< Shape of the stored value
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper2D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) isAssignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterListIterator_isAssignable2D
+
+
+    function ParameterListIterator_isAssignable3D(this, Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value(1:,1:,1:) !< Value
+        class(*), pointer                          :: Wrapper         !< Wrapper
+        logical                                    :: isAssignable    !< Check if is assignable
+        integer(I4P), allocatable                  :: ValueShape(:)   !< Shape of the stored value
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper3D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) isAssignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterListIterator_isAssignable3D
+
+
+    function ParameterListIterator_isAssignable4D(this, Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this               !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value(1:,1:,1:,1:) !< Value
+        class(*), pointer                          :: Wrapper            !< Wrapper
+        logical                                    :: isAssignable       !< Check if is assignable
+        integer(I4P), allocatable                  :: ValueShape(:)      !< Shape of the stored value
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper4D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) isAssignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterListIterator_isAssignable4D
+
+
+    function ParameterListIterator_isAssignable5D(this, Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this                  !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value(1:,1:,1:,1:,1:) !< Value
+        class(*), pointer                          :: Wrapper               !< Wrapper
+        logical                                    :: isAssignable          !< Check if is assignable
+        integer(I4P), allocatable                  :: ValueShape(:)         !< Shape of the stored value
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper5D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) isAssignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterListIterator_isAssignable5D
+
+
+    function ParameterListIterator_isAssignable6D(this, Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this                     !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value(1:,1:,1:,1:,1:,1:) !< Value
+        class(*), pointer                          :: Wrapper                  !< Wrapper
+        logical                                    :: isAssignable             !< Check if is assignable
+        integer(I4P), allocatable                  :: ValueShape(:)            !< Shape of the stored value
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper6D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) isAssignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterListIterator_isAssignable6D
+
+
+    function ParameterListIterator_isAssignable7D(this, Value) result(isAssignable)
+    !-----------------------------------------------------------------
+    !< Check if a stored variable is Assignable to Value
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t), intent(IN) :: this                        !< Parameter List Iterator
+        class(*),                    intent(IN)    :: Value(1:,1:,1:,1:,1:,1:,1:) !< Value
+        class(*), pointer                          :: Wrapper                     !< Wrapper
+        logical                                    :: isAssignable                !< Check if is assignable
+        integer(I4P), allocatable                  :: ValueShape(:)               !< Shape of the stored value
+    !-----------------------------------------------------------------
+        isAssignable = .false.
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper7D_t)
+                    ! Check same data type
+                    if(Wrapper%isOfDataType(Mold=Value(1,1,1,1,1,1,1))) then
+                        call Wrapper%GetShape(ValueShape)
+                        ! Check right shape
+                        if(all(ValueShape == shape(Value))) isAssignable = .true.
+                    endif
+            end select
+        endif
+    end function ParameterListIterator_isAssignable7D
 
 
     function ParameterListIterator_toString(this, Separator) result(String)
