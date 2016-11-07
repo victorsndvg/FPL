@@ -52,8 +52,11 @@ $ make
 
 ##Getting started with FPL
 
-:warning: **FPL** cannot handle non-allocated variables while calling `Set(Key, Value)` or `Get(Key, Value)` procedures.
-:warning: To succesfull get a stored value into your target variable, **data type** and **shape** of both variables must agree.
+Notes:
+- [Source code documentation](http://victorsndvg.github.io/FPL/)
+- **FPL** cannot handle non-allocated variables while calling `Set(Key, Value)` or `Get(Key, Value)` procedures.
+- To succesfull get a stored value into your target variable, **data type** and **shape** of both variables must agree.
+
 
 ###Using FPL in your program
 
