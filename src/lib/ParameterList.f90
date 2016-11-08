@@ -191,6 +191,7 @@ save
         procedure, public, non_overridable :: GetShape                 => ParameterListIterator_GetShape
         procedure, public, non_overridable :: GetDimensions            => ParameterListIterator_GetDimensions
         procedure, public, non_overridable :: DataSizeInBytes          => ParameterListIterator_DataSizeInBytes
+        procedure, public, non_overridable :: GetAsString              => ParameterListIterator_GetAsString
         procedure, public, non_overridable :: GetSubList               => ParameterListIterator_GetSubList
         procedure, public, non_overridable :: isSubList                => ParameterListIterator_isSubList
         procedure, public, non_overridable :: toString                 => ParameterListIterator_toString
@@ -1919,9 +1920,39 @@ contains
     end function ParameterListIterator_GetDimensions
 
 
+    function ParameterListIterator_GetAsString(this,String,Separator) result(FPLerror)
+    !-----------------------------------------------------------------
+    !< Return the current value converted into a string
+    !-----------------------------------------------------------------
+        class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
+        character(len=:), allocatable,        intent(INOUT) :: String         !< Returned string
+        character(len=1), optional,           intent(IN)    :: Separator      !< Array values separator
+        class(*),                    pointer                :: Wrapper        !< Wrapper
+        integer(I4P)                                        :: FPLerror       !< Error flag
+    !-----------------------------------------------------------------
+        FPLerror = FPLSuccess
+        nullify(Wrapper)
+        Wrapper => this%PointToValue()
+        if(associated(Wrapper)) then
+            select type(Wrapper)
+                class is (DimensionsWrapper_t)
+                    String = Wrapper%ToString(Separator=Separator)
+                class Default
+                    FPLerror = FPLWrapperError
+                    call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Value was not modified.', &
+                               file=__FILE__, line=__LINE__ )
+            end select
+        else
+            FPLerror = FPLWrapperFactoryError
+            call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Not present. Value was not modified.', &
+                           file=__FILE__, line=__LINE__ )
+        endif
+    end function ParameterListIterator_GetAsString
+
+
     function ParameterListIterator_Get0D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return a scalar Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value          !< Returned value
@@ -1950,7 +1981,7 @@ contains
 
     function ParameterListIterator_Get1D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return a vector Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value(:)       !< Returned value
@@ -1979,7 +2010,7 @@ contains
 
     function ParameterListIterator_Get2D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return an array Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value(:,:)     !< Returned value
@@ -2008,7 +2039,7 @@ contains
 
     function ParameterListIterator_Get3D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return an array Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value(:,:,:)   !< Returned value
@@ -2038,7 +2069,7 @@ contains
 
     function ParameterListIterator_Get4D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return an array Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this           !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value(:,:,:,:) !< Returned value
@@ -2067,7 +2098,7 @@ contains
 
     function ParameterListIterator_Get5D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return an array Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this             !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:) !< Returned value
@@ -2097,7 +2128,7 @@ contains
 
     function ParameterListIterator_Get6D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return an array Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this               !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:) !< Returned value
@@ -2127,7 +2158,7 @@ contains
 
     function ParameterListIterator_Get7D(this,Value) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return an array Value given the Key
+    !< Return the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),       intent(IN)    :: this                 !< Parameter List Iterator
         class(*),                             intent(INOUT) :: Value(:,:,:,:,:,:,:) !< Returned value
@@ -2157,7 +2188,7 @@ contains
 
     function ParameterListIterator_GetSublist(this, Sublist) result(FPLerror)
     !-----------------------------------------------------------------
-    !< Return a Unlimited polymorphic pointer to a Value given the Key
+    !< Return a pointer to the current sublist
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),  intent(IN)    :: this          !< Parameter List
         type(ParameterList_t), pointer,  intent(INOUT) :: Sublist       !< Wrapper
@@ -2207,7 +2238,7 @@ contains
 
     function ParameterListIterator_DataSizeInBytes(this) result(DataSizeInBytes)
     !-----------------------------------------------------------------
-    !< Return the data size in bytes of the value associated with Key
+    !< Return the data size in bytes of the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
         type(ParameterEntry_t),      pointer       :: CurrentEntry    !< Current entry
@@ -2228,7 +2259,7 @@ contains
 
     function ParameterListIterator_isOfDataType0D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold            !< Mold
@@ -2249,7 +2280,7 @@ contains
 
     function ParameterListIterator_isOfDataType1D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:)        !< Mold
@@ -2270,7 +2301,7 @@ contains
 
     function ParameterListIterator_isOfDataType2D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:,1:)     !< Mold
@@ -2291,7 +2322,7 @@ contains
 
     function ParameterListIterator_isOfDataType3D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value 
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:,1:,1:)  !< Mold
@@ -2312,7 +2343,7 @@ contains
 
     function ParameterListIterator_isOfDataType4D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this              !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:,1:,1:,1:) !< Mold
@@ -2333,7 +2364,7 @@ contains
 
     function ParameterListIterator_isOfDataType5D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this                 !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:,1:,1:,1:,1:) !< Mold
@@ -2354,7 +2385,7 @@ contains
 
     function ParameterListIterator_isOfDataType6D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this                    !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:,1:,1:,1:,1:,1:) !< Mold
@@ -2375,7 +2406,7 @@ contains
 
     function ParameterListIterator_isOfDataType7D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the value associated with Key
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this                       !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:,1:,1:,1:,1:,1:,1:) !< Mold

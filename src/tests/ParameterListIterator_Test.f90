@@ -6,8 +6,9 @@ USE FPL
 
 type(ParameterList_t)         :: Parameters
 type(ParameterListIterator_t) :: Iterator
-integer(I4P),allocatable :: array(:)
-integer(I4P),allocatable :: shape(:)
+integer(I4P),     allocatable :: array(:)
+integer(I4P),     allocatable :: shape(:)
+character(len=:), allocatable :: string
 integer :: iter, numiters, loop
 
 numiters = 7
@@ -55,10 +56,12 @@ do while (.not. Iterator%HasFinished())
         write(unit=OUTPUT_UNIT, fmt= '(A)') ' FAIL!!!!'
         stop -1
     endif
+    FPLError = Iterator%GetAsString(String, Separator=' ')
+    if(FPLError /= 0) stop -1
     print*, '  Key = '//Iterator%GetKey()
     print*, '  Bytes = '//trim(str(n=Iterator%DataSizeInBytes()))
     print*, '  Dimensions = '//trim(str(n=Iterator%GetDimensions()))
-    print*, '  Value = '//trim(str(n=array))
+    print*, '  Value = '//String
     print*, '  Shape = '//trim(str(n=shape))
     if(all(array == shape(1))) then
         write(unit=OUTPUT_UNIT, fmt='(A)') 'Ok!'
