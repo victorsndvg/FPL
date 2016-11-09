@@ -1,14 +1,14 @@
-#FPL
+# FPL
 **F**ortran **P**arameter **L**ist
 
 [![Build Status](https://travis-ci.org/victorsndvg/FPL.svg?branch=master)](https://travis-ci.org/victorsndvg/FPL)
 [![codecov.io](https://codecov.io/github/victorsndvg/FPL/coverage.svg?branch=master)](https://codecov.io/github/victorsndvg/FPL?branch=master)
 
-##License
+## License
 
 [![License](https://img.shields.io/badge/license-GNU%20LESSER%20GENERAL%20PUBLIC%20LICENSE%20v3%2C%20LGPLv3-red.svg)](http://www.gnu.org/licenses/lgpl-3.0.txt)
 
-##What is FPL?
+## What is FPL?
 
 **FPL** is pure fortran 2003 library that can manage the parameters of your program from a single point.
 
@@ -25,11 +25,11 @@ Value can be a scalar or an array of any dimension.
 
 **FPL** is based in [Teuchos::ParameterList](https://trilinos.org/docs/dev/packages/teuchos/doc/html/classTeuchos_1_1ParameterList.html)  of the [Trilinos](https://trilinos.org/) project.
 
-##How to get FPL
+## How to get FPL
 
 ```git clone --recursive https://github.com/victorsndvg/FPL.git ```
 
-##Compilation
+## Compilation
 
 **FPL** compile with GNU Fortran compiler 5.1 (and newer versions) and Intel Fortran compiler 15.0.1 (and newer versions).
 
@@ -50,7 +50,7 @@ $ make
 *To compile FPL under Windows use de equivalent commands*
 
 
-##Getting started with FPL
+## Getting started with FPL
 
 Notes:
 - [Source code documentation](http://victorsndvg.github.io/FPL/)
@@ -58,7 +58,7 @@ Notes:
 - To succesfull get a stored value into your target variable, **data type** and **shape** of both variables must agree.
 
 
-###Using FPL in your program
+### Using FPL in your program
 
 ```fortran
 USE FPL
@@ -74,7 +74,7 @@ call My_List%Free()
 call FPL_Finalize()
 ```
 
-###Setting parameters
+### Setting parameters
 
 ```fortran
 FPLError = My_List%Set(Key='Max Iters', Value=1500)
@@ -82,7 +82,7 @@ FPLError = My_List%Set(Key='Tolerance', Value=1.e-10)
 FPLError = My_List%Set(Key='Solver', Value='GMRES')
 ```
 
-###Getting parameters
+### Getting parameters
 
 ```fortran
 integer :: MaxIters
@@ -90,7 +90,7 @@ integer :: MaxIters
 FPLError = My_List%Get(Key='Max Iters', Value=MaxIters)
 ```
 
-###Getting parameters as strings
+### Getting parameters as strings
 
 ```fortran
 character(len=:), allocatable :: MaxItersString
@@ -98,7 +98,7 @@ character(len=:), allocatable :: MaxItersString
 FPLError = My_List%GetAsString(Key='Max Iters', String=MaxItersString)
 ```
 
-###Check if you can assign a parameter to your variable
+### Check if you can assign a parameter to your variable
 
 Check if the target variable has the same type and shape as the stored variable :bangbang:
 
@@ -110,13 +110,13 @@ if(My_List%isAssignable(Key='Max Iters', Value=MaxIters)) then
 endif
 ```
 
-###Deleting parameters
+### Deleting parameters
 
 ```fortran
 call My_List%Del(Key='Max Iters')
 ```
 
-###Checking if a parameter is present
+### Checking if a parameter is present
 
 ```fortran
 logical :: solver_defined
@@ -124,7 +124,7 @@ logical :: solver_defined
 solver_defined = My_List%isPresent(Key='Solver')
 ```
 
-###Checking if a parameter is of the expected data type
+### Checking if a parameter is of the expected data type
 
 ```fortran
 logical :: has_same_type
@@ -133,7 +133,7 @@ real    :: Tolerance
 has_same_type = My_List%isOfDataType(Key='Tolerance', Mold=Tolerance)
 ```
 
-###Checking the shape of a parameter
+### Checking the shape of a parameter
 
 ```fortran
 logical :: has_same_type
@@ -142,7 +142,7 @@ integer, allocatable :: Shape(:)
 FPLError = My_List%GetShape(Key='Tolerance', Shape=Shape)
 ```
 
-###Working with parameter sublists
+### Working with parameter sublists
 
 Every parameter list can recursively store parameter sublists.
 
@@ -155,7 +155,7 @@ call Prec_List%Set(Key='Type', Value='ILU')
 call Prec_List%Set(Key='Drop Tolerance', Value=1.e-3)
 ```
 
-###Checking if it is a parameter sublist
+### Checking if it is a parameter sublist
 
 ```fortran
 logical :: prec_defined
@@ -163,13 +163,13 @@ logical :: prec_defined
 prec_defined = My_List%isSubList(Key='Preconditioner')
 ```
 
-###Print (recursive) the content of a parameter list
+### Print (recursive) the content of a parameter list
 
 ```fortran
 call My_List%Print()
 ```
 
-###Iterate on a ParameterList
+### Iterate on a ParameterList
 
 ParameterList also includes a derived type that works like an iterator to go through all stored parameters without asking for the key.
 
