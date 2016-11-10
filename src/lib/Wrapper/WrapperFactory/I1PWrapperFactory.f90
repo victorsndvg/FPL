@@ -58,7 +58,7 @@ private
         procedure, public :: hasSameType => I1PWrapperFactory_hasSameType
     end type
 
-    type(I1PWrapperFactory_t), public :: WrapperFactoryI1P
+    type(I1PWrapperFactory_t), public, save :: WrapperFactoryI1P
 
 contains
 

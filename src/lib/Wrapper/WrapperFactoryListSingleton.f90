@@ -33,7 +33,7 @@ USE R8PWrapperFactory
 implicit none
 private
 
-    type(WrapperFactoryList_t) :: TheWrapperFactoryList
+    type(WrapperFactoryList_t), save :: TheWrapperFactoryList
 
 public :: TheWrapperFactoryList
 public :: TheWrapperFactoryList_Init
