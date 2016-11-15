@@ -40,7 +40,6 @@ USE DimensionsWrapper7D
 
 implicit none
 private
-save
 
     type :: ParameterList_t
     private

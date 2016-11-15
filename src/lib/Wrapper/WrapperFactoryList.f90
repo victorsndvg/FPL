@@ -28,9 +28,9 @@ private
 
     type, public :: WrapperFactoryList_t
     private
-        character(len=:), allocatable :: Key
-        class(WrapperFactory_t), pointer :: Value          => null()
-        class(WrapperFactoryList_t), public, pointer  :: Next   => null()
+        character(len=:),            allocatable :: Key
+        class(WrapperFactory_t),     pointer     :: Value          => null()
+        class(WrapperFactoryList_t), pointer     :: Next   => null()
     contains
     private
         procedure, non_overridable, public :: HasNext           => WrapperFactoryList_HasNext
@@ -130,8 +130,7 @@ contains
         class(WrapperFactoryList_t),   intent(INOUT) :: this          !< Wrapper Factory List 
         character(len=*),              intent(IN)    :: Key           !< Key
     !-----------------------------------------------------------------
-        if(this%HasKey()) deallocate(this%Key)
-        allocate(this%Key, source=Key)
+        this%Key = Key
     end subroutine WrapperFactoryList_SetKey
 
 
@@ -142,8 +141,7 @@ contains
         class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
         character(len=:), allocatable           :: Key                !< Key
     !-----------------------------------------------------------------
-        !if(this%HasKey()) 
-        allocate(Key, source=this%Key)
+        if(this%HasKey()) Key = this%Key
     end function WrapperFactoryList_GetKey
 
 
