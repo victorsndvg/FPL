@@ -1,3 +1,4 @@
 [submodule "src/lib/PENF"]
 	path = src/lib/PENF
 	url = https://github.com/victorsndvg/PENF.git
+	branch = openmp_threadsafe
