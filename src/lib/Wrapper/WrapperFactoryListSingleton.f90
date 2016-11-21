@@ -34,6 +34,7 @@ implicit none
 private
 
     type(WrapperFactoryList_t), save :: TheWrapperFactoryList
+    !$OMP THREADPRIVATE(TheWrapperFactoryList)
 
 public :: TheWrapperFactoryList
 public :: TheWrapperFactoryList_Init

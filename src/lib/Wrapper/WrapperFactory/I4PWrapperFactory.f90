@@ -58,7 +58,8 @@ private
         procedure, public :: hasSameType => I4PWrapperFactory_hasSameType
     end type
 
-    type(I4PWrapperFactory_t), public, save :: WrapperFactoryI4P
+    type(I4PWrapperFactory_t), save, public :: WrapperFactoryI4P
+   !$OMP THREADPRIVATE(WrapperFactoryI4P)
 
 contains
 
