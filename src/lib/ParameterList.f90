@@ -1845,7 +1845,7 @@ contains
     !-----------------------------------------------------------------
         nullify(CurrentEntry)
         CurrentEntry => this%GetEntry()
-        if(associated(CurrentEntry)) Key = CurrentEntry%GetKey()
+        if(associated(CurrentEntry)) call CurrentEntry%GetKey(Key)
     end function ParameterListIterator_GetKey
 
 

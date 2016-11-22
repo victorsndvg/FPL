@@ -142,15 +142,15 @@ contains
     end subroutine ParameterEntry_SetKey
 
 
-    function ParameterEntry_GetKey(this) result(Key)
+    subroutine ParameterEntry_GetKey(this, Key)
     !-----------------------------------------------------------------
-    !< Check if Next is associated for the current Node
+    !< Return entry key
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),     intent(IN) :: this               !< Parameter Entry 
-        character(len=:), allocatable           :: Key                !< Key
+        class(ParameterEntry_t),       intent(IN)    :: this          !< Parameter Entry 
+        character(len=:), allocatable, intent(INOUT) :: Key           !< Key
     !-----------------------------------------------------------------
         Key = this%Key
-    end function ParameterEntry_GetKey
+    end subroutine ParameterEntry_GetKey
 
 
     subroutine ParameterEntry_DeallocateKey(this)
@@ -261,12 +261,14 @@ contains
         integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
         character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
         character(len=:),       allocatable           :: prefd        !< Prefixing string.
+        character(len=:),       allocatable           :: Key          !< Entry Key
         integer(I4P)                                  :: iostatd      !< IO error.
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         iostatd = 0 ; iomsgd = ''; prefd = '';if (present(prefix)) prefd = prefix
         if(this%HasKey()) then
-            write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//this%GetKey()//'", '
+            call this%GetKey(Key)
+            write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Key//'", '
             select type (Wrapper =>this%Value)
                 class is (DimensionsWrapper_t)
                     call Wrapper%Print(unit=unit)
@@ -348,18 +350,18 @@ contains
     end function EntryListIterator_GetEntry
 
 
-    function EntryListIterator_GetKey(this) result(Key)
+    subroutine EntryListIterator_GetKey(this, Key)
     !-----------------------------------------------------------------
     !< Return the current Key
     !-----------------------------------------------------------------
-        class(EntryListIterator_t),  intent(IN) :: this               ! List iterator
-        type(ParameterEntry_t),  pointer        :: CurrentEntry       ! Current entry
-        character(len=:), allocatable           :: Key                ! Entry Key
+        class(EntryListIterator_t),    intent(IN)    :: this          ! List iterator
+        character(len=:), allocatable, intent(INOUT) :: Key           ! Entry Key
+        type(ParameterEntry_t),  pointer             :: CurrentEntry  ! Current entry
     !-----------------------------------------------------------------
         if(associated(this%CurrentEntry)) then
-            if(this%CurrentEntry%HasKey()) Key = this%CurrentEntry%GetKey()
+            if(this%CurrentEntry%HasKey()) call this%CurrentEntry%GetKey(Key)
         endif
-    end function EntryListIterator_GetKey
+    end subroutine EntryListIterator_GetKey
 
 
     function EntryListIterator_PointToValue(this) result(Value)
