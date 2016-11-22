@@ -133,21 +133,21 @@ contains
     end function CircleWrapper_isOfDataType
 
 
-    function CircleWrapper_toString(this, Separator) result(String)
+    subroutine CircleWrapper_toString(this, String, Separator)
     !-----------------------------------------------------------------
     !< Check if Mold and Value are of the same datatype 
     !-----------------------------------------------------------------
-        class(CircleWrapper_t),           intent(IN) :: this          !< Circle wrapper 0D
-        character(len=1), optional,       intent(IN) :: Separator     !< Value separator for multidimensional variables
-        character(len=:), allocatable                :: String        !< Return the Value as a string
-        real                                         :: Radius        !< Circle radius
+        class(CircleWrapper_t),           intent(IN)    :: this          !< Circle wrapper 0D
+        character(len=:), allocatable,    intent(INOUT) :: String        !< Return the Value as a string
+        character(len=1), optional,       intent(IN)    :: Separator     !< Value separator for multidimensional variables
+        real                                            :: Radius        !< Circle radius
     !-----------------------------------------------------------------
         String = ''
         if(allocated(this%Value)) then
             call this%Value%GetRadius(Radius=Radius)
             String = 'Radius = '//str(no_sign=.true., n=Radius)
         endif
-    end function CircleWrapper_toString
+    end subroutine CircleWrapper_toString
 
 
     subroutine CircleWrapper_Print(this, unit, prefix, iostat, iomsg)
@@ -160,13 +160,15 @@ contains
         integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
         character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
         character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        character(len=:), allocatable                 :: strvalue     !< String value
         integer(I4P)                                  :: iostatd      !< IO error.
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
         real                                          :: Radius       !< Circle radius
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
+        call this%toString(strvalue)
         write(unit=unit,fmt='(A)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = Circle'//&
-                            ', '//this%toString()
+                            ', '//strvalue
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine CircleWrapper_Print

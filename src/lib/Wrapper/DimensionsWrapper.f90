@@ -67,13 +67,13 @@ private
             integer(I4P), allocatable,  intent(INOUT) :: ValueShape(:)
         end subroutine
 
-        function DimensionsWrapper_toString(this, Separator) result(String)
+        subroutine DimensionsWrapper_toString(this, String, Separator)
             import DimensionsWrapper_t
             import I4P
-            class(DimensionsWrapper_t), intent(IN)    :: this
-            character(len=1), optional, intent(IN)    :: Separator
-            character(len=:), allocatable             :: String
-        end function
+            class(DimensionsWrapper_t),    intent(IN)    :: this
+            character(len=:), allocatable, intent(INOUT) :: String
+            character(len=1), optional,    intent(IN)    :: Separator
+        end subroutine
     end interface
 
 public :: DimensionsWrapper_t

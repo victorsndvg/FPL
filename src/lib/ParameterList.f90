@@ -1625,7 +1625,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%toString(Separator=Separator)
+                    call Wrapper%toString(String=String, Separator=Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Unknown Wrapper. Value was not modified.', &
@@ -1935,7 +1935,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%ToString(Separator=Separator)
+                    call Wrapper%ToString(String=String, Separator=Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Value was not modified.', &
@@ -2651,7 +2651,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%toString(Separator)
+                    call Wrapper%toString(String, Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Value was not modified.', &
