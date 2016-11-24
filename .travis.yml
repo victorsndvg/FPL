@@ -36,7 +36,7 @@ before_script:
   - cmake -DFPL_ENABLE_TESTS=ON -DFPL_ENABLE_EXAMPLES=ON -DCOVERAGE_COMMAND=$GCOV ..
 
 script:
-  - ctest -VV -T Start -T Build -T Test -T Coverage
+  - ctest -VV -T Start -T Build -T Test #-T Coverage
 
 after_success:
   - find . -name '*.gcno' -print
