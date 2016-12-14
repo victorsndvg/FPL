@@ -338,7 +338,7 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         integer(I4P), optional,               intent(IN)    :: Size           !< Sublist Size
         class(*),                             pointer       :: Sublist        !< New Sublist
-        class(ParameterList_t),               pointer       :: SublistPointer !< New Sublist pointer
+        type(ParameterList_t),                pointer       :: SublistPointer !< New Sublist pointer
     !-----------------------------------------------------------------
         allocate(ParameterList_t :: SubList)
         call this%Dictionary%Set(Key=Key,Value=Sublist)
@@ -360,7 +360,7 @@ contains
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN)    :: this    !< Parameter List
         character(len=*),                     intent(IN)    :: Key     !< String Key
-        class(ParameterList_t),      pointer, intent(INOUT) :: Sublist !< Wrapper
+        type(ParameterList_t),       pointer, intent(INOUT) :: Sublist !< Wrapper
         class(*),                    pointer                :: Value   !< Returned pointer to value
         integer(I4P)                                        :: FPLerror!< Error flag
     !-----------------------------------------------------------------
