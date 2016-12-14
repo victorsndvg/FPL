@@ -29,10 +29,11 @@ private
     type, public :: WrapperFactoryList_t
     private
         character(len=:),            allocatable :: Key
-        class(WrapperFactory_t),     pointer     :: Value          => null()
-        class(WrapperFactoryList_t), pointer     :: Next   => null()
+        class(WrapperFactory_t),     pointer     :: Value  => null()
+        type(WrapperFactoryList_t),  pointer     :: Next   => null()
     contains
     private
+        procedure, non_overridable, public :: Init              => WrapperFactoryList_Init
         procedure, non_overridable, public :: HasNext           => WrapperFactoryList_HasNext
         procedure, non_overridable, public :: SetNext           => WrapperFactoryList_SetNext
         procedure, non_overridable, public :: GetNext           => WrapperFactoryList_GetNext
@@ -67,6 +68,18 @@ private
     end type WrapperFactoryList_t
 
 contains
+
+    subroutine WrapperFactoryList_Init(this)
+    !-----------------------------------------------------------------
+    !< Initialize the node
+    !-----------------------------------------------------------------
+        class(WrapperFactoryList_t),         intent(INOUT) :: this    !< Wrapper Factory List 
+    !-----------------------------------------------------------------
+        if(allocated(this%Key)) deallocate(this%Key)
+        nullify(this%Value)
+        nullify(this%Next)
+    end subroutine WrapperFactoryList_Init
+
 
     function WrapperFactoryList_HasNext(this) result(hasNext)
     !-----------------------------------------------------------------
@@ -230,15 +243,9 @@ contains
             if (this%GetKey()/=Key) then
                 if (.not. this%hasNext()) then
                     allocate(WrapperFactoryList_t::this%Next)
-                    select type (Next => this%Next)
-                    type is (WrapperFactoryList_t)
-                        call Next%AddWrapperFactory(Key=Key, WrapperFactory=WrapperFactory)
-                    end select
+                    call this%Next%AddWrapperFactory(Key=Key, WrapperFactory=WrapperFactory)
                 else
-                    select type (Next => this%Next)
-                    type is (WrapperFactoryList_t)
-                        call Next%AddWrapperFactory(Key=Key, WrapperFactory=WrapperFactory)
-                    end select
+                    call this%Next%AddWrapperFactory(Key=Key, WrapperFactory=WrapperFactory)
                 endif
             else
                 call this%SetValue(Value=WrapperFactory)
@@ -263,10 +270,7 @@ contains
             if(this%Value%HasSameType(Value=Value)) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory0D
@@ -285,10 +289,7 @@ contains
             if(this%Value%HasSameType(Value=Value(1))) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory1D
@@ -307,10 +308,7 @@ contains
             if(this%Value%HasSameType(Value=Value(1,1))) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory2D
@@ -329,10 +327,7 @@ contains
             if(this%Value%HasSameType(Value=Value(1,1,1))) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory3D
@@ -351,10 +346,7 @@ contains
             if(this%Value%HasSameType(Value=Value(1,1,1,1))) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory4D
@@ -373,10 +365,7 @@ contains
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1))) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory5D
@@ -395,10 +384,7 @@ contains
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1,1))) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory6D
@@ -417,10 +403,7 @@ contains
             if(this%Value%HasSameType(Value=Value(1,1,1,1,1,1,1))) then
                 WrapperFactory => this%Value
             elseif(this%HasNext()) then
-                select type (Next => this%Next)
-                    type is (WrapperFactoryList_T)
-                        WrapperFactory => Next%GetFactory(Value=Value)
-                end select
+                WrapperFactory => this%Next%GetFactory(Value=Value)
             endif
         endif
     end function WrapperFactoryList_GetFactory7D

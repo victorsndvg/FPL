@@ -10,14 +10,14 @@ private
 
     contains
         private
-        procedure(WrapperFactory_Wrap0D),              deferred :: Wrap0D
-        procedure(WrapperFactory_Wrap1D),              deferred :: Wrap1D
-        procedure(WrapperFactory_Wrap2D),              deferred :: Wrap2D
-        procedure(WrapperFactory_Wrap3D),              deferred :: Wrap3D
-        procedure(WrapperFactory_Wrap4D),              deferred :: Wrap4D
-        procedure(WrapperFactory_Wrap5D),              deferred :: Wrap5D
-        procedure(WrapperFactory_Wrap6D),              deferred :: Wrap6D
-        procedure(WrapperFactory_Wrap7D),              deferred :: Wrap7D
+        procedure(WrapperFactory_Wrap0D),      public, deferred :: Wrap0D
+        procedure(WrapperFactory_Wrap1D),      public, deferred :: Wrap1D
+        procedure(WrapperFactory_Wrap2D),      public, deferred :: Wrap2D
+        procedure(WrapperFactory_Wrap3D),      public, deferred :: Wrap3D
+        procedure(WrapperFactory_Wrap4D),      public, deferred :: Wrap4D
+        procedure(WrapperFactory_Wrap5D),      public, deferred :: Wrap5D
+        procedure(WrapperFactory_Wrap6D),      public, deferred :: Wrap6D
+        procedure(WrapperFactory_Wrap7D),      public, deferred :: Wrap7D
         procedure(WrapperFactory_hasSameType), public, deferred :: hasSameType 
         generic, public :: Wrap =>   Wrap0D, &
                                      Wrap1D, &
