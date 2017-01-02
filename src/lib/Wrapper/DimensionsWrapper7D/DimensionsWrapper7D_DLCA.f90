@@ -214,15 +214,15 @@ contains
     end function DimensionsWrapper7D_DLCA_isOfDataType
 
 
-    function DimensionsWrapper7D_DLCA_toString(this, Separator) result(String) 
+    subroutine DimensionsWrapper7D_DLCA_toString(this, String, Separator) 
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
-        class(DimensionsWrapper7D_DLCA_t), intent(IN)  :: this
-        character(len=1), optional,        intent(IN)  :: Separator
-        character(len=:), allocatable                  :: String
-        character(len=1)                               :: Sep
-        integer(I4P)                                   :: idx1,idx2,idx3,idx4,idx5,idx6,idx7
+        class(DimensionsWrapper7D_DLCA_t), intent(IN)    :: this
+        character(len=:), allocatable,     intent(INOUT) :: String
+        character(len=1), optional,        intent(IN)    :: Separator
+        character(len=1)                                 :: Sep
+        integer(I4P)                                     :: idx1,idx2,idx3,idx4,idx5,idx6,idx7
     !-----------------------------------------------------------------
         String = ''
         Sep = ','
@@ -245,7 +245,7 @@ contains
             enddo
             String = String(:len(String)-1)
         endif
-    end function
+    end subroutine
 
 
     subroutine DimensionsWrapper7D_DLCA_Print(this, unit, prefix, iostat, iomsg)
@@ -258,6 +258,7 @@ contains
         integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
         character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
         character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        character(len=:), allocatable                 :: strvalue     !< String value
         integer(I4P)                                  :: iostatd      !< IO error.
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
@@ -266,7 +267,8 @@ contains
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
-        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%toString()
+        call this%toString(strvalue)
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) strvalue
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine DimensionsWrapper7D_DLCA_Print

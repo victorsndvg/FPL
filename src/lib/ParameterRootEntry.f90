@@ -153,7 +153,7 @@ contains
         else
             NextEntry => this%GetRoot()
             do while(associated(NextEntry))
-                NExtEntryKey = NextEntry%GetKey()
+                call NextEntry%GetKey(NExtEntryKey)
                 if (NextEntryKey/=Key) then
                     if (.not. NextEntry%hasNext()) then 
                         ! I reached the end of the list
@@ -188,7 +188,7 @@ contains
     !-----------------------------------------------------------------
         if(this%HasRoot()) then
             CurrentEntry => this%GetRoot()
-            CurrentEntryKey = CurrentEntry%GetKey()
+            call CurrentEntry%GetKey(CurrentEntryKey)
             if(CurrentEntryKey == Key) then
                 NextEntry => CurrentEntry%GetNext()
                 call CurrentEntry%DeallocateKey()    
@@ -227,7 +227,7 @@ contains
     !-----------------------------------------------------------------
         Entry => this%GetRoot()
         do while(associated(Entry))
-            EntryKey = Entry%GetKey()
+            call Entry%GetKey(EntryKey)
             if (EntryKey==Key) exit
             Entry => Entry%GetNext()
         enddo
@@ -249,7 +249,7 @@ contains
         do while(associated(PreviousEntry))
             if (PreviousEntry%HasNext()) then
                 NextEntry => PreviousEntry%GetNext()
-                NextEntryKey = NextEntry%GetKey()
+                call NextEntry%GetKey(NextEntryKey)
                 if (NextEntryKey==Key) then
                     exit
                 else

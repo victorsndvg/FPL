@@ -338,7 +338,7 @@ contains
         character(len=*),                     intent(IN)    :: Key            !< String Key
         integer(I4P), optional,               intent(IN)    :: Size           !< Sublist Size
         class(*),                             pointer       :: Sublist        !< New Sublist
-        class(ParameterList_t),               pointer       :: SublistPointer !< New Sublist pointer
+        type(ParameterList_t),                pointer       :: SublistPointer !< New Sublist pointer
     !-----------------------------------------------------------------
         allocate(ParameterList_t :: SubList)
         call this%Dictionary%Set(Key=Key,Value=Sublist)
@@ -360,7 +360,7 @@ contains
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN)    :: this    !< Parameter List
         character(len=*),                     intent(IN)    :: Key     !< String Key
-        class(ParameterList_t),      pointer, intent(INOUT) :: Sublist !< Wrapper
+        type(ParameterList_t),       pointer, intent(INOUT) :: Sublist !< Wrapper
         class(*),                    pointer                :: Value   !< Returned pointer to value
         integer(I4P)                                        :: FPLerror!< Error flag
     !-----------------------------------------------------------------
@@ -1625,7 +1625,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%toString(Separator=Separator)
+                    call Wrapper%toString(String=String, Separator=Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//Key//'"]: Unknown Wrapper. Value was not modified.', &
@@ -1845,7 +1845,7 @@ contains
     !-----------------------------------------------------------------
         nullify(CurrentEntry)
         CurrentEntry => this%GetEntry()
-        if(associated(CurrentEntry)) Key = CurrentEntry%GetKey()
+        if(associated(CurrentEntry)) call CurrentEntry%GetKey(Key)
     end function ParameterListIterator_GetKey
 
 
@@ -1935,7 +1935,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%ToString(Separator=Separator)
+                    call Wrapper%ToString(String=String, Separator=Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Value was not modified.', &
@@ -2651,7 +2651,7 @@ contains
         if(associated(Wrapper)) then
             select type(Wrapper)
                 class is (DimensionsWrapper_t)
-                    String = Wrapper%toString(Separator)
+                    call Wrapper%toString(String, Separator)
                 class Default
                     FPLerror = FPLWrapperError
                     call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Unknown Wrapper. Value was not modified.', &

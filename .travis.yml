@@ -23,22 +23,24 @@ before_install:
   - git submodule update --init --recursive
 
 install:
-  - export FC=/usr/bin/gfortran-6
+  - export FC=gfortran-6
+  - export CC=gcc-6
+  - export GCOV=$(which gcov-6)
   - $FC --version
+  - $GCOV --version
   - cmake --version
 
 before_script:
   - mkdir build
   - cd build
-  - cmake -DFPL_ENABLE_TESTS=ON -DFPL_ENABLE_EXAMPLES=ON ..
+  - cmake -DFPL_ENABLE_TESTS=ON -DFPL_ENABLE_EXAMPLES=ON -DCOVERAGE_COMMAND=$GCOV ..
 
 script:
-  - ctest -VV -T Start -T Build -T Test -T Coverage
+  - ctest -VV -T Start -T Build -T Test #-T Coverage
 
 after_success:
   - find . -name '*.gcno' -print
-  - gcov-6 --version
-  - bash <(curl -s https://codecov.io/bash) -x $(which gcov-6)
+  - bash <(curl -s https://codecov.io/bash) -x $(GCOV)
 
 after_script:
   - cd ..

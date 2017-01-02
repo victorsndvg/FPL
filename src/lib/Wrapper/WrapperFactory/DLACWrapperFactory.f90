@@ -59,6 +59,7 @@ private
     end type
 
     type(DLCAWrapperFactory_t), public, save :: WrapperFactoryDLCA
+    !$OMP THREADPRIVATE(WrapperFactoryDLCA)
 
 contains
 

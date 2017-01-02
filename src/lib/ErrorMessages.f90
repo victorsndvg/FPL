@@ -41,7 +41,8 @@ private
         procedure, non_overridable :: Error => MessageHandler_Error
     end type
 
-    type(MessageHandler_t) :: msg
+    type(MessageHandler_t), save :: msg
+   !$OMP THREADPRIVATE(msg)
 
 public :: msg
 

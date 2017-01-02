@@ -200,15 +200,15 @@ contains
     end function DimensionsWrapper1D_DLCA_isOfDataType
 
 
-    function DimensionsWrapper1D_DLCA_toString(this, Separator) result(String) 
+    subroutine DimensionsWrapper1D_DLCA_toString(this, String, Separator) 
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
-        class(DimensionsWrapper1D_DLCA_t), intent(IN)  :: this
-        character(len=1), optional,        intent(IN)  :: Separator
-        character(len=:), allocatable                  :: String
-        character(len=1)                               :: Sep
-        integer(I4P)                                   :: idx
+        class(DimensionsWrapper1D_DLCA_t), intent(IN)    :: this
+        character(len=:), allocatable,     intent(INOUT) :: String
+        character(len=1), optional,        intent(IN)    :: Separator
+        character(len=1)                                 :: Sep
+        integer(I4P)                                     :: idx
     !-----------------------------------------------------------------
         String = ''
         Sep = ','
@@ -219,7 +219,7 @@ contains
             enddo
             String = trim(adjustl(String(:len(String)-1)))
         endif
-    end function
+    end subroutine
 
 
     subroutine DimensionsWrapper1D_DLCA_Print(this, unit, prefix, iostat, iomsg)
@@ -232,15 +232,17 @@ contains
         integer(I4P), optional,           intent(OUT) :: iostat       !< IO error.
         character(*), optional,           intent(OUT) :: iomsg        !< IO error message.
         character(len=:), allocatable                 :: prefd        !< Prefixing string.
+        character(len=:), allocatable                 :: strvalue     !< String value
         integer(I4P)                                  :: iostatd      !< IO error.
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
+        call this%toString(strvalue)
         write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '
-        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) this%toString()
+        write(unit=unit,fmt=*,iostat=iostatd,iomsg=iomsgd) strvalue
 
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
