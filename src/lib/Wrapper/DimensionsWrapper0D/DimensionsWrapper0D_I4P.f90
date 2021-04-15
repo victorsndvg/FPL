@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -42,14 +42,14 @@ private
         procedure, public :: Free           => DimensionsWrapper0D_I4P_Free
         procedure, public :: Print          => DimensionsWrapper0D_I4P_Print
         final             ::                   DimensionsWrapper0D_I4P_Final
-    end type           
+    end type
 
 public :: DimensionsWrapper0D_I4P_t
 
 contains
 
 
-    subroutine DimensionsWrapper0D_I4P_Final(this) 
+    subroutine DimensionsWrapper0D_I4P_Final(this)
     !-----------------------------------------------------------------
     !< Final procedure of DimensionsWrapper0D
     !-----------------------------------------------------------------
@@ -59,7 +59,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper0D_I4P_Set(this, Value) 
+    subroutine DimensionsWrapper0D_I4P_Set(this, Value)
     !-----------------------------------------------------------------
     !< Set I4P Wrapper Value
     !-----------------------------------------------------------------
@@ -81,7 +81,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper0D_I4P_Get(this, Value) 
+    subroutine DimensionsWrapper0D_I4P_Get(this, Value)
     !-----------------------------------------------------------------
     !< Get I4P Wrapper Value
     !-----------------------------------------------------------------
@@ -106,12 +106,12 @@ contains
         integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
         if(allocated(ValueShape)) deallocate(ValueShape)
-		allocate(ValueShape(this%GetDimensions()))
+        allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value, kind=I4P)
     end subroutine
 
 
-    function DimensionsWrapper0D_I4P_GetPointer(this) result(Value) 
+    function DimensionsWrapper0D_I4P_GetPointer(this) result(Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic pointer to Wrapper Value
     !-----------------------------------------------------------------
@@ -122,7 +122,7 @@ contains
     end function
 
 
-    subroutine DimensionsWrapper0D_I4P_GetPolymorphic(this, Value) 
+    subroutine DimensionsWrapper0D_I4P_GetPolymorphic(this, Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
@@ -133,7 +133,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper0D_I4P_Free(this) 
+    subroutine DimensionsWrapper0D_I4P_Free(this)
     !-----------------------------------------------------------------
     !< Free a DimensionsWrapper0D
     !-----------------------------------------------------------------
@@ -162,7 +162,7 @@ contains
 
     function DimensionsWrapper0D_I4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(DimensionsWrapper0D_I4P_t), intent(IN) :: this           !< Dimensions wrapper 0D
         class(*),                         intent(IN) :: Mold           !< Mold for data type comparison
@@ -176,7 +176,7 @@ contains
     end function DimensionsWrapper0D_I4P_isOfDataType
 
 
-    subroutine DimensionsWrapper0D_I4P_toString(this, String, Separator) 
+    subroutine DimensionsWrapper0D_I4P_toString(this, String, Separator)
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
