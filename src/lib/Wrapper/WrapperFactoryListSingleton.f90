@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
