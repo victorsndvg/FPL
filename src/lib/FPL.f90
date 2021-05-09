@@ -18,6 +18,9 @@
 ! License along with this library.
 !-----------------------------------------------------------------
 
+#define ParameterList_t ParameterList_
+#define ParameterListIterator_t ParameterListIterator_
+
 module FPL
 
 USE ParameterList
