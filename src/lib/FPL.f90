@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -17,6 +17,9 @@
 ! You should have received a copy of the GNU Lesser General Public
 ! License along with this library.
 !-----------------------------------------------------------------
+
+#define ParameterList_t ParameterList_
+#define ParameterListIterator_t ParameterListIterator_
 
 module FPL
 

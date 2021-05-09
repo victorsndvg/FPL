@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -42,14 +42,14 @@ private
         procedure, public :: Free           => DimensionsWrapper4D_R4P_Free
         procedure, public :: Print          => DimensionsWrapper4D_R4P_Print
         final             ::                   DimensionsWrapper4D_R4P_Final
-    end type           
+    end type
 
 public :: DimensionsWrapper4D_R4P_t
 
 contains
 
 
-    subroutine DimensionsWrapper4D_R4P_Final(this) 
+    subroutine DimensionsWrapper4D_R4P_Final(this)
     !-----------------------------------------------------------------
     !< Final procedure of DimensionsWrapper4D
     !-----------------------------------------------------------------
@@ -59,7 +59,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper4D_R4P_Set(this, Value) 
+    subroutine DimensionsWrapper4D_R4P_Set(this, Value)
     !-----------------------------------------------------------------
     !< Set R4P Wrapper Value
     !-----------------------------------------------------------------
@@ -86,7 +86,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper4D_R4P_Get(this, Value) 
+    subroutine DimensionsWrapper4D_R4P_Get(this, Value)
     !-----------------------------------------------------------------
     !< Get R4P Wrapper Value
     !-----------------------------------------------------------------
@@ -120,12 +120,12 @@ contains
         integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
         if(allocated(ValueShape)) deallocate(ValueShape)
-		allocate(ValueShape(this%GetDimensions()))
+        allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value, kind=I4P)
     end subroutine
 
 
-    function DimensionsWrapper4D_R4P_GetPointer(this) result(Value) 
+    function DimensionsWrapper4D_R4P_GetPointer(this) result(Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic pointer to Wrapper Value
     !-----------------------------------------------------------------
@@ -136,7 +136,7 @@ contains
     end function
 
 
-    subroutine DimensionsWrapper4D_R4P_GetPolymorphic(this, Value) 
+    subroutine DimensionsWrapper4D_R4P_GetPolymorphic(this, Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
@@ -151,7 +151,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper4D_R4P_Free(this) 
+    subroutine DimensionsWrapper4D_R4P_Free(this)
     !-----------------------------------------------------------------
     !< Free a DimensionsWrapper4D
     !-----------------------------------------------------------------
@@ -180,7 +180,7 @@ contains
 
     function DimensionsWrapper4D_R4P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(DimensionsWrapper4D_R4P_t), intent(IN) :: this          !< Dimensions wrapper 4D
         class(*),                         intent(IN) :: Mold          !< Mold for data type comparison
@@ -194,7 +194,7 @@ contains
     end function DimensionsWrapper4D_R4P_isOfDataType
 
 
-    subroutine DimensionsWrapper4D_R4P_toString(this, String, Separator) 
+    subroutine DimensionsWrapper4D_R4P_toString(this, String, Separator)
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
@@ -235,7 +235,7 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
+        write(unit=unit,fmt='(A)', advance="no",iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = R4P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '

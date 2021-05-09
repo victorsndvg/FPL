@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -43,14 +43,14 @@ private
         procedure, public :: Free           => DimensionsWrapper2D_L_Free
         procedure, public :: Print          => DimensionsWrapper2D_L_Print
         final             ::                   DimensionsWrapper2D_L_Final
-    end type           
+    end type
 
 public :: DimensionsWrapper2D_L_t
 
 contains
 
 
-    subroutine DimensionsWrapper2D_L_Final(this) 
+    subroutine DimensionsWrapper2D_L_Final(this)
     !-----------------------------------------------------------------
     !< Final procedure of DimensionsWrapper2D
     !-----------------------------------------------------------------
@@ -60,7 +60,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper2D_L_Set(this, Value) 
+    subroutine DimensionsWrapper2D_L_Set(this, Value)
     !-----------------------------------------------------------------
     !< Set logical Wrapper Value
     !-----------------------------------------------------------------
@@ -85,7 +85,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper2D_L_Get(this, Value) 
+    subroutine DimensionsWrapper2D_L_Get(this, Value)
     !-----------------------------------------------------------------
     !< Get logical Wrapper Value
     !-----------------------------------------------------------------
@@ -119,12 +119,12 @@ contains
         integer(I4P), allocatable,      intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
         if(allocated(ValueShape)) deallocate(ValueShape)
-		allocate(ValueShape(this%GetDimensions()))
+        allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value, kind=I4P)
     end subroutine
 
 
-    function DimensionsWrapper2D_L_GetPointer(this) result(Value) 
+    function DimensionsWrapper2D_L_GetPointer(this) result(Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic pointer to Wrapper Value
     !-----------------------------------------------------------------
@@ -135,7 +135,7 @@ contains
     end function
 
 
-    subroutine DimensionsWrapper2D_L_GetPolymorphic(this, Value) 
+    subroutine DimensionsWrapper2D_L_GetPolymorphic(this, Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
@@ -148,7 +148,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper2D_L_Free(this) 
+    subroutine DimensionsWrapper2D_L_Free(this)
     !-----------------------------------------------------------------
     !< Free a DimensionsWrapper2D
     !-----------------------------------------------------------------
@@ -177,7 +177,7 @@ contains
 
     function DimensionsWrapper2D_L_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(DimensionsWrapper2D_L_t), intent(IN) :: this            !< Dimensions wrapper 2D
         class(*),                       intent(IN) :: Mold            !< Mold for data type comparison
@@ -191,7 +191,7 @@ contains
     end function DimensionsWrapper2D_L_isOfDataType
 
 
-    subroutine DimensionsWrapper2D_L_toString(this, String, Separator) 
+    subroutine DimensionsWrapper2D_L_toString(this, String, Separator)
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
@@ -230,7 +230,7 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
+        write(unit=unit,fmt='(A)', advance="no",iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = L'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '

@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -42,14 +42,14 @@ private
         procedure, public :: Print          => DimensionsWrapper7D_I2P_Print
         procedure, public :: Free           => DimensionsWrapper7D_I2P_Free
         final             ::                   DimensionsWrapper7D_I2P_Final
-    end type           
+    end type
 
 public :: DimensionsWrapper7D_I2P_t
 
 contains
 
 
-    subroutine DimensionsWrapper7D_I2P_Final(this) 
+    subroutine DimensionsWrapper7D_I2P_Final(this)
     !-----------------------------------------------------------------
     !< Final procedure of DimensionsWrapper7D
     !-----------------------------------------------------------------
@@ -59,7 +59,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper7D_I2P_Set(this, Value) 
+    subroutine DimensionsWrapper7D_I2P_Set(this, Value)
     !-----------------------------------------------------------------
     !< Set I2P Wrapper Value
     !-----------------------------------------------------------------
@@ -89,7 +89,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper7D_I2P_Get(this, Value) 
+    subroutine DimensionsWrapper7D_I2P_Get(this, Value)
     !-----------------------------------------------------------------
     !< Get I2P Wrapper Value
     !-----------------------------------------------------------------
@@ -123,12 +123,12 @@ contains
         integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
         if(allocated(ValueShape)) deallocate(ValueShape)
-		allocate(ValueShape(this%GetDimensions()))
+        allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value, kind=I4P)
     end subroutine
 
 
-    function DimensionsWrapper7D_I2P_GetPointer(this) result(Value) 
+    function DimensionsWrapper7D_I2P_GetPointer(this) result(Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic pointer to Wrapper Value
     !-----------------------------------------------------------------
@@ -139,7 +139,7 @@ contains
     end function
 
 
-    subroutine DimensionsWrapper7D_I2P_GetPolymorphic(this, Value) 
+    subroutine DimensionsWrapper7D_I2P_GetPolymorphic(this, Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
@@ -157,7 +157,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper7D_I2P_Free(this) 
+    subroutine DimensionsWrapper7D_I2P_Free(this)
     !-----------------------------------------------------------------
     !< Free a DimensionsWrapper7D
     !-----------------------------------------------------------------
@@ -186,7 +186,7 @@ contains
 
     function DimensionsWrapper7D_I2P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(DimensionsWrapper7D_I2P_t), intent(IN) :: this          !< Dimensions wrapper 7D
         class(*),                         intent(IN) :: Mold          !< Mold for data type comparison
@@ -200,7 +200,7 @@ contains
     end function DimensionsWrapper7D_I2P_isOfDataType
 
 
-    subroutine DimensionsWrapper7D_I2P_toString(this, String, Separator) 
+    subroutine DimensionsWrapper7D_I2P_toString(this, String, Separator)
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
@@ -247,7 +247,7 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
+        write(unit=unit,fmt='(A)', advance="no",iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I2P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '

@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -73,7 +73,7 @@ contains
     !-----------------------------------------------------------------
     !< Initialize the node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),         intent(INOUT) :: this    !< Wrapper Factory List 
+        class(WrapperFactoryList_t),         intent(INOUT) :: this    !< Wrapper Factory List
     !-----------------------------------------------------------------
         if(allocated(this%Key)) deallocate(this%Key)
         nullify(this%Value)
@@ -85,7 +85,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List
         logical                                 :: hasNext            !< Check if Next is associated
     !-----------------------------------------------------------------
         hasNext = associated(this%Next)
@@ -96,8 +96,8 @@ contains
     !-----------------------------------------------------------------
     !< Set the pointer to the Next node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),         intent(INOUT) :: this    !< Wrapper Factory List 
-        class(WrapperFactoryList_t), target, intent(IN)    :: Next    !< Pointer to Next 
+        class(WrapperFactoryList_t),         intent(INOUT) :: this    !< Wrapper Factory List
+        class(WrapperFactoryList_t), target, intent(IN)    :: Next    !< Pointer to Next
     !-----------------------------------------------------------------
         this%Next => Next
     end subroutine WrapperFactoryList_SetNext
@@ -107,7 +107,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to the Next node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List
         class(WrapperFactoryList_t), pointer    :: Next               !< Pointer to Next
     !-----------------------------------------------------------------
         nullify(Next)
@@ -119,7 +119,7 @@ contains
     !-----------------------------------------------------------------
     !< Nullify Next
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(INOUT) :: this            !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(INOUT) :: this            !< Wrapper Factory List
     !-----------------------------------------------------------------
         nullify(this%Next)
     end subroutine WrapperFactoryList_NullifyNext
@@ -129,18 +129,18 @@ contains
     !-----------------------------------------------------------------
     !< Check if Key is allocated for the current Node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List
         logical                         :: hasKey                     !< Check if Key is associated
     !-----------------------------------------------------------------
         hasKey = allocated(this%Key)
     end function WrapperFactoryList_HasKey
 
 
-    subroutine WrapperFactoryList_SetKey(this, Key) 
+    subroutine WrapperFactoryList_SetKey(this, Key)
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t),   intent(INOUT) :: this          !< Wrapper Factory List 
+        class(WrapperFactoryList_t),   intent(INOUT) :: this          !< Wrapper Factory List
         character(len=*),              intent(IN)    :: Key           !< Key
     !-----------------------------------------------------------------
         this%Key = Key
@@ -151,7 +151,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List
         character(len=:), allocatable           :: Key                !< Key
     !-----------------------------------------------------------------
         if(this%HasKey()) Key = this%Key
@@ -162,7 +162,7 @@ contains
     !-----------------------------------------------------------------
     !< Deallocate Key if allocated
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(INOUT) :: this            !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(INOUT) :: this            !< Wrapper Factory List
     !-----------------------------------------------------------------
         if(this%HasKey()) deallocate(this%Key)
     end subroutine WrapperFactoryList_DeallocateKey
@@ -172,7 +172,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Value is allocated for the current Node
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(IN) :: this               !< Wrapper Factory List
         logical                                 :: hasValue           !< Check if Value is allocated
     !-----------------------------------------------------------------
         hasValue = associated(this%Value)
@@ -206,7 +206,7 @@ contains
     !-----------------------------------------------------------------
     !< Free the list
     !-----------------------------------------------------------------
-        class(WrapperFactoryList_t), intent(INOUT):: this             !< Wrapper Factory List 
+        class(WrapperFactoryList_t), intent(INOUT):: this             !< Wrapper Factory List
         class(WrapperFactoryList_t),  pointer     :: Next             !< Wrapper Factory List Node
     !-----------------------------------------------------------------
         if (this%HasNext()) then
@@ -225,7 +225,7 @@ contains
     !-----------------------------------------------------------------
     !< Finalize procedure
     !-----------------------------------------------------------------
-        type(WrapperFactoryList_t), intent(INOUT):: this              !< Wrapper Factory List 
+        type(WrapperFactoryList_t), intent(INOUT):: this              !< Wrapper Factory List
     !-----------------------------------------------------------------
         call this%Free()
     end subroutine WrapperFactoryList_Finalize

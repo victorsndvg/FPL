@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -42,14 +42,14 @@ private
         procedure, public :: toString       => DimensionsWrapper3D_I1P_toString
         procedure, public :: Print          => DimensionsWrapper3D_I1P_Print
         final             ::                   DimensionsWrapper3D_I1P_Final
-    end type           
+    end type
 
 public :: DimensionsWrapper3D_I1P_t
 
 contains
 
 
-    subroutine DimensionsWrapper3D_I1P_Final(this) 
+    subroutine DimensionsWrapper3D_I1P_Final(this)
     !-----------------------------------------------------------------
     !< Final procedure of DimensionsWrapper3D
     !-----------------------------------------------------------------
@@ -59,7 +59,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper3D_I1P_Set(this, Value) 
+    subroutine DimensionsWrapper3D_I1P_Set(this, Value)
     !-----------------------------------------------------------------
     !< Set I1P Wrapper Value
     !-----------------------------------------------------------------
@@ -85,7 +85,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper3D_I1P_Get(this, Value) 
+    subroutine DimensionsWrapper3D_I1P_Get(this, Value)
     !-----------------------------------------------------------------
     !< Get I1P Wrapper Value
     !-----------------------------------------------------------------
@@ -119,12 +119,12 @@ contains
         integer(I4P), allocatable,        intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
         if(allocated(ValueShape)) deallocate(ValueShape)
-		allocate(ValueShape(this%GetDimensions()))
+        allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value, kind=I4P)
     end subroutine
 
 
-    function DimensionsWrapper3D_I1P_GetPointer(this) result(Value) 
+    function DimensionsWrapper3D_I1P_GetPointer(this) result(Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic pointer to Wrapper Value
     !-----------------------------------------------------------------
@@ -135,7 +135,7 @@ contains
     end function
 
 
-    subroutine DimensionsWrapper3D_I1P_GetPolymorphic(this, Value) 
+    subroutine DimensionsWrapper3D_I1P_GetPolymorphic(this, Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
@@ -150,7 +150,7 @@ contains
 
 
 
-    subroutine DimensionsWrapper3D_I1P_Free(this) 
+    subroutine DimensionsWrapper3D_I1P_Free(this)
     !-----------------------------------------------------------------
     !< Free a DimensionsWrapper3D
     !-----------------------------------------------------------------
@@ -179,7 +179,7 @@ contains
 
     function DimensionsWrapper3D_I1P_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_I1P_t), intent(IN) :: this          !< Dimensions wrapper 3D
         class(*),                         intent(IN) :: Mold          !< Mold for data type comparison
@@ -193,7 +193,7 @@ contains
     end function DimensionsWrapper3D_I1P_isOfDataType
 
 
-    subroutine DimensionsWrapper3D_I1P_toString(this, String, Separator) 
+    subroutine DimensionsWrapper3D_I1P_toString(this, String, Separator)
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
@@ -232,7 +232,7 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
+        write(unit=unit,fmt='(A)', advance="no",iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = I1P'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '

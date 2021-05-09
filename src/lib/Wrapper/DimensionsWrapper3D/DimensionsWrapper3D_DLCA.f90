@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -42,14 +42,14 @@ private
         procedure, public :: Free           => DimensionsWrapper3D_DLCA_Free
         procedure, public :: Print          => DimensionsWrapper3D_DLCA_Print
         final             ::                   DimensionsWrapper3D_DLCA_Final
-    end type           
+    end type
 
 public :: DimensionsWrapper3D_DLCA_t
 
 contains
 
 
-    subroutine DimensionsWrapper3D_DLCA_Final(this) 
+    subroutine DimensionsWrapper3D_DLCA_Final(this)
     !-----------------------------------------------------------------
     !< Final procedure of DimensionsWrapper3D
     !-----------------------------------------------------------------
@@ -59,7 +59,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper3D_DLCA_Set(this, Value) 
+    subroutine DimensionsWrapper3D_DLCA_Set(this, Value)
     !-----------------------------------------------------------------
     !< Set DLCA Wrapper Value
     !-----------------------------------------------------------------
@@ -67,10 +67,10 @@ contains
         class(*),                          intent(IN)    :: Value(:,:,:)
         integer                                          :: err
     !-----------------------------------------------------------------
-#ifdef __GFORTRAN__ 
+#ifdef __GFORTRAN__
         call msg%Warn(txt='Setting value: Array of deferred length allocatable arrays not supported in Gfortran)',&
                       file=__FILE__, line=__LINE__ )
-#else   
+#else
         select type (Value)
             type is (character(len=*))
                 allocate(character(len=len(Value))::               &
@@ -91,7 +91,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper3D_DLCA_Get(this, Value) 
+    subroutine DimensionsWrapper3D_DLCA_Get(this, Value)
     !-----------------------------------------------------------------
     !< Get deferred length character array Wrapper Value
     !-----------------------------------------------------------------
@@ -132,12 +132,12 @@ contains
         integer(I4P), allocatable,         intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
         if(allocated(ValueShape)) deallocate(ValueShape)
-		allocate(ValueShape(this%GetDimensions()))
+        allocate(ValueShape(this%GetDimensions()))
         ValueShape = shape(this%Value, kind=I4P)
     end subroutine
 
 
-    function DimensionsWrapper3D_DLCA_GetPointer(this) result(Value) 
+    function DimensionsWrapper3D_DLCA_GetPointer(this) result(Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic pointer to Wrapper Value
     !-----------------------------------------------------------------
@@ -148,7 +148,7 @@ contains
     end function
 
 
-    subroutine DimensionsWrapper3D_DLCA_GetPolymorphic(this, Value) 
+    subroutine DimensionsWrapper3D_DLCA_GetPolymorphic(this, Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic Wrapper Value
     !-----------------------------------------------------------------
@@ -162,7 +162,7 @@ contains
     end subroutine
 
 
-    subroutine DimensionsWrapper3D_DLCA_Free(this) 
+    subroutine DimensionsWrapper3D_DLCA_Free(this)
     !-----------------------------------------------------------------
     !< Free a DimensionsWrapper3D
     !-----------------------------------------------------------------
@@ -192,7 +192,7 @@ contains
 
     function DimensionsWrapper3D_DLCA_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(DimensionsWrapper3D_DLCA_t), intent(IN) :: this         !< Dimensions wrapper 3D
         class(*),                          intent(IN) :: Mold         !< Mold for data type comparison
@@ -206,7 +206,7 @@ contains
     end function DimensionsWrapper3D_DLCA_isOfDataType
 
 
-    subroutine DimensionsWrapper3D_DLCA_toString(this, String, Separator) 
+    subroutine DimensionsWrapper3D_DLCA_toString(this, String, Separator)
     !-----------------------------------------------------------------
     !< Return the wrapper value as a string
     !-----------------------------------------------------------------
@@ -247,7 +247,7 @@ contains
         character(500)                                :: iomsgd       !< Temporary variable for IO error message.
     !-----------------------------------------------------------------
         prefd = '' ; if (present(prefix)) prefd = prefix
-        write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
+        write(unit=unit,fmt='(A)', advance="no",iostat=iostatd,iomsg=iomsgd) prefd//' Data Type = DLCA'//&
                         ', Dimensions = '//trim(str(no_sign=.true., n=this%GetDimensions()))//&
                         ', Bytes = '//trim(str(no_sign=.true., n=this%DataSizeInBytes()))//&
                         ', Value = '

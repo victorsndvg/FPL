@@ -21,13 +21,13 @@ private
         procedure, public :: toString       => CircleWrapper_toString       !< Return the value as a string
         procedure, public :: Free           => CircleWrapper_Free           !< Free the Wrapper
         procedure, public :: Print          => CircleWrapper_Print          !< Print the Wrapper content
-    end type           
+    end type
 
 public :: CircleWrapper_t
 
 contains
 
-    subroutine CircleWrapper_Set(this, Value) 
+    subroutine CircleWrapper_Set(this, Value)
     !-----------------------------------------------------------------
     !< Set Circle Wrapper Value
     !-----------------------------------------------------------------
@@ -50,7 +50,7 @@ contains
     end subroutine
 
 
-    subroutine CircleWrapper_Get(this, Value) 
+    subroutine CircleWrapper_Get(this, Value)
     !-----------------------------------------------------------------
     !< Get Circle Wrapper Value
     !-----------------------------------------------------------------
@@ -74,12 +74,12 @@ contains
         integer(I4P), allocatable, intent(INOUT) :: ValueShape(:)
     !-----------------------------------------------------------------
         if(allocated(ValueShape)) deallocate(ValueShape)
-		allocate(ValueShape(1))
+        allocate(ValueShape(1))
         ValueShape = 0
     end subroutine
 
 
-    function CircleWrapper_GetPointer(this) result(Value) 
+    function CircleWrapper_GetPointer(this) result(Value)
     !-----------------------------------------------------------------
     !< Get Unlimited Polymorphic pointer to Wrapper Value
     !-----------------------------------------------------------------
@@ -90,7 +90,7 @@ contains
     end function
 
 
-    subroutine CircleWrapper_Free(this) 
+    subroutine CircleWrapper_Free(this)
     !-----------------------------------------------------------------
     !< Free a CircleWrapper0D
     !-----------------------------------------------------------------
@@ -108,7 +108,7 @@ contains
 
     function CircleWrapper_DataSizeInBytes(this) result(DataSizeInBytes)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(CircleWrapper_t),           intent(IN) :: this          !< Circle wrapper 0D
         integer(I4P)                                 :: DataSizeInBytes  !< Data size of the stored data in bytes
@@ -119,7 +119,7 @@ contains
 
     function CircleWrapper_isOfDataType(this, Mold) result(isOfDataType)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(CircleWrapper_t),           intent(IN) :: this          !< Circle wrapper 0D
         class(*),                         intent(IN) :: Mold          !< Mold for data type comparison
@@ -135,7 +135,7 @@ contains
 
     subroutine CircleWrapper_toString(this, String, Separator)
     !-----------------------------------------------------------------
-    !< Check if Mold and Value are of the same datatype 
+    !< Check if Mold and Value are of the same datatype
     !-----------------------------------------------------------------
         class(CircleWrapper_t),           intent(IN)    :: this          !< Circle wrapper 0D
         character(len=:), allocatable,    intent(INOUT) :: String        !< Return the Value as a string

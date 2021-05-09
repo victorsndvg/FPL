@@ -20,7 +20,7 @@ call Parameters%Init(Size=3)
 do loop = 1, numiters
 do iter = 1, numiters
     if(allocated(array)) deallocate(array); allocate(array(iter)); array = iter
-    write(unit=OUTPUT_UNIT, fmt='(A,$)') 'Setting: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
+    write(unit=OUTPUT_UNIT, fmt='(A)', advance="no") 'Setting: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
     if(Parameters%Set(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)), Value=array) /= 0) stop -1
     if(Parameters%isPresent(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)))) then
         write(unit=OUTPUT_UNIT, fmt='(A)') ' Ok!'
@@ -77,7 +77,7 @@ write(unit=OUTPUT_UNIT, fmt='(A)') ''
 do iter = numiters, 1, -1
     if(allocated(array)) deallocate(array)
     if(Parameters%isPresent(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)))) then
-        write(unit=OUTPUT_UNIT, fmt='(A,$)') 'Removing: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
+        write(unit=OUTPUT_UNIT, fmt='(A)', advance="no") 'Removing: "'//'I4P_1D'//trim(str(no_sign=.true., n=iter))//'" ... '
         call Parameters%Del(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)))
         if(Parameters%isPresent(Key='I4P_1D'//trim(str(no_sign=.true., n=iter)))) then
             write(unit=OUTPUT_UNIT, fmt= '(A)') ' FAIL!!!!'

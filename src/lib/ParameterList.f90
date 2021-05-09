@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter List)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -17,6 +17,9 @@
 ! You should have received a copy of the GNU Lesser General Public
 ! License along with this library.
 !-----------------------------------------------------------------
+
+#define ParameterList_t ParameterList_
+#define ParameterListIterator_t ParameterListIterator_
 
 module ParameterList
 
@@ -128,7 +131,9 @@ private
                                               ParameterList_isAssignable7D
         procedure, non_overridable, public :: DataSizeInBytes=> ParameterList_DataSizeInBytes
         procedure, non_overridable, public :: Del            => ParameterList_RemoveEntry
+        generic, public :: Remove => Del
         procedure, non_overridable, public :: Init           => ParameterList_Init
+        generic, public :: Initiate => Init
         procedure, non_overridable, public :: GetShape       => ParameterList_GetShape
         procedure, non_overridable, public :: GetDimensions  => ParameterList_GetDimensions
         procedure, non_overridable, public :: NewSubList     => ParameterList_NewSubList
@@ -137,12 +142,17 @@ private
         procedure, non_overridable, public :: isSubList      => ParameterList_isSubList
         procedure, non_overridable, public :: GetAsString    => ParameterList_GetAsString
         procedure, non_overridable, public :: Free           => ParameterList_Free
+        generic, public :: DeallocateData => Free
         procedure, non_overridable, public :: Print          => ParameterList_Print
+        procedure, non_overridable, public :: Display        => ParameterList_Display
         procedure, non_overridable, public :: Length         => ParameterList_Length
         procedure, non_overridable, public :: GetIterator    => ParameterList_GetIterator
         final                              ::                   ParameterList_Finalize
     end type ParameterList_t
 
+!----------------------------------------------------------------------------
+!
+!----------------------------------------------------------------------------
 
     type :: ParameterListIterator_t
     private
@@ -197,35 +207,43 @@ private
         procedure, public, non_overridable :: Print                    => ParameterListIterator_Print
         procedure, public, non_overridable :: Free                     => ParameterListIterator_Free
         generic,   public                  :: Get                      => ParameterListIterator_Get0D, &
-                                                                          ParameterListIterator_Get1D, &
-                                                                          ParameterListIterator_Get2D, &
-                                                                          ParameterListIterator_Get3D, &
-                                                                          ParameterListIterator_Get4D, &
-                                                                          ParameterListIterator_Get5D, &
-                                                                          ParameterListIterator_Get6D, &
-                                                                          ParameterListIterator_Get7D
+        ParameterListIterator_Get1D, &
+        ParameterListIterator_Get2D, &
+        ParameterListIterator_Get3D, &
+        ParameterListIterator_Get4D, &
+        ParameterListIterator_Get5D, &
+        ParameterListIterator_Get6D, &
+        ParameterListIterator_Get7D
         generic,   public                  :: isOfDataType             => ParameterListIterator_IsOfDataType0D, &
-                                                                          ParameterListIterator_IsOfDataType1D, &
-                                                                          ParameterListIterator_IsOfDataType2D, &
-                                                                          ParameterListIterator_IsOfDataType3D, &
-                                                                          ParameterListIterator_IsOfDataType4D, &
-                                                                          ParameterListIterator_IsOfDataType5D, &
-                                                                          ParameterListIterator_IsOfDataType6D, &
-                                                                          ParameterListIterator_IsOfDataType7D
+        ParameterListIterator_IsOfDataType1D, &
+        ParameterListIterator_IsOfDataType2D, &
+        ParameterListIterator_IsOfDataType3D, &
+        ParameterListIterator_IsOfDataType4D, &
+        ParameterListIterator_IsOfDataType5D, &
+        ParameterListIterator_IsOfDataType6D, &
+        ParameterListIterator_IsOfDataType7D
         generic,   public                  :: isAssignable             => ParameterListIterator_isAssignable0D, &
-                                                                          ParameterListIterator_isAssignable1D, &
-                                                                          ParameterListIterator_isAssignable2D, &
-                                                                          ParameterListIterator_isAssignable3D, &
-                                                                          ParameterListIterator_isAssignable4D, &
-                                                                          ParameterListIterator_isAssignable5D, &
-                                                                          ParameterListIterator_isAssignable6D, &
-                                                                          ParameterListIterator_isAssignable7D
+        ParameterListIterator_isAssignable1D, &
+        ParameterListIterator_isAssignable2D, &
+        ParameterListIterator_isAssignable3D, &
+        ParameterListIterator_isAssignable4D, &
+        ParameterListIterator_isAssignable5D, &
+        ParameterListIterator_isAssignable6D, &
+        ParameterListIterator_isAssignable7D
         generic,   public                  :: Assignment(=)            => ParameterListIterator_Assignment
         final                              ::                             ParameterListIterator_Final
     end type
 
+!----------------------------------------------------------------------------
+!
+!----------------------------------------------------------------------------
+
 public :: ParameterList_t
 public :: ParameterListIterator_t
+
+!----------------------------------------------------------------------------
+!
+!----------------------------------------------------------------------------
 
 contains
 
@@ -237,7 +255,7 @@ contains
     !-----------------------------------------------------------------
     !< Initialize the dictionary
     !-----------------------------------------------------------------
-        class(ParameterList_t),               intent(INOUT) :: this   !< Parameter List 
+        class(ParameterList_t),               intent(INOUT) :: this   !< Parameter List
         integer(I4P), optional,               intent(IN)    :: Size   !< Dictionary Size
     !-----------------------------------------------------------------
         call this%Free()
@@ -314,7 +332,7 @@ contains
     !-----------------------------------------------------------------
     !< Free the dictionary
     !-----------------------------------------------------------------
-        class(ParameterList_t),               intent(INOUT) :: this   !< Parameter List 
+        class(ParameterList_t),               intent(INOUT) :: this   !< Parameter List
     !-----------------------------------------------------------------
         call this%Dictionary%Free()
     end subroutine ParameterList_Free
@@ -1432,7 +1450,7 @@ contains
 
     function ParameterList_isAssignable3D(this,Key,Value) result(Assignable)
     !-----------------------------------------------------------------
-    !< Check if a stored variable is Assignable to Value 
+    !< Check if a stored variable is Assignable to Value
     !-----------------------------------------------------------------
         class(ParameterList_t),               intent(IN) :: this            !< Parameter List
         character(len=*),                     intent(IN) :: Key             !< String Key
@@ -1579,7 +1597,7 @@ contains
     !-----------------------------------------------------------------
     !< Remove an Entry given a Key
     !-----------------------------------------------------------------
-        class(ParameterList_t),               intent(INOUT) :: this   !< Parameter List 
+        class(ParameterList_t),               intent(INOUT) :: this   !< Parameter List
         character(len=*),                     intent(IN)    :: Key    !< String Key
     !-----------------------------------------------------------------
         call this%Dictionary%Del(Key=Key)
@@ -1590,7 +1608,7 @@ contains
     !-----------------------------------------------------------------
     !< Return the number of ParameterListEntries contained in the DataBase
     !-----------------------------------------------------------------
-        class(ParameterList_t),               intent(IN) :: this       !< Parameter List 
+        class(ParameterList_t),               intent(IN) :: this       !< Parameter List
         integer(I4P)                                     :: Length     !< Number of parameters in database
     !-----------------------------------------------------------------
         Length = this%Dictionary%Length()
@@ -1599,7 +1617,7 @@ contains
 
     function ParameterList_GetIterator(this) result(Iterator)
     !-----------------------------------------------------------------
-    !< Return a pointer to a Parameters Iterator 
+    !< Return a pointer to a Parameters Iterator
     !-----------------------------------------------------------------
         class(ParameterList_t),     intent(IN) :: this                !< Parameter List Entry Container Type
         type(ParameterListIterator_t)          :: Iterator            !< Parameter List iterator
@@ -1638,6 +1656,15 @@ contains
         endif
     end function ParameterList_GetAsString
 
+    subroutine ParameterList_Display(this, msg, unitno)
+    !-----------------------------------------------------------------
+    !< Print the content of the DataBase
+    !-----------------------------------------------------------------
+        class(ParameterList_t), intent( in ) :: this
+        character( len = * ), intent( in ) :: msg
+        integer( i4p ), optional, intent( in ) :: unitno
+        call this%print(unitno, msg )
+    end subroutine ParameterList_Display
 
     recursive subroutine ParameterList_Print(this, unit, prefix, iostat, iomsg)
     !-----------------------------------------------------------------
@@ -1661,16 +1688,16 @@ contains
         do while(.not. Iterator%HasFinished())
             Nullify(Value)
             Value => Iterator%PointToValue()
-            if(associated(Value)) then 
+            if(associated(Value)) then
                 select type(Value)
-                    class is (DimensionsWrapper_t) 
+                    class is (DimensionsWrapper_t)
                         call Value%Print(unit=unitd,                                                  &
                                          prefix=prefd//                                               &
                                          '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
                                          ' Key = '//Iterator%GetKey()//',',                           &
                                          iostat=iostatd,                                              &
                                          iomsg=iomsgd)
-                    type is (ParameterList_t) 
+                    type is (ParameterList_t)
                         write(unit=unitd, fmt='(A)') prefd//                                                      &
                                                      '['//trim(str(no_sign=.true., n=Iterator%GetIndex()))//']'// &
                                                      ' Key = '//Iterator%GetKey()//', Data Type = ParameterList'
@@ -1731,7 +1758,7 @@ contains
 
     subroutine ParameterListIterator_Init(this, DataBase)
     !-----------------------------------------------------------------
-    !< Associate the iterator with a dictionary and rewind 
+    !< Associate the iterator with a dictionary and rewind
     !< to the first position
     !-----------------------------------------------------------------
         class(ParameterListIterator_t),     intent(INOUT) :: this        ! Dictionary iterator
@@ -1777,7 +1804,7 @@ contains
         call this%EntryListIterator%Free()
         this%Index = this%Index + 1
         do while(this%Index < this%UpperBound)
-            if(this%DataBase(this%Index)%HasRoot()) then 
+            if(this%DataBase(this%Index)%HasRoot()) then
                 this%EntryListIterator = this%Database(this%Index)%GetIterator()
                 exit
             endif
@@ -1815,7 +1842,7 @@ contains
         if(.not. associated(CurrentEntry)) then
             FPLerror = FPLParameterListIteratorError
             call msg%Error(txt='Current entry not associated. Shape was not modified.', &
-                           file=__FILE__, line=__LINE__ )   
+                           file=__FILE__, line=__LINE__ )
         endif
     end function ParameterListIterator_GetEntry
 
@@ -1885,7 +1912,7 @@ contains
             FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Not present. Shape was not modified.', &
                            file=__FILE__, line=__LINE__ )
-        endif         
+        endif
     end function ParameterListIterator_GetShape
 
 
@@ -1915,7 +1942,7 @@ contains
             FPLerror = FPLWrapperFactoryError
             call msg%Error(txt='Getting [Key="'//this%GetKey()//'"]: Not present. Shape was not modified.', &
                            file=__FILE__, line=__LINE__ )
-        endif         
+        endif
     end function ParameterListIterator_GetDimensions
 
 
@@ -2321,7 +2348,7 @@ contains
 
     function ParameterListIterator_isOfDataType3D(this, Mold) result(IsOfDataType)
     !-----------------------------------------------------------------
-    !< Check if the data type of Mold agrees with the current value 
+    !< Check if the data type of Mold agrees with the current value
     !-----------------------------------------------------------------
         class(ParameterListIterator_t), intent(IN) :: this            !< Parameter List Iterator
         class(*),                    intent(IN)    :: Mold(1:,1:,1:)  !< Mold
@@ -2699,7 +2726,6 @@ contains
         if (present(iostat)) iostat = iostatd
         if (present(iomsg))  iomsg  = iomsgd
     end subroutine ParameterListIterator_Print
-
 
     function ParameterListIterator_HasFinished(this) result(HasFinished)
     !-----------------------------------------------------------------

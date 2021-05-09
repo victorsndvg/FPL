@@ -1,6 +1,6 @@
 !-----------------------------------------------------------------
 ! FPL (Fortran Parameter Entry)
-! Copyright (c) 2015 Santiago Badia, Alberto F. Martín, 
+! Copyright (c) 2015 Santiago Badia, Alberto F. Martín,
 ! Javier Principe and Víctor Sande.
 ! All rights reserved.
 !
@@ -20,7 +20,7 @@
 
 module ParameterEntry
 
-USE PENF 
+USE PENF
 USE DimensionsWrapper
 
 implicit none
@@ -67,7 +67,7 @@ private
         procedure, non_overridable, public :: DeallocateValue  => ParameterEntry_DeallocateValue
         procedure, non_overridable, public :: PointToValue     => ParameterEntry_PointToValue
         procedure, non_overridable, public :: GetIterator      => ParameterEntry_GetIterator
-        final                              ::                     ParameterEntry_Finalize 
+        final                              ::                     ParameterEntry_Finalize
     end type ParameterEntry_t
 
 public :: ParameterEntry_t
@@ -80,7 +80,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(IN) :: this               !< Parameter Entry 
+        class(ParameterEntry_t), intent(IN) :: this               !< Parameter Entry
         logical                             :: hasNext            !< Check if Next is associated
     !-----------------------------------------------------------------
         hasNext = associated(this%Next)
@@ -91,8 +91,8 @@ contains
     !-----------------------------------------------------------------
     !< Set the pointer to the Next node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),          intent(INOUT) :: this        !< Parameter Entry 
-        class(ParameterEntry_t), pointer, intent(IN)    :: Next        !< Pointer to Next 
+        class(ParameterEntry_t),          intent(INOUT) :: this        !< Parameter Entry
+        class(ParameterEntry_t), pointer, intent(IN)    :: Next        !< Pointer to Next
     !-----------------------------------------------------------------
         this%Next => Next
     end subroutine ParameterEntry_SetNext
@@ -102,7 +102,7 @@ contains
     !-----------------------------------------------------------------
     !< Return a pointer to the Next node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter Entry 
+        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter Entry
         class(ParameterEntry_t), pointer    :: Next                   !< Pointer to Next
     !-----------------------------------------------------------------
         nullify(Next)
@@ -114,7 +114,7 @@ contains
     !-----------------------------------------------------------------
     !< Nullify Next
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry
     !-----------------------------------------------------------------
         nullify(this%Next)
     end subroutine ParameterEntry_NullifyNext
@@ -124,18 +124,18 @@ contains
     !-----------------------------------------------------------------
     !< Check if Key is allocated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),     intent(IN) :: this               !< Parameter Entry 
+        class(ParameterEntry_t),     intent(IN) :: this               !< Parameter Entry
         logical                                 :: hasKey             !< Check if Key is associated
     !-----------------------------------------------------------------
         hasKey = allocated(this%Key)
     end function ParameterEntry_HasKey
 
 
-    subroutine ParameterEntry_SetKey(this, Key) 
+    subroutine ParameterEntry_SetKey(this, Key)
     !-----------------------------------------------------------------
     !< Check if Next is associated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),               intent(INOUT) :: this  !< Parameter Entry 
+        class(ParameterEntry_t),               intent(INOUT) :: this  !< Parameter Entry
         character(len=*),                      intent(IN)    :: Key   !< Key
     !-----------------------------------------------------------------
         this%Key = Key
@@ -146,7 +146,7 @@ contains
     !-----------------------------------------------------------------
     !< Return entry key
     !-----------------------------------------------------------------
-        class(ParameterEntry_t),       intent(IN)    :: this          !< Parameter Entry 
+        class(ParameterEntry_t),       intent(IN)    :: this          !< Parameter Entry
         character(len=:), allocatable, intent(INOUT) :: Key           !< Key
     !-----------------------------------------------------------------
         Key = this%Key
@@ -157,7 +157,7 @@ contains
     !-----------------------------------------------------------------
     !< Deallocate Key if allocated
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry
     !-----------------------------------------------------------------
         if(this%HasKey()) deallocate(this%Key)
     end subroutine ParameterEntry_DeallocateKey
@@ -167,7 +167,7 @@ contains
     !-----------------------------------------------------------------
     !< Free the Entry
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry
     !-----------------------------------------------------------------
         call this%DeallocateKey()
         call this%DeallocateValue()
@@ -179,7 +179,7 @@ contains
     !-----------------------------------------------------------------
     !< Check if Value is allocated for the current Node
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter Entry 
+        class(ParameterEntry_t), intent(IN) :: this                   !< Parameter Entry
         logical                             :: hasValue               !< Check if Value is allocated
     !-----------------------------------------------------------------
         hasValue = associated(this%Value)
@@ -224,7 +224,7 @@ contains
     !-----------------------------------------------------------------
     !< Deallocate Key if allocated
     !-----------------------------------------------------------------
-        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry 
+        class(ParameterEntry_t), intent(INOUT) :: this                !< Parameter Entry
     !-----------------------------------------------------------------
         if(this%HasValue()) deallocate(this%Value)
     end subroutine ParameterEntry_DeallocateValue
@@ -234,7 +234,7 @@ contains
     !-----------------------------------------------------------------
     !< Finalize procedure
     !-----------------------------------------------------------------
-        type(ParameterEntry_t), intent(INOUT):: this                  !< Parameter Entry 
+        type(ParameterEntry_t), intent(INOUT):: this                  !< Parameter Entry
     !-----------------------------------------------------------------
         call this%Free()
     end subroutine ParameterEntry_Finalize
@@ -247,7 +247,7 @@ contains
         class(ParameterEntry_t),  target, intent(INOUT) :: this       !< Parameter Entry
         type(EntryListIterator_t)                       :: Iterator   !< List iterator
     !-----------------------------------------------------------------
-        call Iterator%Init(Entry=this)    
+        call Iterator%Init(Entry=this)
     end function ParameterEntry_GetIterator
 
 
@@ -268,7 +268,7 @@ contains
         iostatd = 0 ; iomsgd = ''; prefd = '';if (present(prefix)) prefd = prefix
         if(this%HasKey()) then
             call this%GetKey(Key)
-            write(unit=unit,fmt='(A,$)',iostat=iostatd,iomsg=iomsgd)prefd//' Key = "'//Key//'", '
+            write(unit=unit,fmt='(A)', advance="NO", iostat=iostatd,iomsg=iomsgd) prefd // ' Key = "' // Key // '", '
             select type (Wrapper =>this%Value)
                 class is (DimensionsWrapper_t)
                     call Wrapper%Print(unit=unit)
@@ -384,7 +384,7 @@ contains
     !< Check if Iterator has reached the end of the dictionary
     !-----------------------------------------------------------------
         class(EntryListIterator_t),   intent(IN) :: this              ! List iterator
-        logical                                  :: HasFinished       ! Check if has reached the end of the list 
+        logical                                  :: HasFinished       ! Check if has reached the end of the list
     !-----------------------------------------------------------------
         HasFinished = .false.
         if(.not. associated(this%CurrentEntry)) then
